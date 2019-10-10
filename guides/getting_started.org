@@ -1,0 +1,93 @@
+Welcome to Clojure!
+
+Check out [[file:learn/syntax.xml][Learn Clojure]],
+[[file:xref/../../community/resources.xml][Resources]], or
+[[file:xref/../../community/books.xml][Books]] for learning the
+language!
+
+* Clojure installer and CLI tools
+  :PROPERTIES:
+  :CUSTOM_ID: _clojure_installer_and_cli_tools
+  :END:
+
+Clojure provides [[file:deps_and_cli.xml][command line tools]] that can
+be used to start a Clojure repl, use Clojure and Java libraries, and
+start Clojure programs.
+
+** Installation on Mac via [[https://brew.sh][Homebrew]]
+   :PROPERTIES:
+   :CUSTOM_ID: _installation_on_mac_via_link_xl_href_https_brew_sh_homebrew_link
+   :END:
+
+Install the command line tools with =brew=:
+
+#+BEGIN_EXAMPLE
+    brew install clojure
+#+END_EXAMPLE
+
+If you've already installed, you can upgrade to the latest release with:
+
+#+BEGIN_EXAMPLE
+    brew upgrade clojure
+#+END_EXAMPLE
+
+** Installation on Linux
+   :PROPERTIES:
+   :CUSTOM_ID: _installation_on_linux
+   :END:
+
+1. Ensure that the following dependencies are installed: bash, curl,
+   rlwrap, and Java.
+
+2. Use the linux-install script to download and run the install, which
+   will create /usr/local/bin/clj, /usr/local/bin/clojure, and
+   /usr/local/lib/clojure:
+
+#+BEGIN_EXAMPLE
+    curl -O https://download.clojure.org/install/linux-install-1.10.1.469.sh
+    chmod +x linux-install-1.10.1.469.sh
+    sudo ./linux-install-1.10.1.469.sh
+#+END_EXAMPLE
+
+** Installation on Windows
+   :PROPERTIES:
+   :CUSTOM_ID: _installation_on_windows
+   :END:
+
+An early release version of clj on Windows is available at
+[[https://github.com/clojure/tools.deps.alpha/wiki/clj-on-Windows][clj
+on Windows]]. Please provide feedback at
+[[https://clojure.atlassian.net/projects/TDEPS]].
+
+* Other ways to run Clojure
+  :PROPERTIES:
+  :CUSTOM_ID: _other_ways_to_run_clojure
+  :END:
+
+*Local build*
+
+Download and build Clojure from source (requires Git, Java, and Maven):
+
+#+BEGIN_EXAMPLE
+    git clone https://github.com/clojure/clojure.git
+    cd clojure
+    mvn -Plocal -Dmaven.test.skip=true package
+#+END_EXAMPLE
+
+Then start the REPL with the local jar:
+
+#+BEGIN_EXAMPLE
+    java -jar clojure.jar
+#+END_EXAMPLE
+
+*Try Clojure online*
+
+[[https://repl.it/languages/clojure][repl.it]] provides a browser-based
+Clojure repl for interactive exploration.
+
+*Build tools*
+
+Build tools provide a range of capabilities for building, running, and
+deploying Clojure libraries and applications. The two most popular
+Clojure build tools are [[https://leiningen.org/][Leiningen]] and
+[[http://boot-clj.com/][Boot]].

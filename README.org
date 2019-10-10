@@ -1,0 +1,13 @@
+Convert adoc and html files from https://github.com/clojure/clojure-site/tree/master/content to org files
+
+
+First clone https://github.com/clojure/clojure-site 
+
+
+Then clone this project, then =cd= into it and run
+
+#+begin_src
+python3 make-org-files.py PATH_TO_CLOJURE_SITE
+#+end_src
+
+Tested with Linux.

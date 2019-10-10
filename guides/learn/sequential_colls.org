@@ -1,0 +1,166 @@
+Clojure collections "collect" values into compound values. There are
+four key Clojure collection types: vectors, lists, sets, and maps. Of
+those four collection types, vectors and lists are ordered.
+
+* Vectors
+  :PROPERTIES:
+  :CUSTOM_ID: _vectors
+  :END:
+
+Vectors are an indexed, sequential data structure. Vectors are
+represented with =[ ]= like this:
+
+#+BEGIN_SRC clojure
+    [1 2 3]
+#+END_SRC
+
+** Indexed access
+   :PROPERTIES:
+   :CUSTOM_ID: _indexed_access
+   :END:
+
+"Indexed" means that elements of a vector can be retrieved by index. In
+Clojure (as in Java), indexes start at 0, not 1. Use the =get= function
+to retrieve an element at an index:
+
+#+BEGIN_EXAMPLE
+    user=> (get ["abc" false 99] 0)
+    "abc"
+    user=> (get ["abc" false 99] 1)
+    false
+#+END_EXAMPLE
+
+Calling get with an invalid index returns =nil=:
+
+#+BEGIN_EXAMPLE
+    user=> (get ["abc" false 99] 14)
+    nil
+#+END_EXAMPLE
+
+** =count=
+   :PROPERTIES:
+   :CUSTOM_ID: __literal_count_literal
+   :END:
+
+All Clojure collections can be counted:
+
+#+BEGIN_EXAMPLE
+    user=> (count [1 2 3])
+    3
+#+END_EXAMPLE
+
+** Constructing
+   :PROPERTIES:
+   :CUSTOM_ID: _constructing
+   :END:
+
+In addition to the literal =[ ]= syntax, Clojure vectors can be created
+with the =vector= function:
+
+#+BEGIN_EXAMPLE
+    user=> (vector 1 2 3)
+    [1 2 3]
+#+END_EXAMPLE
+
+** Adding elements
+   :PROPERTIES:
+   :CUSTOM_ID: _adding_elements
+   :END:
+
+Elements are added to a vector with =conj= (short for conjoin). Elements
+are always added to a vector at the end:
+
+#+BEGIN_EXAMPLE
+    user=> (conj [1 2 3] 4 5 6)
+    [1 2 3 4 5 6]
+#+END_EXAMPLE
+
+** Immutability
+   :PROPERTIES:
+   :CUSTOM_ID: _immutability
+   :END:
+
+Clojure collections share important properties of simple values like
+strings and numbers, such as immutability and equality comparison by
+value.
+
+For example, lets create a vector and modify it with =conj=.
+
+#+BEGIN_EXAMPLE
+    user=> (def v [1 2 3])
+    #'user/v
+    user=> (conj v 4 5 6)
+    [1 2 3 4 5 6]
+#+END_EXAMPLE
+
+Here =conj= returned a new vector but if we examine the original vector,
+we see it's unchanged:
+
+#+BEGIN_EXAMPLE
+    user=> v
+    [1 2 3]
+#+END_EXAMPLE
+
+Any function that "changes" a collection returns a new instance. Your
+program will need to remember or pass along the changed instance to take
+advantage of it.
+
+* Lists
+  :PROPERTIES:
+  :CUSTOM_ID: _lists
+  :END:
+
+Lists are sequential linked lists that add new elements at the head of
+the list, instead of at the tail like vectors.
+
+** Constructing
+   :PROPERTIES:
+   :CUSTOM_ID: _constructing_2
+   :END:
+
+Because lists are evaluated by invoking the first element as a function,
+we must quote a list to prevent evaluation:
+
+#+BEGIN_SRC clojure
+    (def cards '(10 :ace :jack 9))
+#+END_SRC
+
+Lists are not indexed so they must be walked using =first= and =rest=.
+
+#+BEGIN_EXAMPLE
+    user=> (first cards)
+    10
+    user=> (rest cards)
+    '(:ace :jack 9)
+#+END_EXAMPLE
+
+** Adding elements
+   :PROPERTIES:
+   :CUSTOM_ID: _adding_elements_2
+   :END:
+
+=conj= can be used to add elements to a list just as with vectors.
+However, =conj= always adds elements where it can be done in constant
+time for the data structure. In the case of lists, elements are added at
+the front:
+
+#+BEGIN_EXAMPLE
+    user=> (conj cards :queen)
+    (:queen 10 :ace :jack 9)
+#+END_EXAMPLE
+
+** Stack access
+   :PROPERTIES:
+   :CUSTOM_ID: _stack_access
+   :END:
+
+Lists can also be used as a stack with peek and pop:
+
+#+BEGIN_EXAMPLE
+    user=> (def stack '(:a :b))
+    #'user/stack
+    user=> (peek stack)
+    :a
+    user=> (pop stack)
+    (:b)
+#+END_EXAMPLE

@@ -1,0 +1,20 @@
+Clojure has a set of useful features that together form a simple,
+coherent, and powerful tool. In Clojure you'll find ideas from Lisp, ML,
+Haskell, and others, but the end result is unique. This section is a
+brief, non-comprehensive tour of some of the features of Clojure.
+Consult the [[file:xref/../../reference/documentation.xml][reference]]
+for more details.
+
+-  [[file:dynamic.xml][Dynamic Development]]
+
+-  [[file:functional_programming.xml][Functional Programming]]
+
+-  [[file:lisp.xml][Lisp]]
+
+-  [[file:runtime_polymorphism.xml][Runtime Polymorphism]]
+
+-  [[file:concurrent_programming.xml][Concurrent Programming]]
+
+-  [[file:jvm_hosted.xml][Hosted on the JVM]]
+
+

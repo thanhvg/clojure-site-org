@@ -1,0 +1,9 @@
+[[https://clojurescript.org][ClojureScript]] is a compiler for Clojure
+that targets JavaScript. It is designed to emit JavaScript code which is
+compatible with the advanced compilation mode of the
+[[https://developers.google.com/closure/][Google Closure]] optimizing
+compiler.
+
+-  [[https://github.com/clojure/clojurescript][ClojureScript Home]]
+
+
