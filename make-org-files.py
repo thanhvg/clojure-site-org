@@ -13,10 +13,10 @@ def make_org_file(source_file, docbook_file, org_file):
     subprocess.run(['asciidoctor', '-b', 'docbook',
                     source_file, '-o', docbook_file])
     subprocess.run(['pandoc', '-f', 'docbook',
-                    docbook_file, '-o', docbook_file])
+                    docbook_file, '-o', org_file])
 
     # subprocess.run(['pandoc', '-h'])
-    # os.remove(docbook_file)
+    os.remove(docbook_file)
 
 
 if __name__ == '__main__':
