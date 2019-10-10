@@ -10,7 +10,7 @@ CWD_PATH = os.getcwd()
 def make_org_file_from_adoc(source_file, docbook_file, org_file):
     print(source_file, docbook_file, org_file)
     os.makedirs(os.path.dirname(docbook_file), exist_ok=True)
-    subprocess.run(['asciidoctor', '-b', 'docbook',
+    subprocess.run(['asciidoctor', '-b', 'docbook5',
                     source_file, '-o', docbook_file])
     subprocess.run(['pandoc', '-f', 'docbook',
                     docbook_file, '-o', org_file])
@@ -22,6 +22,23 @@ def make_org_file_from_html(source_file, org_file):
     print(source_file, org_file)
     os.makedirs(os.path.dirname(org_file), exist_ok=True)
     subprocess.run(['pandoc', source_file, '-o', org_file])
+
+
+def clean_cheatshet_file(filename):
+    with open(filename, 'r') as source:
+        lines = source.readlines()
+
+    with open(filename, 'w') as source:
+        keep = True
+        for line in lines:
+            if line == '\n': continue
+            if line.startswith('#+BEGIN_HTML'):
+                keep = False
+
+            if keep:
+                source.write(line)
+            if line.startswith('#+END_HTML'):
+                keep = True
 
 
 if __name__ == '__main__':
@@ -82,3 +99,6 @@ if __name__ == '__main__':
             source_file,
             os.path.join(CWD_PATH, rel_path, basename + '.org')
         )
+
+    clean_cheatshet_file(
+            os.path.join(CWD_PATH, 'api', 'cheatsheet.org'))
