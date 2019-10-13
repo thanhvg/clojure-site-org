@@ -3,61 +3,61 @@
   :CUSTOM_ID: _reference_documentation
   :END:
 
--  [[file:reader.xml][The Reader]]
+-  [[file:reader.org[The Reader]]
 
--  [[file:repl_and_main.xml][The REPL and main]]
+-  [[file:repl_and_main.org[The REPL and main]]
 
--  [[file:evaluation.xml][Evaluation]]
+-  [[file:evaluation.org[Evaluation]]
 
--  [[file:special_forms.xml][Special Forms]]
+-  [[file:special_forms.org[Special Forms]]
 
--  [[file:macros.xml][Macros]]
+-  [[file:macros.org[Macros]]
 
--  [[file:other_functions.xml][Other Functions]]
+-  [[file:other_functions.org[Other Functions]]
 
--  [[file:data_structures.xml][Data Structures]]
+-  [[file:data_structures.org[Data Structures]]
 
--  [[file:datatypes.xml][Datatypes]]
+-  [[file:datatypes.org[Datatypes]]
 
--  [[file:sequences.xml][Sequences]]
+-  [[file:sequences.org[Sequences]]
 
--  [[file:transients.xml][Transients]]
+-  [[file:transients.org[Transients]]
 
--  [[file:transducers.xml][Transducers]]
+-  [[file:transducers.org[Transducers]]
 
--  [[file:multimethods.xml][Multimethods and Hierarchies]]
+-  [[file:multimethods.org[Multimethods and Hierarchies]]
 
--  [[file:protocols.xml][Protocols]]
+-  [[file:protocols.org[Protocols]]
 
--  [[file:metadata.xml][Metadata]]
+-  [[file:metadata.org[Metadata]]
 
--  [[file:namespaces.xml][Namespaces]]
+-  [[file:namespaces.org[Namespaces]]
 
--  [[file:libs.xml][Libs]]
+-  [[file:libs.org[Libs]]
 
--  [[file:vars.xml][Vars and Environments]]
+-  [[file:vars.org[Vars and Environments]]
 
--  [[file:refs.xml][Refs and Transactions]]
+-  [[file:refs.org[Refs and Transactions]]
 
--  [[file:agents.xml][Agents]]
+-  [[file:agents.org[Agents]]
 
--  [[file:atoms.xml][Atoms]]
+-  [[file:atoms.org[Atoms]]
 
--  [[file:reducers.xml][Reducers]]
+-  [[file:reducers.org[Reducers]]
 
--  [[file:java_interop.xml][Java Interop]]
+-  [[file:java_interop.org[Java Interop]]
 
--  [[file:compilation.xml][Compilation and Class Generation]]
+-  [[file:compilation.org[Compilation and Class Generation]]
 
--  [[file:other_libraries.xml][Other Libraries]]
+-  [[file:other_libraries.org[Other Libraries]]
 
--  [[file:lisps.xml][Differences with Lisps]]
+-  [[file:lisps.org[Differences with Lisps]]
 
 * API Documentation
   :PROPERTIES:
   :CUSTOM_ID: _api_documentation
   :END:
 
--  [[file:xref/../../api/api.xml][Clojure API documentation]]
+-  [[file:xref/../../api/api.org[Clojure API documentation]]
 
 

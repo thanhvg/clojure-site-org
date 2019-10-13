@@ -17,7 +17,7 @@ functional programming with immutable persistent data structures; and
 providing built-in concurrency support via software transactional memory
 and asynchronous agents. The result is robust, practical, and fast.
 
-Clojure has a distinctive approach to [[file:state.xml][state and
+Clojure has a distinctive approach to [[file:state.org[state and
 identity]].
 
 * Why Clojure?
@@ -242,6 +242,6 @@ behind Clojure.
 
 In short, I think Clojure occupies a unique niche as a functional Lisp
 for the JVM with strong concurrency support. Check out some of the
-[[file:features.xml][features]] or
-[[file:xref/../../guides/getting_started.xml][get started with
+[[file:features.org[features]] or
+[[file:xref/../../guides/getting_started.org[get started with
 Clojure]].

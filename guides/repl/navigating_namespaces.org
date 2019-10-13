@@ -5,7 +5,7 @@ same expressions in the REPL as your program does when it runs.
 
 This is achieved by giving your REPL the same context as your running
 program, which implies using REPL in the same
-[[file:xref/../../../reference/namespaces.xml][namespaces]] where your
+[[file:xref/../../../reference/namespaces.org[namespaces]] where your
 code is defined. We will see how to do that in the following sections.
 
 *NOTE:* Namespaces are one of the trickiest parts of Clojure. If you're
@@ -235,7 +235,7 @@ to deal with these subtleties.
 
 Most of the namespaces you will navigate at the REPL will already exist
 in source files or dependencies of your project, i.e in
-[[file:xref/../../../reference/libs.xml][libs]] of your project.
+[[file:xref/../../../reference/libs.org[libs]] of your project.
 
 There is an important usage precaution for switching to namespaces
 defined in libs:
@@ -244,7 +244,7 @@ defined in libs:
   *Note*
 
   *If a namespace is defined in a
-  [[file:xref/../../../reference/libs.xml][lib]] of your project, always
+  [[file:xref/../../../reference/libs.org[lib]] of your project, always
   make sure you have /loaded/ the lib in the REPL before switching to
   it.*
 #+END_QUOTE

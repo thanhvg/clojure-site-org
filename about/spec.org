@@ -571,7 +571,7 @@ In addition to the destructuring use cases above, you can make calls to
 lighter-weight internal-only specs for tests you intend to run in
 production.
 
-Please see the [[file:xref/../../../guides/spec.xml][spec Guide]] and
+Please see the [[file:xref/../../../guides/spec.org[spec Guide]] and
 [[https://clojure.github.io/spec.alpha/index.html][API docs]] for more
 examples and usage information.
 

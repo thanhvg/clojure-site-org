@@ -15,7 +15,7 @@ return seqs do so incrementally, as they are consumed, and thus consume
 any seq arguments incrementally as well. Functions returning lazy seqs
 can be implemented using the
 [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/lazy-seq][lazy-seq]]
-macro. See also [[file:lazy.xml][lazy]].
+macro. See also [[file:lazy.org[lazy]].
 
 When
 [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/seq][seq]]
@@ -69,7 +69,7 @@ which *seq* returns nil.
 Returns a new seq where item is the first element and seq is the rest.
 
 For a discussion of *rest* vs. *next* and *lazy-seq* see
-[[file:lazy.xml][lazy]].
+[[file:lazy.org[lazy]].
 
 * The Seq library
   :PROPERTIES:
@@ -82,7 +82,7 @@ appear in more than one group. There are many more listed in the
 [[https://clojure.github.io/clojure/][API]] section.
 
 Since Clojure 1.7, Clojure also provides
-[[file:transducers.xml][transducers]], an alternate model for composable
+[[file:transducers.org[transducers]], an alternate model for composable
 transformations on collections. Transducers decouple the input,
 processing, and output parts of transformation and allow reuse of
 transformations in more contexts, such as core.async channels. Many of

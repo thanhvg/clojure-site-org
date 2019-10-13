@@ -198,7 +198,7 @@ Clojure characters are Java Characters.
 
 Keywords are symbolic identifiers that evaluate to themselves. They
 provide very fast equality tests. Like Symbols, they have names and
-optional [[file:namespaces.xml][namespaces]], both of which are strings.
+optional [[file:namespaces.org[namespaces]], both of which are strings.
 The leading ':' is not part of the namespace or name.
 
 Keywords implement IFn for invoke() of one argument (a map) with an
@@ -223,7 +223,7 @@ optional second argument (a default value). For example
 Symbols are identifiers that are normally used to refer to something
 else. They can be used in program forms to refer to function parameters,
 let bindings, class names and global vars. They have names and optional
-[[file:namespaces.xml][namespaces]], both of which are strings. Symbols
+[[file:namespaces.org[namespaces]], both of which are strings. Symbols
 can have metadata (see
 [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/with-meta][with-meta]]).
 
@@ -241,7 +241,7 @@ Symbols, just like Keywords, implement IFn for invoke() of one argument
 [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/symbol][symbol]]
 [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/symbol?][symbol?]]
 [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/genysm][gensym]]
-(see also the #-suffix [[file:reader.xml][reader]] macro)
+(see also the #-suffix [[file:reader.org[reader]] macro)
 
 * Collections
   :PROPERTIES:
@@ -271,7 +271,7 @@ collections.
 
 Because collections support the
 [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/seq][seq]]
-function, all of the [[file:sequences.xml][sequence functions]] can be
+function, all of the [[file:sequences.org[sequence functions]] can be
 used with any collection.
 
 ** Java collection hashes
@@ -397,7 +397,7 @@ Examine a vector:
 [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/subvec][subvec]]
 [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/replace][replace]]
 
-See also [[file:other_libraries.xml][zippers]]
+See also [[file:other_libraries.org[zippers]]
 
 * Maps (IPersistentMap)
   :PROPERTIES:
@@ -462,7 +462,7 @@ Examine a map entry:
   *Note*
 
   Most uses of StructMaps would now be better served by
-  [[file:datatypes.xml][records]].
+  [[file:datatypes.org[records]].
 #+END_QUOTE
 
 Often many map instances have the same base set of keys, for instance

@@ -1,6 +1,7 @@
 import sys
 import os
 import subprocess
+import re
 
 dir_list = ['about', 'guides', 'reference', 'api']
 
@@ -31,7 +32,8 @@ def clean_cheatshet_file(filename):
     with open(filename, 'w') as source:
         keep = True
         for line in lines:
-            if line == '\n': continue
+            if line == '\n':
+                continue
             if line.startswith('#+BEGIN_HTML'):
                 keep = False
 
@@ -39,6 +41,16 @@ def clean_cheatshet_file(filename):
                 source.write(line)
             if line.startswith('#+END_HTML'):
                 keep = True
+
+
+def clean_xml_link(filename):
+    xml_file_link = re.compile(r'(\[file:.*\.)xml\]')
+    print('remove xml links in: ', filename)
+    with open(filename, 'r') as source:
+        lines = source.readlines()
+    with open(filename, 'w') as source:
+        for line in lines:
+            source.write(xml_file_link.sub(r'\1org', line))
 
 
 if __name__ == '__main__':
@@ -101,4 +113,10 @@ if __name__ == '__main__':
         )
 
     clean_cheatshet_file(
-            os.path.join(CWD_PATH, 'api', 'cheatsheet.org'))
+        os.path.join(CWD_PATH, 'api', 'cheatsheet.org'))
+
+    # walk the working dir
+    for dirname, dirnames, filenames in os.walk(CWD_PATH):
+        for filename in filenames:
+            if filename.endswith('.org'):
+                clean_xml_link(os.path.join(dirname, filename))

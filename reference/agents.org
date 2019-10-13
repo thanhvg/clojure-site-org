@@ -1,5 +1,5 @@
 Like Refs, Agents provide shared access to mutable state. Where
-[[file:refs.xml][Refs]] support /coordinated/, /synchronous/ change of
+[[file:refs.org[Refs]] support /coordinated/, /synchronous/ change of
 /multiple/ locations, Agents provide /independent/, /asynchronous/
 change of /individual/ locations. Agents are bound to a single storage
 location for their lifetime, and only allow mutation of that location
@@ -18,7 +18,7 @@ itself immutable (preferably an instance of one of Clojure's persistent
 collections), and the state of an Agent is always immediately available
 for reading by any thread (using the
 [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/deref][deref]]
-function or [[file:reader.xml][reader]] macro @) without any messages,
+function or [[file:reader.org[reader]] macro @) without any messages,
 i.e. observation does not require cooperation or coordination.
 
 Agent action dispatches take the form (send agent fn args*).
@@ -118,7 +118,7 @@ Create an Agent:
 
 Examine an Agent:
 [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/deref][deref]]
-/(see also the @ [[file:reader.xml][reader]] macro)/
+/(see also the @ [[file:reader.org[reader]] macro)/
 [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/agent-error][agent-error]]
 [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/error-handler][error-handler]]
 [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/error-mode][error-mode]]

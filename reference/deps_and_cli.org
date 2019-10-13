@@ -5,7 +5,7 @@
 
 Clojure "endeavors to be a general-purpose language suitable in those
 areas where Java is suitable" (from
-[[file:xref/../../about/rationale.xml][Rationale]]). To effectively
+[[file:xref/../../about/rationale.org[Rationale]]). To effectively
 target the JVM platform, Clojure needs to provide ready access to Java
 libraries, ideally in a way suited for dynamic development. In practice,
 this means meeting the JVM platform in two places:
@@ -775,7 +775,7 @@ The cached classpath file is used when:
   :END:
 
 For tools installation, see the instructions in the
-[[file:xref/../../guides/getting_started.xml][Getting Started]] guide.
+[[file:xref/../../guides/getting_started.org[Getting Started]] guide.
 
 * Glossary
   :PROPERTIES:

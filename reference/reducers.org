@@ -1,5 +1,5 @@
 Reducers provide an alternative approach to using
-[[file:sequences.xml][sequences]] to manipulate standard Clojure
+[[file:sequences.org[sequences]] to manipulate standard Clojure
 collections. Sequence functions are typically applied lazily, in order,
 create intermediate results, and in a single thread. However, many
 sequence functions (like map and filter) could conceptually be applied

@@ -378,10 +378,10 @@ code. Use the =locking= macro.
 The special forms [[file:java_interop.xml#dot][dot ('.')]],
 [[file:java_interop.xml#new][new]], and
 [[file:java_interop.xml#set][set!]] of fields are described in the
-[[file:java_interop.xml][Java Interop]] section of the reference.
+[[file:java_interop.org[Java Interop]] section of the reference.
 
 [[file:vars.xml#set%21][set!]] of vars is described in the
-[[file:vars.xml][Vars]] section of the reference.
+[[file:vars.org[Vars]] section of the reference.
 
 * Binding Forms (Destructuring)
   :PROPERTIES:

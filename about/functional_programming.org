@@ -70,7 +70,7 @@ are not variables. Once created their values never change!*
   :END:
 
 The easiest way to avoid mutating state is to use immutable
-[[file:xref/../../reference/data_structures.xml][data structures]].
+[[file:xref/../../reference/data_structures.org[data structures]].
 Clojure provides a set of immutable lists, vectors, sets and maps. Since
 they can't be changed, 'adding' or 'removing' something from an
 immutable collection means creating a new collection just like the old
@@ -104,7 +104,7 @@ collections have readable representations and common interfaces:
 Applications often need to associate attributes and other data about
 data that is orthogonal to the logical value of the data. Clojure
 provides direct support for this
-[[file:xref/../../reference/metadata.xml][metadata]]. Symbols, and all
+[[file:xref/../../reference/metadata.org[metadata]]. Symbols, and all
 of the collections, support a metadata map. It can be accessed with the
 [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/meta][meta]]
 function. Metadata does /not/ impact equality semantics, nor will
@@ -132,7 +132,7 @@ extensions. This is a big improvement vs. hardwiring a language to the
 concrete implementations of its data types.
 
 A good example of this is the
-[[file:xref/../../reference/sequences.xml][seq]] interface. By making
+[[file:xref/../../reference/sequences.org[seq]] interface. By making
 the core Lisp list construct into an abstraction, a wealth of library
 functions are extended to any data structure that can provide a
 sequential interface to its contents. All of the Clojure data structures

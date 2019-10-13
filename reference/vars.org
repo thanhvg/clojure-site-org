@@ -1,8 +1,8 @@
 Clojure is a practical language that recognizes the occasional need to
 maintain a persistent reference to a changing value and provides 4
 distinct mechanisms for doing so in a controlled manner - Vars,
-[[file:refs.xml][Refs]], [[file:agents.xml][Agents]] and
-[[file:atoms.xml][Atoms]]. Vars provide a mechanism to refer to a
+[[file:refs.xml][Refs]], [[file:agents.org[Agents]] and
+[[file:atoms.org[Atoms]]. Vars provide a mechanism to refer to a
 mutable storage location that can be dynamically rebound (to a new
 storage location) on a per-thread basis. Every Var can (but needn't)
 have a root binding, which is a binding that is shared by all threads
@@ -76,7 +76,7 @@ with logging behavior only in certain call contexts or threads.
   :END:
 
 Some Clojure concurrency functions (futures,
-[[file:agents.xml][agents]]) provide "binding conveyance", which allows
+[[file:agents.org[agents]]) provide "binding conveyance", which allows
 the current set of dynamic bindings to be conveyed to another thread for
 the purpose of continuing work asynchronously with the same environment.
 This functionality is provided by
@@ -117,18 +117,18 @@ in [[file:java_interop.xml#set][Java Interop]].
   :END:
 
 The Namespace system maintains global maps of symbols to Var objects
-/(see [[file:namespaces.xml][Namespaces]])/. If a =def= expression does
+/(see [[file:namespaces.org[Namespaces]])/. If a =def= expression does
 not find an interned entry in the current namespace for the symbol being
 def-ed, it creates one, otherwise it uses the existing Var. This
 find-or-create process is called interning. This means that, unless they
 have been unmap-ed, Var objects are stable references and need not be
 looked up every time. It also means that namespaces constitute a global
 environment in which, as described in
-[[file:evaluation.xml][Evaluation]], the compiler attempts to resolve
+[[file:evaluation.org[Evaluation]], the compiler attempts to resolve
 all free symbols as Vars.
 
 The [[file:special_forms.xml#var][var]] special form or the =#'= reader
-macro /(see [[file:reader.xml][Reader]])/ can be used to get an interned
+macro /(see [[file:reader.org[Reader]])/ can be used to get an interned
 Var object instead of its current value.
 
 * Non-interned Vars

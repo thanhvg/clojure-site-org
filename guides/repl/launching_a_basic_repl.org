@@ -7,7 +7,7 @@ terminal window:
   :END:
 
 The easiest way to start a Clojure REPL is with using the =clj= command
-of the Clojure [[file:xref/../../deps_and_cli.xml][CLI tools]]:
+of the Clojure [[file:xref/../../deps_and_cli.org[CLI tools]]:
 
 #+BEGIN_EXAMPLE
     clj ## run this command in a terminal window
@@ -20,7 +20,7 @@ You should see output like the following:
     user=>
 #+END_EXAMPLE
 
-See [[file:xref/../../getting_started.xml][Getting Started]] to learn
+See [[file:xref/../../getting_started.org[Getting Started]] to learn
 how to install the Clojure CLI.
 
 You can exit the REPL by typing =Ctrl+D= (pressing the =Ctrl= and =D=

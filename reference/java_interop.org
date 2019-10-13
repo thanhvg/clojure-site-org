@@ -251,7 +251,7 @@ As of Clojure 1.2,
 is also available for implementing interfaces.
 
 Java annotations may be attached to classes, constructors, and methods
-via [[file:metadata.xml][metadata]] on =gen-class= and Clojure type
+via [[file:metadata.org[metadata]] on =gen-class= and Clojure type
 constructs, see the
 [[file:datatypes.xml#_java_annotation_support][datatypes reference]] for
 an example.
@@ -289,7 +289,7 @@ It is recommended that you limit use of arrays to interop with Java
 libraries that require them as arguments or use them as return values.
 
 Note that many other Clojure functions work with arrays such as via the
-[[file:sequences.xml][seq library]]. The functions listed here exist for
+[[file:sequences.org[seq library]]. The functions listed here exist for
 initial creation of arrays, or to support mutation or higher performance
 operations on arrays.
 

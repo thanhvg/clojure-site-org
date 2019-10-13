@@ -26,9 +26,9 @@ In all cases, using a library involves:
 Clojure tools specify a syntax and file (deps.edn) for (a), given which
 they'll handle (b) and (c) automatically.
 
-See [[file:getting_started.xml][Getting Started]] for details on how to
+See [[file:getting_started.org[Getting Started]] for details on how to
 install the tools. Here we will demonstrate how to get started. See
-[[file:xref/../../reference/deps_and_cli.xml][Deps and CLI]] for a
+[[file:xref/../../reference/deps_and_cli.org[Deps and CLI]] for a
 complete reference.
 
 * Running a REPL and using libraries
@@ -432,5 +432,5 @@ And then run the hello namespace:
     Hello, World!
 #+END_EXAMPLE
 
-See [[file:xref/../../reference/compilation.xml][Compilation and Class
+See [[file:xref/../../reference/compilation.org[Compilation and Class
 Generation]] for a complete reference.

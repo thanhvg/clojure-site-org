@@ -7,7 +7,7 @@ However, it is often necessary to have state change in a program.
 Clojure, being a practical language, allows state to change but provides
 mechanism to ensure that, when it does so, it remains consistent, while
 alleviating developers from having to avoid conflicts manually using
-locks etc. The [[file:xref/../../reference/refs.xml][software
+locks etc. The [[file:xref/../../reference/refs.org[software
 transactional memory system]] (STM), exposed through
 [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/dosync][dosync]],
 [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/ref][ref]],
@@ -15,11 +15,11 @@ transactional memory system]] (STM), exposed through
 [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/alter][alter]],
 et al, supports /sharing/ changing state between threads in a
 /synchronous/ and /coordinated/ manner. The
-[[file:xref/../../reference/agents.xml][agent]] system supports sharing
+[[file:xref/../../reference/agents.org[agent]] system supports sharing
 changing state between threads in an /asynchronous/ and /independent/
-manner. The [[file:xref/../../reference/atoms.xml][atoms]] system
+manner. The [[file:xref/../../reference/atoms.org[atoms]] system
 supports sharing changing state between threads in a /synchronous/ and
-/independent/ manner. The [[file:xref/../../reference/vars.xml][dynamic
+/independent/ manner. The [[file:xref/../../reference/vars.org[dynamic
 var system]], exposed through
 [[file:xref/../../reference/special_forms.xml#def][def]],
 [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/binding][binding]],
@@ -32,7 +32,7 @@ therefore they work with the Executor framework etc.
 Most of this is covered in more detail in the
 [[https://www.youtube.com/watch?v=nDAfZK8m5_8][concurrency screencast]].
 
-[[file:xref/../../reference/refs.xml][Refs]] are mutable references to
+[[file:xref/../../reference/refs.org[Refs]] are mutable references to
 objects. They can be
 [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/ref-set][ref-set]]
 or
@@ -80,8 +80,8 @@ persistent and immutable, efficiently support simultaneous speculative
 put in refs.
 
 By default Vars are static, but per-thread bindings for Vars defined
-with [[file:xref/../../reference/metadata.xml][metadata]] mark them as
-dynamic. [[file:xref/../../reference/vars.xml][Dynamic vars]] are also
+with [[file:xref/../../reference/metadata.org[metadata]] mark them as
+dynamic. [[file:xref/../../reference/vars.org[Dynamic vars]] are also
 mutable references to objects. They have a (thread-shared) root binding
 which can be established by
 [[file:xref/../../reference/special_forms.xml#def][def]], and can be set

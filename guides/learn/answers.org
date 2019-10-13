@@ -1,5 +1,5 @@
 This page contains solutions to the "Test your knowledge" sections of
-the [[file:syntax.xml][Learn Clojure]] guide.
+the [[file:syntax.org[Learn Clojure]] guide.
 
 * [[file:syntax.xml#_test_your_knowledge][Syntax]]
   :PROPERTIES:

@@ -214,7 +214,7 @@ route to error-handling methods etc.
 
 /Note: In this example, the keyword :Shape is being used as the dispatch
 function, as keywords are functions of maps, as described in the
-[[file:data_structures.xml][Data Structures]] section./
+[[file:data_structures.org[Data Structures]] section./
 
 #+BEGIN_SRC clojure
     (defmulti area :Shape)

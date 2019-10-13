@@ -142,7 +142,7 @@ functions used, but there are a few rules of thumb:
    require the =->= macro.
 
 -  When calling methods through
-   [[file:xref/../../reference/java_interop.xml][Java interop]], the
+   [[file:xref/../../reference/java_interop.org[Java interop]], the
    Java object is passed in as the first argument. In such cases, =->=
    is useful, for example, to check a string for a prefix:
 
@@ -189,7 +189,7 @@ resembles =->= in that it threads a value through a number of
 expressions. However, it also short-circuits execution when an
 expression evaluates as =nil= at any point in the chain. One common
 problem with arrow macros in the context of
-[[file:xref/../../reference/java_interop.xml][Java interop]] is that
+[[file:xref/../../reference/java_interop.org[Java interop]] is that
 Java methods do not expect to be passed =nil= (=null=). One way to avoid
 a =NullPointerException= in these cases is to add an explicit guard:
 
