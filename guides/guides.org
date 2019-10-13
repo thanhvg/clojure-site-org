@@ -3,45 +3,45 @@
   :CUSTOM_ID: _learning
   :END:
 
--  [[file:getting_started.org[Getting Started]]
+-  [[file:getting_started.org][Getting Started]]
 
--  [[file:learn/syntax.org[Learn Clojure]]
+-  [[file:learn/syntax.org][Learn Clojure]]
 
--  [[file:repl/introduction.org[Programming at the REPL]]
+-  [[file:repl/introduction.org][Programming at the REPL]]
 
--  [[file:faq.org[FAQ]]
+-  [[file:faq.org][FAQ]]
 
 * Language
   :PROPERTIES:
   :CUSTOM_ID: _language
   :END:
 
--  [[file:spec.org[spec]]
+-  [[file:spec.org][spec]]
 
--  [[file:weird_characters.org[Reading Clojure Characters]]
+-  [[file:weird_characters.org][Reading Clojure Characters]]
 
--  [[file:destructuring.org[Destructuring]]
+-  [[file:destructuring.org][Destructuring]]
 
--  [[file:threading_macros.org[Threading Macros]]
+-  [[file:threading_macros.org][Threading Macros]]
 
--  [[file:comparators.org[Comparators]]
+-  [[file:comparators.org][Comparators]]
 
--  [[file:reader_conditionals.org[Reader Conditionals]]
+-  [[file:reader_conditionals.org][Reader Conditionals]]
 
 * Tools
   :PROPERTIES:
   :CUSTOM_ID: _tools
   :END:
 
--  [[file:deps_and_cli.org[Deps and CLI]]
+-  [[file:deps_and_cli.org][Deps and CLI]]
 
--  [[file:test_check_beginner.org[test.check]]
+-  [[file:test_check_beginner.org][test.check]]
 
 * Libraries
   :PROPERTIES:
   :CUSTOM_ID: _libraries
   :END:
 
--  [[file:core_async_go.org[Go Block Best Practices]]
+-  [[file:core_async_go.org][Go Block Best Practices]]
 
 

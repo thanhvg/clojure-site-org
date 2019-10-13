@@ -28,7 +28,7 @@ exist more ergonomic terminal REPL clients:
 
 -  *[[https://github.com/bhauman/rebel-readline][rebel-readline]]* is a
    terminal readline library made by Bruce Hauman. If you have already
-   installed the [[file:xref/../../deps_and_cli.org[Clojure CLI
+   installed the [[file:xref/../../deps_and_cli.org][Clojure CLI
    tools]], you can launch it in
    [[https://github.com/bhauman/rebel-readline#quick-try][one line at
    the terminal]] without any additional installation steps.
@@ -104,7 +104,7 @@ You can usually customize how your REPL reads, evaluates and prints, but
 the method to do it depends on your toolchain. For instance:
 
 -  when using a REPL started from
-   [[file:xref/../../../reference/repl_and_main.org[clojure.main]] (as
+   [[file:xref/../../../reference/repl_and_main.org][clojure.main]] (as
    is the case when using the =clj= tool) you can customize the REPL by
    launching a 'sub-REPL': see
    [[https://clojure.github.io/clojure/clojure.main-api.html#clojure.main/repl][clojure.main/repl]].

@@ -59,12 +59,12 @@ Branching:
 [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/if-let][if-let]]
 [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/cond][cond]]
 [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/condp][condp]]\\
-Looping (see also [[file:sequences.org[Sequences]]):
+Looping (see also [[file:sequences.org][Sequences]]):
 [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/for][for]]
 [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/doseq][doseq]]
 [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/dotimes][dotimes]]
 [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/while][while]]\\
-Working with vars (see also [[file:vars.org[Vars and Environment]]):
+Working with vars (see also [[file:vars.org][Vars and Environment]]):
 [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/ns][ns]]
 [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/declare][declare]]
 [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/defn][defn]]
@@ -79,7 +79,7 @@ Arranging code differently:
 [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/%2E%2E][..]]
 [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/doto][doto]]
 [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/-%3e][->]]\\
-Dynamic scopes (see also [[file:vars.org[Vars and Environment]]):
+Dynamic scopes (see also [[file:vars.org][Vars and Environment]]):
 [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/binding][binding]]
 [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/locking][locking]]
 [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/time][time]]
@@ -88,11 +88,11 @@ Dynamic scopes (see also [[file:vars.org[Vars and Environment]]):
 [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/with-open][with-open]]
 [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/with-out-str][with-out-str]]
 [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/with-precision][with-precision]]\\
-Creating lazy things (see also [[file:sequences.org[Sequences]]):
+Creating lazy things (see also [[file:sequences.org][Sequences]]):
 [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/lazy-cat][lazy-cat]]
 [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/lazy-cons][lazy-cons]]
 [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/delay][delay]]\\
-[[file:java_interop.org[Java interop]] macros:
+[[file:java_interop.org][Java interop]] macros:
 [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/%2E%2E][..]]
 [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/amap][amap]]
 [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/areduce][areduce]]
@@ -109,5 +109,5 @@ Transactions:
 [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/dosync][dosync]]
 [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/io!][io!]]
 
-A few [[file:special_forms.org[special forms]] are actually implemented
+A few [[file:special_forms.org][special forms]] are actually implemented
 as macros, primarily to provide destructuring: fn let loop

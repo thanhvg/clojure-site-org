@@ -4,7 +4,7 @@
   :END:
 
 Having started the REPL (as described
-[[file:launching_a_basic_repl.org[in the previous chapter]]), you can
+[[file:launching_a_basic_repl.org][in the previous chapter]]), you can
 now evaluate Clojure expressions by simply typing them into the REPL and
 pressing ENTER:
 
@@ -54,7 +54,7 @@ source files in the right order into the REPL.
 
   [[/images/content/guides/repl/editor-cli-repl.gif]]
 
-  In the /[[file:enhancing_your_repl_workflow.org[Enhancing your REPL
+  In the /[[file:enhancing_your_repl_workflow.org][Enhancing your REPL
   workflow]]/ chapter of this guide, we will see more ergonomic
   configurations for using the REPL. However, this minimalist setup is
   sufficient for the scope of this tutorial, and is important for
@@ -98,7 +98,7 @@ nature:
 So far, we have only called code that we had defined manually at the
 REPL (for instance our =factorial= function defined above). But the REPL
 also lets you use pre-existing Clojure code, i.e Clojure
-[[file:xref/../../../reference/libs.org[libs]].[fn:1] Given a Clojure
+[[file:xref/../../../reference/libs.org][libs]].[fn:1] Given a Clojure
 lib with namespace =my.name.space=, you can evaluate
 =(require '[my.name.space])= to make that lib's code loaded and
 available in the REPL.
@@ -339,6 +339,6 @@ that is printed by =doc=) using =find-doc=:
 #+END_QUOTE
 
 [fn:1] Note that what we call a Clojure
-       [[file:xref/../../../reference/libs.org[lib]] is not necessarily
+       [[file:xref/../../../reference/libs.org][lib]] is not necessarily
        a [[https://en.wikipedia.org/wiki/Library_(computing)][library]]:
        it can also be a source code file in your current project.

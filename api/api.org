@@ -8,7 +8,7 @@
 -  [[https://clojure.github.io/clojure/javadoc/][Clojure Java API]] -
    for calling from Java into Clojure
 
--  [[file:cheatsheet.org[Clojure Cheatsheet]]
+-  [[file:cheatsheet.org][Clojure Cheatsheet]]
 
 * ClojureScript API
   :PROPERTIES:
@@ -23,7 +23,7 @@
   :END:
 
 Documentation for Clojure
-[[file:xref/../../community/contrib_libs.org[contrib libraries]]:
+[[file:xref/../../community/contrib_libs.org][contrib libraries]]:
 
 -  [[https://clojure.github.io/][Contrib APIs]]
 

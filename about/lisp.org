@@ -1,13 +1,13 @@
 Clojure is a member of the Lisp family of languages. Many of the
 features of Lisp have made it into other languages, but Lisp's approach
-to code-as-data and its [[file:xref/../../reference/macros.org[macro
+to code-as-data and its [[file:xref/../../reference/macros.org][macro
 system]] still set it apart. Clojure extends the code-as-data system
 beyond parenthesized lists (s-expressions) to vectors and maps. Thus
 vectors and maps can be used in macro syntax, have literal reader
 representations etc.
 
 Lisp data, and thus Lisp code, is read by the
-[[file:xref/../../reference/reader.org[reader]]. The result of reading
+[[file:xref/../../reference/reader.org][reader]]. The result of reading
 is the data structure represented by the forms. Clojure can compile data
 structures that represent code, and as part of that process it looks for
 calls to macros. When it sees one, it calls the macro, passing the forms

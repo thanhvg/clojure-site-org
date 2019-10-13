@@ -125,7 +125,7 @@ loaded by the JVM.
 [[/images/content/guides/learn/syntax/clojure-evaluation.png]]
 
 In Clojure, source code is read as characters by the
-[[file:xref/../../../reference/reader.org[Reader]]. The Reader may read
+[[file:xref/../../../reference/reader.org][Reader]]. The Reader may read
 the source either from .clj files or be given a series of expressions
 interactively. The Reader produces Clojure data. The Clojure compiler
 then produces the bytecode for the JVM.
@@ -395,7 +395,7 @@ implementation of the Clojure library itself is an excellent way to
 learn more about the language and how it is used.
 
 It is also an excellent idea to keep a copy of the
-[[file:xref/../../../api/cheatsheet.org[Clojure Cheatsheet]] open while
+[[file:xref/../../../api/cheatsheet.org][Clojure Cheatsheet]] open while
 you are learning Clojure. The cheatsheet categorizes the functions
 available in the standard library and is an invaluable reference.
 

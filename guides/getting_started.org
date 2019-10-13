@@ -1,8 +1,8 @@
 Welcome to Clojure!
 
-Check out [[file:learn/syntax.org[Learn Clojure]],
-[[file:xref/../../community/resources.org[Resources]], or
-[[file:xref/../../community/books.org[Books]] for learning the
+Check out [[file:learn/syntax.org][Learn Clojure]],
+[[file:xref/../../community/resources.org][Resources]], or
+[[file:xref/../../community/books.org][Books]] for learning the
 language!
 
 * Clojure installer and CLI tools
@@ -10,7 +10,7 @@ language!
   :CUSTOM_ID: _clojure_installer_and_cli_tools
   :END:
 
-Clojure provides [[file:deps_and_cli.org[command line tools]] that can
+Clojure provides [[file:deps_and_cli.org][command line tools]] that can
 be used to start a Clojure repl, use Clojure and Java libraries, and
 start Clojure programs.
 

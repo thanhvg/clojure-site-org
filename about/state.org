@@ -114,8 +114,8 @@ over time. This is the Clojure model.
 In Clojure's model, value calculation is purely functional. Values never
 change. New values are functions of old, not mutations. But logical
 identity is well supported, via atomic references to values
-([[file:xref/../../reference/refs.org[Refs]] and
-[[file:xref/../../reference/agents.org[Agents]]). Changes to references
+([[file:xref/../../reference/refs.org][Refs]] and
+[[file:xref/../../reference/agents.org][Agents]]). Changes to references
 are controlled/coordinated by the system - i.e. cooperation is not
 optional and not manual. The world moves forward due to the cooperative
 efforts of its participants and the programming language/system,
@@ -243,7 +243,7 @@ models and provides robust and easy-to-use facilities for managing
 identity and state in a single process in the face of concurrency.
 
 In coming to Clojure from an OO language, you can use one of its
-[[file:xref/../../reference/data_structures.org[persistent
+[[file:xref/../../reference/data_structures.org][persistent
 collections]], e.g. maps, instead of objects. Use values as much as
 possible. And for those cases where your objects are truly modeling
 identities (far fewer cases than you might realize until you start

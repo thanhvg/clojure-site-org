@@ -67,7 +67,7 @@ classpath. Classpath-relative paths have prefix of @ or @/
   :END:
 
 The simplest way to launch a Clojure /repl/ is to use the
-[[file:xref/../../guides/getting_started.org[clj]] command tool, which
+[[file:xref/../../guides/getting_started.org][clj]] command tool, which
 invokes clojure.main:
 
 #+BEGIN_EXAMPLE

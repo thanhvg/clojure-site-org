@@ -1,7 +1,7 @@
 This page explains the Clojure syntax for characters that are difficult
 to "google". Sections are not in any particular order, but related items
 are grouped for ease. Please refer to
-[[file:xref/../../reference/reader.org[the reader reference page]] as
+[[file:xref/../../reference/reader.org][the reader reference page]] as
 the authoritative reference on the Clojure reader. This guide is based
 on [[http://twitter.com/kouphax][James Hughes]] original
 [[https://yobriefca.se/blog/2014/05/19/the-weird-and-wonderful-characters-of-clojure/][blog
@@ -144,7 +144,7 @@ the reader (This is a more complete removal than the =comment= macro
 which yields =nil=).". This can prove useful for debugging situations or
 for multiline comments.
 
--  [[file:xref/../../reference/reader.org[Clojure Documentation -
+-  [[file:xref/../../reference/reader.org][Clojure Documentation -
    Reader]]
 
 -  [[https://github.com/edn-format/edn#tagged-elements][edn Tagged
@@ -353,7 +353,7 @@ the same:
 
 =@= is used to get the current value of a reference. The above example
 uses =@= to get the current value of an
-[[file:xref/../../reference/atom.org[atom]], but =@= can be applied to
+[[file:xref/../../reference/atom.org][atom]], but =@= can be applied to
 other things such as =future= s, =delay= s, =promises= s etc. to force
 computation and potentially block.
 
@@ -425,7 +425,7 @@ you will see in most Clojure, but occasionally you will encounter the
 
 Note that metadata is available in edn, but type hints are not.
 
--  [[file:xref/../../reference/metadata.org[Clojure Official
+-  [[file:xref/../../reference/metadata.org][Clojure Official
    Documentation]]
 
 -  [[http://en.wikibooks.org/wiki/Learning_Clojure/Meta_Data][Learning
@@ -548,7 +548,7 @@ qualified name.
 
 Note that =::= is not available in edn.
 
--  [[file:xref/../../reference/reader.org[Reader]]
+-  [[file:xref/../../reference/reader.org][Reader]]
 
 * =#:= and =#::= - Namespace Map Syntax
   :PROPERTIES:
@@ -634,7 +634,7 @@ separator in a symbol name to separate a symbol's name and namespace
 qualifier, e.g. =my-namespace/utils=. Namespace qualifiers can thus
 prevent naming collisions for simple names.
 
--  [[file:xref/../../reference/reader.org[Reader]]
+-  [[file:xref/../../reference/reader.org][Reader]]
 
 * =\= - Character literal
   :PROPERTIES:
@@ -678,7 +678,7 @@ is an imported Java class
 -  [[http://blog.jayfields.com/2011/01/clojure-using-java-inner-classes.html][Clojure:
    Using Java Inner Classes]]
 
--  [[file:xref/../../reference/java_interop.org[Official
+-  [[file:xref/../../reference/java_interop.org][Official
    Documentation]]
 
 * =->=, =->>=, =some->=, =cond->=, =as->= etc. - Threading macros
@@ -687,7 +687,7 @@ is an imported Java class
   :END:
 
 These are threading macros. Please refer to
-[[file:xref/../threading_macros.org[Official Clojure Documentation]]
+[[file:xref/../threading_macros.org][Official Clojure Documentation]]
 
 -  [[http://blog.fogus.me/2009/09/04/understanding-the-clojure-macro/][Understanding
    the Clojure -> macro]]
@@ -751,7 +751,7 @@ allowed only within syntax quote.
 -  [[http://aphyr.com/posts/305-clojure-from-the-ground-up-macros][Clojure
    from the ground up: macros]]
 
--  [[file:xref/../../reference/macros.org[Clojure Official
+-  [[file:xref/../../reference/macros.org][Clojure Official
    Documentation]]
 
 * =~= - Unquote
@@ -787,7 +787,7 @@ are functions invoked during compilation that take code and return code.
 -  [[http://aphyr.com/posts/305-clojure-from-the-ground-up-macros][Clojure
    from the ground up: macros]]
 
--  [[file:xref/../../macros.org[Clojure Official Documentation]]
+-  [[file:xref/../../macros.org][Clojure Official Documentation]]
 
 * =~@= - Unquote splicing
   :PROPERTIES:
@@ -821,7 +821,7 @@ Again, this is a powerful tool for writing macros.
 -  [[http://aphyr.com/posts/305-clojure-from-the-ground-up-macros][Clojure
    from the ground up: macros]]
 
--  [[file:xref/../../macros.org[Clojure Official Documentation]]
+-  [[file:xref/../../macros.org][Clojure Official Documentation]]
 
 * =<symbol>#= - Gensym
   :PROPERTIES:
@@ -891,7 +891,7 @@ traditional =cond=. The syntax for usage is =#?= and looks like this:
        :default (fallthrough expression))
 #+END_SRC
 
--  [[file:xref/../reader_conditionals.org[Reader conditionals]]
+-  [[file:xref/../reader_conditionals.org][Reader conditionals]]
 
 * =#?@= - Splicing Reader conditional
   :PROPERTIES:
@@ -915,7 +915,7 @@ as this:
       (list 5 6 7 8))
 #+END_SRC
 
--  [[file:xref/../reader_conditionals.org[Reader conditonals]]
+-  [[file:xref/../reader_conditionals.org][Reader conditonals]]
 
 * =*var-name*= - "Earmuffs"
   :PROPERTIES:
@@ -990,7 +990,7 @@ the pain of managing asynchronous code from the code base.
 
 -  [[https://github.com/clojure/core.async/wiki][core.async Wiki]]
 
--  [[file:xref/../core_async_go.org[Go Block Best Practices]]
+-  [[file:xref/../core_async_go.org][Go Block Best Practices]]
 
 * =<symbol>?= - Predicate Suffix
   :PROPERTIES:

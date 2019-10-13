@@ -94,7 +94,7 @@ been loaded]].
 
 *Explanations:* Clojure did not find any existing namespace named
 =a.b.c=, then searched the classpath for a
-[[file:xref/../../../reference/libs.org[lib]] that would define it,
+[[file:xref/../../../reference/libs.org][lib]] that would define it,
 eventualling failing with the above Exception. The cause may vary:
 
 -  maybe you just made a typo in the namespace name

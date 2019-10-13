@@ -16,7 +16,7 @@ conditionals, all you need is for your file to have a =.cljc= extension
 and to use Clojure 1.7 or ClojureScript 0.0-3196 or higher. Reader
 conditionals are expressions, and can be manipulated like ordinary
 Clojure expressions. For more technical details, see the reference page
-on [[file:xref/../../reference/reader.org[the reader]].
+on [[file:xref/../../reference/reader.org][the reader]].
 
 There are two types of reader conditionals, standard and splicing. The
 standard reader conditional behaves similarly to a traditional =cond=.
@@ -211,7 +211,7 @@ code between platforms was solved by a Leiningen plugin called
 =.cljx= extension and outputs multiple platform specific files to a
 generated sources directory. These were then read as normal Clojure or
 ClojureScript files by the Clojure
-[[file:xref/../../reference/reader.org[reader]]. This worked well, but
+[[file:xref/../../reference/reader.org][reader]]. This worked well, but
 required another piece of tooling to run. cljx was deprecated on June 13
 2015 in favour of reader conditionals.
 

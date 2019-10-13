@@ -50,7 +50,7 @@ def clean_xml_link(filename):
         lines = source.readlines()
     with open(filename, 'w') as source:
         for line in lines:
-            source.write(xml_file_link.sub(r'\1org', line))
+            source.write(xml_file_link.sub(r'\1org]', line))
 
 
 if __name__ == '__main__':

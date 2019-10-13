@@ -7,14 +7,14 @@ extend. Clojure supports polymorphism in several ways:
 -  Clojure supports the generation of implementations of Java interfaces
    in Clojure using
    [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/proxy][proxy]]
-   ([[file:jvm_hosted.org[see JVM Hosted]]).
+   ([[file:jvm_hosted.org][see JVM Hosted]]).
 
 -  The Clojure language supports polymorphism along both class and
    custom hierarchies with
-   [[file:xref/../../reference/multimethods.org[multimethod]]s.
+   [[file:xref/../../reference/multimethods.org][multimethod]]s.
 
 -  The Clojure language also supports a faster form of polymorphism with
-   [[file:xref/../../reference/protocols.org[protocols]] (but limited
+   [[file:xref/../../reference/protocols.org][protocols]] (but limited
    only to class polymorphism to take advantage of the JVMs existing
    capabilities for invocation).
 
@@ -68,4 +68,4 @@ protocols. Additionally, protocols are open to later dynamic extension
 for new types. Protocols are limited just to dispatch on class type to
 take advantage of the native Java performance of polymorphic method
 calls. For more details, see the
-[[file:xref/../../reference/protocols.org[protocols]] page.
+[[file:xref/../../reference/protocols.org][protocols]] page.

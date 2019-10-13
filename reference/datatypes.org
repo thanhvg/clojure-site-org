@@ -9,7 +9,7 @@ many implementations of these abstractions. The abstractions are
 specified by host interfaces, and the implementations by host classes.
 While this was sufficient for bootstrapping the language, it left
 Clojure without similar abstraction and low-level implementation
-facilities. The [[file:protocols.org[protocols]] and [[#][datatypes]]
+facilities. The [[file:protocols.org][protocols]] and [[#][datatypes]]
 features add powerful and flexible mechanisms for abstraction and data
 structure definition with no compromises vs the facilities of the host
 platform.
@@ -28,7 +28,7 @@ and
 , provide the mechanism for defining implementations of abstractions,
 and in the case of reify, instances of those implementations. The
 abstractions themselves are defined by either
-[[file:protocols.org[protocols]] or interfaces. A datatype provides a
+[[file:protocols.org][protocols]] or interfaces. A datatype provides a
 host type, (named in the case of deftype and defrecord, anonymous in the
 case of reify), with some structure (explicit fields in the case of
 deftype and defrecord, implicit closure in the case of reify), and

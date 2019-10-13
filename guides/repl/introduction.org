@@ -1,5 +1,5 @@
 This guide is for developers who have at least a
-[[file:xref/../../learn/syntax.org[basic understanding]] of Clojure,
+[[file:xref/../../learn/syntax.org][basic understanding]] of Clojure,
 and want to become more proficient at using the Clojure REPL.
 
 * What is a REPL?
@@ -79,21 +79,21 @@ Depending on your needs, you may not need to read the entirety of this
 guide:
 
 -  If you are */just starting to learn Clojure/*, the first 2 chapters
-   [[file:launching_a_basic_repl.org[Launching a basic Clojure REPL]]
-   and [[file:basic_usage.org[Basic Usage]] are enough to get you
+   [[file:launching_a_basic_repl.org][Launching a basic Clojure REPL]]
+   and [[file:basic_usage.org][Basic Usage]] are enough to get you
    started with a productive learning environment.
 
 -  As soon as you start */developing non-trivial programs/* (such as a
    hobby web app), you will need the ideas presented in at least the
-   next 2 chapters: [[file:data_visualization_at_the_repl.org[Data
+   next 2 chapters: [[file:data_visualization_at_the_repl.org][Data
    visualization at the REPL]] and
-   [[file:navigating_namespaces.org[Navigating namespaces]].
+   [[file:navigating_namespaces.org][Navigating namespaces]].
 
 -  For */working on Clojure projects at a professional level/*,
-   [[file:enhancing_your_repl_workflow.org[Enhancing your REPL
+   [[file:enhancing_your_repl_workflow.org][Enhancing your REPL
    workflow]] and
-   [[file:guidelines_for_repl_aided_development.org[Guidelines for
+   [[file:guidelines_for_repl_aided_development.org][Guidelines for
    REPL-Aided Development]] are must-reads.
 
-First, we'll learn how to [[file:launching_a_basic_repl.org[launch a
+First, we'll learn how to [[file:launching_a_basic_repl.org][launch a
 basic Clojure REPL]].

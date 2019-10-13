@@ -623,7 +623,7 @@ Clojure?]]*
 Rich Hickey prefers to evaluate patches attached to JIRA tickets. This
 is not to make it more difficult for contributors, or for legal reasons,
 but because of workflow preferences. See
-[[file:xref/../../dev/dev.org[the development page]] for more details.
+[[file:xref/../../dev/dev.org][the development page]] for more details.
 
 [[https://groups.google.com/forum/#!msg/clojure/jWMaop_eVaQ/3M4gddaXDZoJ][Link]]
 to Oct 2012 Clojure Google group message from Rich Hickey on this topic.

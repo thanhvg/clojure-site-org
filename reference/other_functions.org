@@ -22,7 +22,7 @@ Miscellaneous:
 | Function                                                                                          | Example expression                     | Return value               |    |
 |---------------------------------------------------------------------------------------------------+----------------------------------------+----------------------------+----|
 | [[file:special_forms.xml#fn][fn]]                                                                 | =(map (fn [x] (+ 2 x)) [1 2 3])=       | =(3 4 5)=                  |    |
-| #() [[file:reader.org[reader]] macro                                                             | =(map #(+ 2 %) [1 2 3])=               | =(3 4 5)=                  |    |
+| #() [[file:reader.org][reader]] macro                                                             | =(map #(+ 2 %) [1 2 3])=               | =(3 4 5)=                  |    |
 | [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/partial][partial]]         | =(map (partial + 2) [1 2 3])=          | =(3 4 5)=                  |    |
 | [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/comp][comp]]               | =(map (comp - *) [2 4 6] [1 2 3])=     | =(-2 -8 -18)=              |    |
 | [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/complement][complement]]   | =(map (complement zero?) [3 2 1 0])=   | =(true true true false)=   |    |
