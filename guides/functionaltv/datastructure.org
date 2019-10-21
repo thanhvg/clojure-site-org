@@ -1,0 +1,2681 @@
+* Clojure Data Structures Tutorial
+  :PROPERTIES:
+  :CUSTOM_ID: clojure-data-structures-tutorial
+  :CLASS: entry-title
+  :END:
+
+Eric Normand · Updated April 15, 2019
+
+In this tutorial, you'll learn Clojure data structures easily with code
+examples. We'll go through Clojure's main collections, data structure
+usage patterns, and thought processes for using Clojure's powerful
+collection library including how to use collections like vectors,
+hashmaps, and sets, and common patterns like tuple and entity.
+** Table of Contents
+   :PROPERTIES:
+   :CUSTOM_ID: table-of-contents
+   :END:
+
+-  [[two-layers][How to choose the right data structure]]
+
+   -  [[language-semantics][Language semantics]]
+   -  [[domain-semantics][Domain semantics]]
+
+-  [[data-structures][Collections]]
+
+   -  [[vector][Vector]]
+   -  [[hash-map][HashMap]]
+   -  [[sorted-map][Sorted Map]]
+   -  [[set][Set]]
+   -  [[sorted-set][Sorted Set]]
+   -  [[list][List]]
+   -  [[queue][Queue]]
+
+-  [[access-patterns][Access patterns]]
+
+   -  [[sequential-access][Sequential access]]
+   -  [[remember-duplicates][Remember duplicates]]
+   -  [[lookup-by-key][Lookup by key]]
+   -  [[associate-key-value][Associate a key and value]]
+   -  [[dissociate][Dissociate a key and value]]
+   -  [[count][Count]]
+   -  [[equality][Equality comparison]]
+   -  [[removing][Removing an item from a Set]]
+   -  [[subvectors][Split a sequence]]
+   -  [[contains][Containment check]]
+   -  [[fifo][FIFO (first-in, first-out)]]
+   -  [[lifo][LIFO (last-in, first-out)]]
+
+-  [[patterns][Usage Patterns]]
+
+   -  [[entity][Entity]]
+   -  [[variant-entity][Variant Entity]]
+   -  [[index][Index]]
+   -  [[accumulator-index][Accumulator Index]]
+   -  [[dispatch][Dispatch Table]]
+   -  [[conversion-table][Conversion Table]]
+   -  [[tuple][Tuple]]
+   -  [[variant-tuple][Variant Tuple]]
+   -  [[multi-equals][Multi-comparison]]
+
+-  [[immutability][Immutability, Persistence, Transients]]
+-  [[atoms][Usage in an atom]]
+-  [[combinations][When no one collection fits]]
+-  [[vectors-lists][Vectors vs Lists in Clojure syntax]]
+-  [[sequences][Laziness and sequences]]
+-  [[collections-sequences][Collections vs sequences]]
+
+** How to choose the right data structure
+   :PROPERTIES:
+   :CUSTOM_ID: two-layers
+   :END:
+
+Every program has to deal with two separate layers of
+semantics---otherwise known as meaning.
+
+*** 1. Language semantics
+    :PROPERTIES:
+    :CUSTOM_ID: language-semantics
+    :END:
+
+The programming language has its own semantics, which is how everything
+the language gives you works. The collections come with built-in
+semantics--rules governing how they work and how you can use them. These
+are fixed by the language itself, and you have very little control over
+these semantics. They form the building material out of which you build
+your program.
+
+I like to think of the Clojure collections like Lego bricks. They fit
+together in certain limited and fixed ways. Yet it is those limitations
+that mean they fit together to build a huge variety of things.
+
+What we've got to do is learn those pieces and how they work. Then we'll
+be able to build whatever we want out of them.
+
+*** 2. Domain semantics
+    :PROPERTIES:
+    :CUSTOM_ID: domain-semantics
+    :END:
+
+The second kind of semantics is governed by your domain. If you're
+writing an accounting system, you have to follow the rules of
+accounting. Your job as a programmer is to understand those rules and
+implement them in the language.
+
+Once you understand the thing you're trying to implement, it's all about
+finding the right language semantics to implement it. Think about it
+this way: if you need to build a wall, you'll reach for the rectangular
+Lego bricks. If you need to build a high tower, you'll reach for tall,
+vertical pieces. We've all built with blocks before. We've played with
+them so much, there's a lot that is intuitive.
+
+We want to develop that same intuition for building with Clojure's data
+structures. As an experienced Clojure programmer, I have to say that
+Clojure's building blocks are really nice. The problem is, when you
+first start programming in Clojure, it's like someone handed you a big
+box of Legos and asked you to build a scale model of Rivendell.
+
+
+Chances are, you're not ready for that. But what are you missing?
+
+What you need is to learn to see the properties of the data structures
+and how they can fit together. That's what this guide is about.
+
+But that won't get you all the way there. You'll also get some help in
+the form of /usage patterns/. These are common ways of using the data
+structures that help you build out the medium- to large-scale
+structures.
+
+Those usage patterns have been proven by professional Clojure
+programmers. They're idiomatic uses of the data structures that you'll
+find in code at most companies and in open source projects.
+
+So how should we look at the Clojure collections?
+
+Well, when we look at a Lego brick's particular purpose, we can look at
+it in different ways. How tall is it? How wide? How long? Where can it
+attach to other bricks? There are all sorts of factors you could use to
+describe the properties of the brick.
+
+And those are exactly the questions you ask when you've got a gap in a
+wall you'd like to fill. What size is the gap? Where can you connect a
+piece? They're the same questions! If, in the hole in your wall, you
+connect on the top, you'll look for a piece that connects on the bottom.
+
+Likewise, we'll ask questions of our domain solution and try to find
+data structures that have appropriate answers. If our domain needs to
+keep things in order, we look for a data structure that maintains order,
+like a List or Vector.
+
+I've made a video lesson about this. Check out
+[[https://purelyfunctional.tv/lesson/introduction-to-clojure-s-collections/][/Introduction to Clojure's Collections/]].
+
+** Data structures
+   :PROPERTIES:
+   :CUSTOM_ID: data-structures
+   :END:
+
+Now we're going to go through each collection and give you some details
+of its operation. I won't get into any implementation details. These are
+just the things you need to know to use them effectively.
+
+I've made a video lesson about this. Check out [[https://purelyfunctional.tv/lesson/data-structures/][/Data structures/]].
+
+*** Vector
+    :PROPERTIES:
+    :CUSTOM_ID: vector
+    :END:
+
+Vectors are very common in Clojure, and for good reason. They strike a
+nice balance between speed and expressivity. They are useful for:
+
+-  [[sequential-access][maintaining the order of items as they were inserted]]
+-  [[lookup-by-key][random access of items by index]]
+-  [[duplicates][keeping duplicates]]
+-  [[count][fast counts]]
+-  [[equality][sequential equality checks]]
+-  [[subvectors][creating subvectors]]
+-  [[contains][checking if an index is valid]]
+-  [[lifo][adding to and removing from the end]]
+-  [[tuple][representing tuples]]
+
+*Construction*
+
+Usually, you'll create a Vector using the literal syntax:
+
+#+begin_example clojure
+    [1 2 3 4]
+#+end_example
+
+You can also use the function [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/vector][=vector=]],
+which takes any number of arguments and constructs a Vector and puts the
+arguments into it.
+
+Finally, you can convert any collection to a Vector by calling [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/vec][=vec=]]
+on it.
+
+*Evaluation*
+
+Literal Vectors are read in by the reader, which constructs a Vector
+containing the expressions inside of it. When that Vector is evaluated,
+a new Vector is created with all of its elements evaluated.
+
+For example,
+
+#+begin_example clojure
+    [1 :x (+ 2 2)]
+#+end_example
+
+Is read in just like you read it above. Then it is evaluated. That means
+evaluating each of the arguments and putting them into a new Vector.
+
+#+begin_example clojure
+    (eval '[1 :x (+ 2 2)]) ;=>
+
+    [(eval 1) (eval :x) (eval '(+ 2 2))] ;=>
+
+    [1 :x 4]
+#+end_example
+
+*Function semantics*
+
+Vectors can be called like functions by putting them at the beginning of
+an s-expression.
+
+#+begin_example clojure
+    (def v [:a :b :c])
+
+    (v 0)
+#+end_example
+
+What does this do? It does a lookup by index. Essentially, =(v 0)= is
+equivalent to =(get v 0)=.
+
+I've made a video lesson about this. Check out
+[[https://purelyfunctional.tv/lesson/vector-collection/][/Vector collection/]].
+
+*** HashMap
+    :PROPERTIES:
+    :CUSTOM_ID: hash-map
+    :END:
+
+HashMaps are the workhorses of Clojure. Essentially, they map keys to
+values. They are used mostly to represent Entities, but they can serve
+many different purposes. They are useful for:
+
+-  [[sequential-access][forgetting the order]]
+-  [[remember-duplicates][forgetting duplicate keys]]
+-  [[lookup-by-key][random access by key]]
+-  [[associate-key-value][associating keys to values]]
+-  [[dissociate][removing key-value pairs based on key]]
+-  [[count][fast count]]
+-  [[equality][map equality check]]
+-  [[contains][check if a key exists in the map]]
+-  [[entity][representing entities]]
+-  [[dispatch][making dispatch tables]]
+
+*Construction*
+
+We normally create HashMaps with the literal syntax:
+
+#+begin_example clojure
+    {:a 1
+     :b 2
+     :c 3}
+#+end_example
+
+There are a couple of rules to remember. It is an error to have
+duplicate keys in a literal HashMap. They all have to be unique. You
+cannot write this:
+
+#+begin_example clojure
+    {:a 1
+     :a 2} ;=> throws clojure.lang.LispReader$ReadException: Duplicate Key: :a
+#+end_example
+
+Note that there are two chances for errors: at read time and at eval
+time. The unevaluated keys have to be unique, as do the evaluated keys.
+
+#+begin_example clojure
+    (def x :a)
+
+    {:a 1
+     x  2} ;=> throws java.lang.IllegalArgumentException: Duplicate key: :a
+#+end_example
+
+We talk about how HashMaps are evaluated in an upcoming section.
+
+You can also create HashMaps using the
+[[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/hash-map][=hash-map=]]
+function. It takes alternating keys and values and adds them to an empty
+HashMap.
+
+#+begin_example clojure
+    (hash-map :a 1 :b 2) ;=> {:b 2 :a 1}
+#+end_example
+
+=hash-map= does not care about duplicates.
+
+Another common pattern is to add key-value pairs to an empty HashMap.
+You can create key-value pairs with Vectors.
+
+#+begin_example clojure
+    (into {} ;; add to empty HashMap
+      [[:a 1] [:b 2] [:c 3]]) ;; a sequence of key-value pairs
+                              ;=> {:b 2 :c 3 :a 1}
+#+end_example
+
+*Other operations*
+
+-  [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/keys][=keys=]]
+   will return a seq of the keys, and
+-  [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/vals][=vals=]]
+   will return a seq of the values
+-  [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/merge][=merge=]]
+   will combine the keys and values of two or more HashMaps
+-  [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/select-keys][=select-keys=]]
+   lets you remove unknown or unwanted keys from a Map by saying which
+   keys to keep
+
+See the [[https://clojure.org/reference/data_structures#Maps][docs]] for
+more HashMap operations.
+
+*Evaluation*
+
+Like all Clojure expressions, literal HashMaps have an evaluation
+semantic. There are two phases, /read/ and /eval/.
+
+During the read phase, a HashMap is created with the key and value
+expressions. These are checked for uniqueness. That means that the
+following is illegal:
+
+#+begin_example clojure
+    {(rand) :a
+     (rand) :b} ;=> throws clojure.lang.LispReader$ReadException: Duplicate key: (rand)
+#+end_example
+
+Even though two calls to =(rand)= are unlikely to return the same value,
+the expressions are the same, so they will fail during the read phase.
+
+Then all keys and values are evaluated and put into a new HashMap.
+Again, there is a check for uniqueness.
+
+#+begin_example clojure
+    (eval '{10 :ten (+ 1 1) :two (* 7 2) :fourteen}) ;=>
+
+    {(eval 10)       (eval :ten)
+     (eval '(+ 1 1)) (eval :two)
+     (eval '(* 7 2)) (eval :fourteen)} ;=>
+
+    {10 :ten 2 :two 14 :fourteen}
+#+end_example
+
+*Function semantics*
+
+HashMaps can be called as functions by putting them at the beginning of
+an s-expression. Doing so will look up the key provided as an argument.
+
+#+begin_example clojure
+    (def numbers {:zero 0 :one 1 :two 2})
+
+    (numbers :two)
+#+end_example
+
+-  Essentially, =(numbers :two)= is equivalent to `(get
+   numbers :: two)`.
+
+   I've made a video lesson about this. Check out
+   [[https://purelyfunctional.tv/lesson/hashmap-collection/][/HashMap collection/]].
+
+*** Sorted Map
+    :PROPERTIES:
+    :CUSTOM_ID: sorted-map
+    :END:
+
+Sorted Maps are cool, but I'll be honest: I can't remember ever using
+one. They're kind of like a library: there's a card catolog so you can
+quickly find a book, and also the books are shelved in order (based on
+the Dewey Decimal system, their key).
+
+Sorted Maps are cool for:
+
+-  [[sequential-access][sequential access ordered by key]]
+-  [[remember-duplicates][forgetting duplicates]]
+-  [[associate-key-value][associating keys with values]]
+-  [[dissociate][removing key-value pairs given the key]]
+-  [[count][counting key-value pairs]]
+-  [[equality][map equality check]]
+-  [[contains][checking whether a key is contained]]
+
+*Construction*
+
+There's no literal syntax for creating Sorted Maps. And to confuse
+things a little bit more, they look like regular Maps when you print
+them. But Clojure does provide a couple of functions for construction:
+
+#+begin_example clojure
+    (sorted-map :b 43 :a 100 :c 4) ;=> {:a 100 :b 43 :c 4} ;; notice the order
+#+end_example
+
+You can also make a Sorted Map that takes a custom comparator function:
+
+#+begin_example clojure
+    (sorted-map-by (comparator <) 0 :a 1 :b 2 :c) ;=> {0 :a 1 :b 2 :c}
+    (sorted-map-by (comparator >) 0 :a 1 :b 2 :c) ;=> {2 :c 1 :b 0 :a}
+#+end_example
+
+*Other operations*
+
+Besides maintaining the order of keys, Sorted Maps have all of the same
+operations as [[hash-map][HashMaps]].
+
+*Function semantics*
+
+You can use Sorted Maps as a function, which does a lookup:
+
+#+begin_example clojure
+    (def students (sorted-map 123 {:name "Eric"} 332 {:name "Mary"} ...))
+
+    (students 332) ;=> {:name "Mary"}
+#+end_example
+
+I've made a video lesson about this. Check out
+[[https://purelyfunctional.tv/lesson/sorted-map-collection/][/Sorted Map collection/]].
+
+*** Set
+    :PROPERTIES:
+    :CUSTOM_ID: set
+    :END:
+
+What if you are coding up a cat university. Each cat has a meow id
+number. And you're taking attendance. Since a classroom full of cats is
+notoriously hard to count, you're probably going to count the same one
+twice. Why not just capture all of the meow ids you can, and ignore
+duplicates? That's why sets are cool.
+
+[[//purelyfunctional.tv/wp-content/plugins/a3-lazy-load/assets/images/lazy_placeholder.gif]]
+[[https://media.giphy.com/media/E8BkZrpuZxDri/200w.webp]]
+Sets are awesome for:
+
+-  [[sequential-access][unordered sequential access]]
+-  [[remember-duplicates][forgetting duplicates]]
+-  [[lookup-by-key][looking up a value given an equal value]]
+-  [[count][fast count]]
+-  [[equality][set equality check]]
+-  [[removing][removing an item given that item]]
+-  [[contains][containment check]]
+-  [[multi-equals][multi-comparison]]
+
+*Construction*
+
+Sets have a literal syntax.
+
+#+begin_example clojure
+    #{1 2 3} ;=> #{1 3 2}
+#+end_example
+
+You have similar issues with duplicates in a literal as you do with Hash
+Maps. It is illegal to have duplicates in a literal Set.
+
+#+begin_example clojure
+    #{1 1} ;=> clojure.lang.LispReader$ReaderException: Duplicate key: 1
+#+end_example
+
+You can create a new set with the built-in
+[[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/hash-set][=hash-set=]]:
+
+#+begin_example clojure
+    (hash-set 1 2 3) ;=> #{1 3 2}
+#+end_example
+
+You can also convert any collection to a Set by using . . .
+[[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/set][=set=]].
+Note that it's tolerant of duplicates.
+
+#+begin_example clojure
+    (set [1 2 3 1]) ;=> #{1 2 3}
+#+end_example
+
+*Evaluation semantics*
+
+Evaluating a Set means creating a new Set with all of the elements
+evaluated.
+
+#+begin_example clojure
+    (eval '#{1 (+ 2 2) (* 9 3)}) ;=>
+
+    #{(eval 1) (eval '(+ 2 2)) (eval '(* 9 3))} ;=>
+
+    #{1 4 27}
+#+end_example
+
+Note that this means there are two ways to have duplicates in a literal:
+during the read and during the eval.
+
+#+begin_example clojure
+    ;; during read
+    #{(rand) (rand)} ;=> clojure.lang.LispReader$ReaderException: Duplicate key: (rand)
+
+    ;; during eval
+    (def x 1)
+    #{1 x} ;=> java.lang.IllegalArgumentException: Duplicate key: 1
+#+end_example
+
+*Other operations*
+
+There is a whole suite of operations for doing mathematical set
+operations and relational algebra with Sets. Check out
+[[https://lispcast.com/clojure-set/][my guide to clojure.set]].
+
+For more information, see the
+[[https://clojure.org/reference/data_structures#Sets][documentation]].
+
+*Function call semantics*
+
+Sets can be called just like functions by putting them in the first
+position in an s-expression. It performs a lookup. Essentially, it's
+like calling =get=.
+
+#+begin_example clojure
+    (#{1 2 3} 3)  ;=> 3
+    (#{1 2 3} 10) ;=> nil
+#+end_example
+
+I've made a video lesson about this. Check out
+[[https://purelyfunctional.tv/lesson/set-collection/][/Set collection/]].
+
+*** Sorted Set
+    :PROPERTIES:
+    :CUSTOM_ID: sorted-set
+    :END:
+
+Sorted Sets are like Sets. The only difference is that you get ordered
+sequential access. The order you get out of a Sorted Set is determined
+by either their natural order (numerical order for numbers, alphabetical
+for Strings, keywords, and symbols, etc.), or, if you want, you can give
+it your own ordering function.
+
+Sorted Sets are neat for:
+
+-  [[sequential-access][ordered sequential access]]
+-  [[remember-duplicates][forgetting duplicates]]
+-  [[lookup-by-key][looking up a value given an equal value]]
+-  [[count][fast count]]
+-  [[equality][set equality check]]
+-  [[removing][removing an item given that item]]
+-  [[contains][containment check]]
+-  [[multi-equals][multi-comparison]]
+
+*Construction*
+
+There is no literal syntax for Sorted Sets. You can make one with
+[[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/sorted-set][=sorted-set=]].
+
+#+begin_example clojure
+    (sorted-set 7 3 1 2 3 1) ;=> #{1 2 3 7}
+#+end_example
+
+Note that they look like regular Sets when they are printed.
+
+*Function call semantics*
+
+Sorted Sets, like regular Sets, will do a lookup when used in a function
+call. =((sorted-set 1 2 3) x)= is equivalent to
+=(get (sorted-set 1 2 3) x)=.
+
+I've made a video lesson about this. Check out
+[[https://purelyfunctional.tv/lesson/sorted-set-collection/][/Sorted Set collection/]].
+
+*** List
+    :PROPERTIES:
+    :CUSTOM_ID: list
+    :END:
+
+Lists are most commonly used in Clojure to represent code. However, they
+are often used interchangeably with seqs. However, they are their own
+type
+([[https://clojure.org/reference/data_structures#Lists][=clojure.lang.IPersistentList=]]).
+You can tell if you have a List (instead of a seq) by calling
+[[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/list?][=list?=]].
+
+#+begin_example clojure
+    (list? '(1 2 3))      ;=> true
+    (list? (seq [1 2 3])) ;=> false
+#+end_example
+
+They are not used as much as Vectors, because Vectors have
+[[vectors-lists][several important advantages]].
+
+*Construction*
+
+Clojure has no literal representation for Lists. If you write a List out
+in your program, it is interpreted as code. At first glance, it appears
+that quoting the List is a good solution. However, if you quote a List,
+the elements of the List won't be evaluated. That means that a quoted
+List is only useful for Lists of literals.
+
+#+begin_example clojure
+    '(1 2 3) ;=> (1 2 3) ;; ok!
+    '(1 (+ 1 1) 3) ;=> (1 (+ 1 1) 3) ;; perhaps not what you want
+#+end_example
+
+Usually, if you want a List, you build one with the
+[[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/list][=list=]]
+function.
+
+#+begin_example clojure
+    (list 1 2 3)       ;=> (1 2 3)
+    (list 1 (+ 1 1) 3) ;=> (1 2 3)
+#+end_example
+
+*Evaluation semantics*
+
+When you evaluate a List, the List is treated as an s-expression. This
+is one of the big reasons why Vectors are preferred in Clojure for
+representing data.
+
+I've made a video lesson about this. Check out
+[[https://purelyfunctional.tv/lesson/list-collection/][/List collection/]].
+
+*** Queue
+    :PROPERTIES:
+    :CUSTOM_ID: queue
+    :END:
+
+Okay, I'm going to be honest: I can't remember ever using a Queue in
+Clojure. But there are times where I should have. I'm open to learn!
+
+Queues are cool for:
+
+-  [[sequential-access][ordered sequential access]]
+-  [[remember-duplicates][remember duplicates]]
+-  [[count][fast count]]
+-  [[equality][sequential equality check]]
+-  [[fifo][adding to the end and removing from the beginning]]
+
+*Construction*
+
+How do you create a Queue? Well, it's actually the hardest one to make.
+There's no literal syntax and there's no function to make one. You have
+to start with an empty one and build it up with =conj=.
+
+#+begin_example clojure
+    (def queue clojure.lang.PersistentQueue/EMPTY)
+
+    (conj queue 1 2 3) ;=> (1 2 3)
+#+end_example
+
+*Other operations*
+
+-  [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/peek][=peek=]]
+   shows you the first element
+-  [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/conj][=conj=]]
+   adds to the end
+-  [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/pop][=pop=]]
+   removes the first element
+
+   I've made a video lesson about this. Check out
+   [[https://purelyfunctional.tv/lesson/queue-collection/][/Queue collection/]].
+
+** Access patterns
+   :PROPERTIES:
+   :CUSTOM_ID: access-patterns
+   :END:
+
+In Clojure, we organize collections by how they are accessed. Those
+different access patterns define how we use the collections. When we are
+modeling a domain, we ask how we will want to access the information in
+the domain. Then we pick the data structures that match the access
+patterns we want.
+
+I'm going to go through many common access patterns. Along the way,
+we'll learn about how to use each collection from each of those
+different patterns. Then we'll go over some examples of how to analyze a
+domain problem along those perspectives. And finally, we'll have a
+reference to all of the collections at the end.
+
+The goal is to have a framework for choosing and using collections that
+is systematic and reduces the cognitive burden of programming. With
+time, it will become intuitive.
+
+So the questions we ask of our domain:
+
+-  How will we access information?
+-  What information will we have?
+-  What information will we want?
+
+The answers to these questions will guide you to implementing your
+solution. Usually, once you've asked the right questions, the right data
+structure becomes super obvious.
+
+And this question about access, it has to do with speed. Well, more
+specifically, speed at scale. Different data structures have different
+access speeds. For example, finding the last element of a large linked
+list is slow, while getting the first element is fast, no matter how
+large the list is. So we will say that we access elements of a linked
+list from the front, because that is fast.
+
+That doesn't mean that you can't get the last item, and in certain rare
+circumstances you might do a slow access just once, but you'd never
+choose the linked list over other collections if you had to access the
+last item frequently. So we will simplify and say "we don't access the
+last item of a linked list".
+
+By looking at our collections this way, we'll be able to answer the
+questions and choose the right collection to implement your domain
+solution.
+
+I've made a video lesson about this. Check out
+[[https://purelyfunctional.tv/lesson/access-patterns/][/Access patterns/]].
+
+*** Sequential access
+    :PROPERTIES:
+    :CUSTOM_ID: sequential-access
+    :END:
+
+Let's say we want to print out ten strings in sequence. Meaning, we
+print them out in a given order. We can do this like this:
+
+#+begin_example clojure
+    (doseq [s strings]
+      (println s))
+#+end_example
+
+Given that we know we want those strings printed in order, what type
+should =strings= be? Well, we have two main choices: Lists and Vectors.
+
+Lists and Vectors both maintain the order of their elements. They're
+based on the order things were added. However, note that Vectors add to
+the end of the sequence and Lists add to the beginning. The important
+thing is that the order is stable (it doesn't change when you add new
+elements) and can be arbitrary (you get to decide which order).
+
+Another less common option is the Queue
+(=clojure.lang.PersistentQueue=). The Queue maintains the order of
+elements (adding to the end), as well as letting you pop them off from
+the beginning.
+
+Two other options are the Sorted Map and the Sorted Set. They maintain
+an order, but it's not the order you add them in. The order is defined
+by a comparison function which you can provide. So if you want the order
+to be alphabetical order, you can do that.
+
+If you don't care about order, any old collection will do. HashMaps and
+Sets do not maintain order. Note that HashMaps and Sets do seem to
+maintain the order while they are small. But that's just an
+implementation detail and once they grow big enough, the order is lost.
+
+*Some questions to ask of your domain*
+
+-  Do you need to keep things in order?
+-  Do you want to remember the order you added things in?
+-  Or do you want an order maintained by resorting? (Like keeping them
+   alphabetical)
+-  Where do you want new items to go?
+
+[[list][*List*]] - Maintains the order you add items in. Adds to the front.
+
+[[vector][*Vector*]] - Maintains the order you add items in. Adds to the back.
+
+[[queue][*Queue*]] - Maintains the order you add items in. Adds to the back.
+
+[[sorted-map][*Sorted Map*]] - Keeps items sorted by a key.
+
+[[sorted-set][*Sorted Set*]] - Keeps items sorted by a key.
+
+[[hash-map][*HashMap*]] - Does not maintain order.
+
+[[set][*Set*]] - Does not maintain order.
+
+*Usage*
+
+We add elements with the
+[[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/conj][=conj=]]
+function. We can get a sequence from any collection with
+[[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/seq][=seq=]].
+In the [[sequences][sequence functions]], =seq= is called for you.
+
+*Examples*
+
+Let's say you need to make a TODO List. You want to put new TODO items
+at the bottom. The bottom of the list means at the back of the sequence.
+We have two requirements: maintain order and add to the end. We go
+through our list of collections above and find Vector and Queue. Both
+will work. But we'll choose Vector because it's more common to work
+with.
+
+#+begin_example clojure
+    (def todos (atom [])) ;; use a vector
+
+    (defn add-todo! [item]
+      (swap! todos conj item))
+
+    (add-todo! "Buy kitten")
+    (add-todo! "Buy cat food")
+    (add-todo! "Feed kitten")
+
+    (doseq [item @todos]
+      (prn item))
+#+end_example
+
+New items are lower in the list.
+
+What if we want to add to the top? We go through our list of collections
+and we see that List will do that.
+
+#+begin_example clojure
+    (def todos (atom ())) ;; use a list
+
+    (defn add-todo! [item]
+      (swap! todos conj item))
+
+    (add-todo! "Buy kitten")
+    (add-todo! "Buy cat food")
+    (add-todo! "Feed kitten")
+
+    (doseq [item @todos]
+      (prn item))
+#+end_example
+
+Besides that first line changing, the rest of the code is the same. This
+is important. Clojure was explicitly designed this way. For a large
+portion of access patterns, you can simply swap out the collection type
+and get different behavior.
+
+What if we like to keep our TODOs in alphabetical order? We can use a
+Sorted Set.
+
+#+begin_example clojure
+    (def todos (atom (sorted-set))) ;; use a sorted set
+
+    (defn add-todo! [item]
+      (swap! todos conj item))
+
+    (add-todo! "Buy kitten")
+    (add-todo! "Buy cat food")
+    (add-todo! "Feed kitten")
+
+    (doseq [item @todos]
+      (prn item))
+#+end_example
+
+Again, we change the behavior by changing the collections. But we're
+unsatisfied with alphabetical order. It feels organized, but maybe
+alphabetical order is wrong for our domain. Let's give each tasks a
+priority, and tell the sorted set that we want to compare the items by
+priority.
+
+#+begin_example clojure
+    (defn priority-order [a b]
+      (compare (:priority a) (:priority b)))
+
+    (def todos (atom (sorted-set-by priority-order))) ;; use a sorted set
+
+    (defn add-todo! [item]
+      (swap! todos conj item))
+
+    (add-todo! {:priority 1 :name "Take nap"})
+    (add-todo! {:priority 4 :name "Clean kitchen"})
+    (add-todo! {:priority 2 :name "Eat lunch"})
+
+    (doseq [item @todos]
+      (prn item))
+#+end_example
+
+Notice that again, we changed the collection to get different behavior.
+It's so important I need to bring it up again and again.
+
+Now, what if we don't need order at all? What if we are just in "capture
+mode", where we are brainstorming all of the things we might want to do,
+but we don't really know the order yet? It's just a bag of things. We
+look through the list of collections above. Both Sets and HashMaps don't
+maintain order. But we don't really have keys (just values). So HashMaps
+are out. We can use a Set.
+
+#+begin_example clojure
+    (def todos (atom #{})) ;; set
+
+    (defn add-todo! [item]
+      (swap! todos conj item))
+
+    (doseq [letter "ABCDEFGHIJKL"] ;; add some letters
+      (add-todo! (str letter)))
+
+    (println (apply str @todos))
+#+end_example
+
+I've added a bunch of letters so that the order is evident.
+
+There's three things to bring up. First thing is that with only a few
+items, the Set looks like it's maintaining order. Try it with three
+items. That has to do with an implementation detail of Sets that they
+actually do maintain order when they're small. But you can't rely on it.
+When do they switch over to not maintaining order? That's an
+implementation detail. Sets do not guarantee order--ever.
+
+The second thing is that these are often terrible for UIs. Imagine every
+time you added an item, the whole thing was reordered arbitrarily.
+People expect their UIs to be more stable. Just keep that in mind. It's
+often better to order them arbitrarily.
+
+The third thing is that Sets don't remember duplicates. That's another
+access pattern, so let's look at it now.
+
+I've made a video lesson about this. Check out
+[[https://purelyfunctional.tv/lesson/sequential-access/][/Sequential Access Pattern/]].
+
+*** Remember duplicates
+    :PROPERTIES:
+    :CUSTOM_ID: remember-duplicates
+    :END:
+
+When you're learning things, and storing that information, do you need
+to remember if you've seen it twice? For instance, when you're making an
+inventory of your books, you probably want to know if you have two
+copies of something. However, when you're making a list of books you've
+read, you probably won't need to write down that you've read some books
+twice.
+
+*Some questions to ask of your domain*
+
+-  Do I need to remember duplicates?
+
+*[[vector][Vector]], [[list][List]], [[queue][Queue]]* - Remember
+duplicates.
+
+*[[hash-map][HashMap]] (and Sorted Map)* - Do not remember duplicates,
+using only the key for equality.
+
+*[[set][Set]] (and [[sorted-set][Sorted Set]])* - Do not remember
+duplicates.
+
+*Examples*
+
+Let's say you need to count every visit to your website and keep track
+of ips to know visits per ip. We need to remember two visits from the
+same ip. We could use a collection that remembers duplicates. We scan
+through the list above and find Vectors.
+
+#+begin_example clojure
+    (def visits (atom []))
+
+    (defn record-visit! [ip]
+      (swap! visits conj ip))
+#+end_example
+
+However, what if we don't want to remember the visits, we want to
+remember the visitors? We want to forget the duplicates. We can use a
+Set.
+
+#+begin_example clojure
+    (def visitors (atom #{}))
+
+    (defn record-visitor! [ip]
+      (swap! visits conj ip))
+#+end_example
+
+I've made a video lesson about this. Check out
+[[https://purelyfunctional.tv/lesson/remembering-duplicates/][/Remembering
+Duplicates Access Pattern/]].
+
+*** Lookup by key
+    :PROPERTIES:
+    :CUSTOM_ID: lookup-by-key
+    :END:
+
+If you've got a bunch of friends, you probably have their phone numbers
+in your phone. How do you look up their number? Well, if you were to do
+it with pen and paper, you'd probably have a card per friend. The card
+would have their name at the top and their phone number somewhere on the
+card. You store all of your cards in alphabetical order by name. When
+you need to find their phone number, you quickly look up their name and
+read their number.
+
+It's a very common access pattern. The name is the /key/ and the phone
+number is the /value/. HashMaps allow you to lookup a value given a key.
+The keys and values can be any type, including collections.
+
+Now, Vectors also let you look up a value by key. The key is an integer
+between 0 and the length of the list. It's also called an index. Vectors
+let you get any element out of them very quickly, regardless of the size
+of the Vector. You just have to know where it is in the Vector.
+
+*Some questions to ask of your domain*
+
+-  Do you need to look up one value using another value (called the
+   /key/)?
+-  What is the type of key?
+
+*[[hash-map][HashMap]] (and [[sorted-map][Sorted Map]])* - Arbitrary key
+and value types.
+
+[[vector][*Vector*]] - Arbitrary key and value types, but you'll never
+find any values for keys that aren't positive integers and a valid
+index. You should really use Vectors only for positive integer keys.
+
+*[[set][Set]] (and [[sorted-set][Sorted Set]])* - Lookup the value in
+the Set that matches equal to the given value. It's like Sets are
+HashMaps with keys mapped to themselves.
+
+*Usage*
+
+The name of the operation to look up a value based on the key in Clojure
+is
+[[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/get][=get=]].
+
+*Examples*
+
+Let's make our rolodex:
+
+#+begin_example clojure
+    (def rolodex {"Eric" "504-543-0093"
+                  "Jane" "303-221-3333"
+                  "Joe" "222-323-2222"})
+
+    (get rolodex "Jane")
+#+end_example
+
+I've made a video lesson about this. Check out
+[[https://purelyfunctional.tv/lesson/lookup-by-key/][/Lookup by key
+Access Pattern/]].
+
+*** Associate a key and value
+    :PROPERTIES:
+    :CUSTOM_ID: associate-key-value
+    :END:
+
+Now, being able to look up values based on keys is very useful. But how
+do we store a new key and value? That's what Associate is all about.
+It's the "file away" action, as opposed to looking stuff up.
+
+Associative data structures in Clojure are HashMaps and Vectors. You can
+associate any key to any value in a HashMap. If the key already exists,
+the old value will be replaced. Vectors are similar, but just like with
+Lookup, you have to use an integer as the key. That will let you replace
+any existing element in the Vector with a new value.
+
+*Some questions to ask of your domain*
+
+-  Do you need to store values based on a key?
+-  What is the type of key?
+
+*[[hash-map][HashMap]] (and [[sorted-map][Sorted Map]])* - Arbitrary key
+and value types.
+
+[[vector][*Vector*]] - Values are any type, but keys are non-negative
+integers. You can re-associate any key (aka index) that already exists
+in the Vector, as well as one past the end of the Vector.
+
+#+begin_example clojure
+    ;; replace existing value
+    (assoc [:a :b :c] 2 :x) ;=> [:a :b :x]
+
+    ;; assoc one past the end
+    (assoc [:a :b :c] 3 :x) ;=> [:a :b :c :x]
+
+    ;; can't skip numbers
+    (assoc [:a :b :c] 5 :x) ;=> throws IndexOutOfBoundsException
+#+end_example
+
+*Usage*
+
+We add new key-value pairs or replace existing values with
+[[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/assoc][=assoc=]].
+
+#+begin_example clojure
+    (assoc {} :greeting "Hello, World!")
+#+end_example
+
+If you need to modify an existing value, you can use the function called
+[[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/update][=update=]].
+
+#+begin_example clojure
+    (def meals {:breakfast []})
+
+    (update meals :breakfast conj :eggs)
+#+end_example
+
+It's roughly equivalent to:
+
+#+begin_example clojure
+    (assoc meals :breakfast (conj (get meals :breakfast) :eggs))
+#+end_example
+
+*Examples*
+
+Well, a couple of sections ago, we wanted to record web page visits, so
+we wrote down every ip address into a Vector, including duplicates. It
+worked, but it's not the best way to get that job done. A better way is
+to think of the problem as an [[accumulator-index][Accumulator Index]].
+We want to associate a count of visits to each ip, which means we'll
+need something from our list above. We don't care about the order, so
+let's choose a HashMap.
+
+#+begin_example clojure
+    (def visits (atom {}))
+
+    (defn record-visit! [ip]
+      (swap! visits update ip (fnil inc 0)))
+
+    (record-visit! "2.2.2.2")
+    (record-visit! "2.2.2.2")
+    (record-visit! "2.2.2.2")
+    (record-visit! "1.1.1.1")
+#+end_example
+
+The
+[[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/fnil][=fnil=]]
+lets you give a default value if the key isn't found.
+
+I've made a video lesson about this. Check out
+[[https://purelyfunctional.tv/lesson/associate-key-and-value/][/Associate
+key and value Access Pattern/]].
+
+*** Dissociate a key and value
+    :PROPERTIES:
+    :CUSTOM_ID: dissociate
+    :END:
+
+Well, once you put something in your HashMap, you might want to get rid
+of it out of the data structure also based on the key. HashMaps are the
+only data structure that you can remove stuff from by key.
+
+*Some questions to ask of your domain*
+
+-  Do I need to remove key-value pairs?
+
+*[[hash-map][HashMap]] (or [[sorted-map][Sorted Map]])* - Can remove
+key-value pairs given the keys.
+
+*Usage*
+
+The name of the operation is
+[[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/dissoc][=dissoc=]].
+
+*Example*
+
+Let's say we're generating a report of visitors. We want to exclude all
+localhost visits from the hashmap of visits. The localhost ip address is
+=127.0.0.1=. We can remove it from the HashMap before we generate the
+report from it.
+
+#+begin_example clojure
+    (def visits (atom {"1.1.1.1" 102
+                       "2.2.2.2" 80
+                       "127.0.0.1" 1008}))
+
+    (dissoc @visits "127.0.0.1")
+#+end_example
+
+I've made a video lesson about this. Check out
+[[https://purelyfunctional.tv/lesson/dissociate-a-key-and-value/][/Dissociate
+a key and value Access Pattern/]].
+
+*** Count
+    :PROPERTIES:
+    :CUSTOM_ID: count
+    :END:
+
+To know how many items are in a collection, you can call the =count=
+operation. =count= typically is very fast on collections, but it's
+overloaded to work on some things that are not fast. For instance, it
+works on iterators and lazy sequences. In both of those cases, it will
+have to go through all of the items to count up how many elements there
+are. So the lazy sequence will become completely realized. And infinite
+sequences and infinite iterators will never end. They'll keep counting
+forever.
+
+*Some questions to ask of your domain*
+
+-  Do I need to know the count of items?
+
+*[[vector][Vector]], [[set][Set]] (or [[sorted-set][Sorted Set]]),
+[[list][List]]* - Returns the count of items.
+
+*[[hash-map][HashMap]] (or [[sorted-map][Sorted Map]])* - Return the
+count of key-value pairs.
+
+*[[sequences][Lazy seqs]]* - Realizes the entire seq, which can be slow.
+Infinite lazy lists will run forever.
+
+*Usage*
+
+Call
+[[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/count][=count=]]
+on the collection.
+
+*Example*
+
+How many visitors did we get? We can use count on our HashMap to figure
+it out.
+
+#+begin_example clojure
+    (def visits (atom {"1.1.1.1" 102
+                       "2.2.2.2" 80
+                       "127.0.0.1" 1008}))
+
+    (count @visits)
+#+end_example
+
+I've made a video lesson about this. Check out
+[[https://purelyfunctional.tv/lesson/count-the-elements/][/Count the elements Access Pattern/]].
+
+*** Equality comparison
+    :PROPERTIES:
+    :CUSTOM_ID: equality
+    :END:
+
+All collections have their own version of equality checks. You can use
+the === function to compare two values, including collections. For
+collections to be equal, their items must be equal.
+
+But the story doesn't stop there. Clojure divides collections into
+/Equality Partitions/. If two collections are in different equality
+partitions, they are never equal---for example, a vector is not equal to
+any hashmap. But if they are in the same partition, then the partition's
+comparison rules kick in.
+
+The /sequential equality partition/ compares two collections,
+item-by-item, in order. The first item of each collection have to be
+equal. And the second items have to be equal. And the third items, etc.
+Basically, the sequences have to have the same items, in the same order.
+
+The collections that fall in the sequential equality partition are
+vectors and lists. That means that =( [1 2 3] '(1 2 3))= returns true.
+They're equal, even though they're different data structures.
+
+The /map equality partition/ compares two collections of key-value
+pairs. The same key-value pairs have to exist in both hashmaps,
+regardless of order. All of the map types belong to this equality
+partition.
+
+The /set equality partition/ compares two collections of values. The
+same values have to exist in both sets, but the order doesn't matter.
+All of the set types belong to this equality partition.
+
+*Some questions to ask of your domain*
+
+-  Do I need to compare it as equal to other values?
+-  What kinds of values am I comparing?
+-  How do I want equality to be computed?
+
+*[[vector][Vector]], [[list][List]], [[queue][Queue]]* - Compare
+equality by comparing items by equality in order.
+
+*[[hash-map][HashMap]] (and [[sorted-map][Sorted Map]])* - Compare
+equality by comparing all key-value pairs by equality, without order.
+
+*[[set][Set]] (and [[sorted-set][Sorted Set]])* - Compare equality by
+comparing all elements by equality, without order.
+
+*Usage*
+
+Use the
+[[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/=][===]]
+function to compare two or more values. Its opposite is
+[[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/not=][=not==]].
+
+*Examples*
+
+#+begin_example clojure
+    (when (= [1 2 3] '(1 2 3))
+      (println "Sequences are equal with same elements."))
+
+    (when (not= [1 2 3] [3 2 1])
+      (println "Sequences are unequal with different order."))
+
+    (when (= {:a 1 :b 2} {:b 2 :a 1})
+      (println "Maps are equal if they have same keys and values."))
+
+    (when (not= {:a 1 :b 2} {:a 1 :b 3})
+      (println "Maps are unequal with different values."))
+
+    (when (= #{1 2 3} #{3 2 1})
+      (println "Sets with same values are equal"))
+#+end_example
+
+I've made a video lesson about this. Check out
+[[https://purelyfunctional.tv/lesson/equality-comparisons/][/Equality
+Comparison Access Pattern/]].
+
+*** Removing an item from a Set
+    :PROPERTIES:
+    :CUSTOM_ID: removing
+    :END:
+
+If you've got a Set, you can remove items very quickly with =disj=
+(short for /disjoin/, the opposite of /conjoin/). The reason it's only
+defined for Sets is that to remove something from a Vector or a List,
+you've got to go through the sequence one item at a time and find the
+thing first, then figure out how to remove it (which is probably not
+fast either). Only Sets let you remove something quickly without looking
+at every item. (Note: to remove a key/value pair from a HashMap, use
+[[dissociate][=dissoc=]].)
+
+*Some questions to ask of your domain*
+
+-  Do I need to remove a value, knowing only the value?
+
+*[[set][Set]] (or [[sorted-set][Sorted Set]])* - Remove an element given
+that element.
+
+*Usage*
+
+Use
+[[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/disj][=disj=]]
+to remove an element.
+
+*Examples*
+
+If we have a Set of people who have RSVP'd to the Star Wars Christmas
+Party, but we want to remove Darth Vader from the guest list:
+
+#+begin_example clojure
+    (def guest-list #{"Leia" "Han" "Luke" "Chewie" "Ackbar" "Darth Vader"})
+
+    (disj guest-list "Darth Vader")
+#+end_example
+
+I've made a video lesson about this. Check out
+[[https://purelyfunctional.tv/lesson/removing-an-item-from-a-set/][/Removing
+an item from a set Access Pattern/]].
+
+*** Split a sequence
+    :PROPERTIES:
+    :CUSTOM_ID: subvectors
+    :END:
+
+Sometimes you are interested in quickly creating a subsequence from a
+longer sequence. Lists can't do this. To make a subsequence from a List,
+you have to walk down the sequence, making a copy---so slow! But Vectors
+let you create a subsequence quickly. You can tell it the start and end
+index, and it creates a new one based on the old one.
+
+*Some questions to ask of your domain*
+
+-  Do I need to split a sequence into consecutive pieces?
+
+[[vector][*Vector*]] - Create a subvector from a given vector and start
+and end indices.
+
+*Usage*
+
+Use the function
+[[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/subvec][=subvec=]]
+to create a subvector.
+
+*Examples*
+
+Let's say we want to do a binary search on an ordered Vector.
+
+#+begin_example clojure
+    (defn binary-search
+      "Return the index of the element, or nil if not found"
+      ([vec el]
+       (binary-search vec el 0))
+      ([vec el offset]
+       (let [middle (quot (count vec) 2)
+             c (compare (get vec middle) el)]
+         (cond
+           (empty? vec)
+           nil
+
+           (zero? c)
+           (+ middle offset)
+
+           (pos? c)
+           (recur (subvec vec 0 middle) el offset)
+
+           (neg? c)
+           (recur (subvec vec (inc middle)) el (+ middle offset 1))))))
+
+    (binary-search [:a :b :c :d :e] :d)
+#+end_example
+
+I've made a video lesson about this. Check out
+[[https://purelyfunctional.tv/lesson/splitting-a-sequence/][/Splitting a
+sequence Access Pattern/]].
+
+*** Containment check
+    :PROPERTIES:
+    :CUSTOM_ID: contains
+    :END:
+
+Sometimes you have a value and you want to know if that value is in your
+collection. Now, you can imagine going to each item, in turn, and
+checking if it's equal to the value you're looking for. How slow would
+that be?
+
+Sets to the rescue! Sets will tell you right away if the value is in
+there, regardless of how big the set is.
+
+Now, I'm going to give you a secret that trips people up when they're
+first starting in Clojure. Vectors and HashMaps also can check for
+containment. However!!! Here's the secret: the containment check is only
+for the keys, because that's the only one that can be fast. HashMaps
+will check if the value you have is a key inside of the HashMap. And
+Vectors will check if your value is a valid index into that Vector.
+Basically, is it an integer and is it non-zero and is it smaller than
+the length of the Vector.
+
+*Some questions to ask of your domain*
+
+-  Do you need to know if a value is in a collection?
+-  Do you need to know if a key is in a HashMap?
+-  Do you need to know if an index is within the range of a Vector?
+
+[[vector][*Vector*]] - Reports true for a non-negative integer, smaller
+than the length of the Vector.
+
+*[[hash-map][HashMap]] (or [[sorted-map][Sorted Map]])* - Reports true
+if the given value is a key in the Map.
+
+*[[set][Set]] (or [[sorted-set][Sorted Set]])* - Reports true if the
+given value is in the Set.
+
+*Usage*
+
+[[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/contains?][=contains?=]]
+is the function for checking containment.
+
+*Examples*
+
+#+begin_example clojure
+    ;; not that useful, I'll admit, but you can do it!
+    (def breakfast [:eggs :juice :toast :coffee :bacon])
+
+    ;; check if there's a 7th element
+    (contains? breakfast 6)
+#+end_example
+
+#+begin_example clojure
+    (def meals {:breakfast [:eggs :juice :toast :coffee :bacon]
+                :lunch [:sandwich]
+                :dinner [:soup :salad :pasta :chicken]})
+
+    (contains? meals :snack)
+#+end_example
+
+#+begin_example clojure
+    (def fridge #{:milk :eggs :carrots :tomato})
+
+    (contains? fridge :eggs)
+#+end_example
+
+I've made a video lesson about this. Check out
+[[https://purelyfunctional.tv/lesson/containment-check/][/Containment
+Check Access Pattern/]].
+
+*** FIFO (first-in, first-out, like a queue)
+    :PROPERTIES:
+    :CUSTOM_ID: fifo
+    :END:
+
+If you want to put values into a data structure and pull them out in the
+same order you put them in, you'll want a FIFO data structure. FIFO data
+structures necessarily are sequential, but they guarantee being able to
+quickly add to the end AND removing from the beginning, which is kind of
+special. Clojure provides a Queue implementation.
+
+Queues are great for producer/consumer patterns. A producer adds values
+to the Queue, and the consumer can grab the oldest one still on the
+Queue and use it.
+
+*Some questions to ask of your domain*
+
+-  Do you need to consume values in the same order they are produced?
+
+*[[queue][Queue]]* - Add values to the end and remove values from the
+beginning.
+
+*Usage*
+
+Use
+[[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/conj][=conj=]]
+to add values to a Queue,
+[[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/peek][=peek=]]
+to get the next value, and
+[[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/pop][=pop=]]
+to remove the next value.
+
+*Example*
+
+Let's keep a queue of tasks to do.
+
+#+begin_example clojure
+    ;; for ClojureScript:
+    (def tasks (atom cljs.core.PersistentQueue/EMPTY))
+    ;; for Clojure:
+    ;; (def tasks (atom clojure.lang.PersistentQueue/EMPTY))
+
+    (defn add-task! [task]
+      (swap! tasks conj task))
+
+    (defn take-task! []
+      (let [[old new] (swap-vals! tasks pop)] ;; new in Clojure 1.9
+        (peek old)))
+#+end_example
+
+I've made a video lesson about this. Check out
+[[https://purelyfunctional.tv/lesson/first-in-first-out/][/First-in,
+first-out Access Pattern/]].
+
+*** LIFO (last-in, first-out, like a stack)
+    :PROPERTIES:
+    :CUSTOM_ID: lifo
+    :END:
+
+Now, sometimes you want to keep track of the most recent value you add
+to the data structure. There's a thing called a LIFO data structure.
+When you take something out, it's the last thing you put in. This is
+like a stack of papers, where you make a note and put it right on the
+top. Then when you go through them, the last note you wrote is on the
+top---it's a stack. Stacks are very useful. They provide fast adding and
+removal from the same end. In Clojure, we use Lists, because they have
+fast adding to the beginning (with =cons=) and fast removal (with
+=rest=).
+
+But Clojure provides more idiomatic functions for stacks that work with
+Lists and Vectors.
+
+*Some questions to ask of your domain*
+
+-  Do you need to consume the newest values before the oldest?
+
+[[vector][*Vector*]] - Add values to the end and remove them from the
+end.
+
+[[list][*List*]] - Add values to the beginning and remove them from the
+beginning.
+
+*Usage*
+
+To add items, use
+[[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/conj][=conj=]],
+to get the most recent item, use
+[[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/peek][=peek=]],
+and to remove the most recent item, use
+[[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/pop][=pop=]].
+
+*Examples*
+
+Let's keep track of stuff we want to work on. We're very recency
+focused. The last thing we add is the one we think is most important.
+
+#+begin_example clojure
+    (def todos (atom []))
+
+    (defn add-todo! [task]
+      (swap! todos conj task))
+
+    (defn get-todo! []
+      (let [[old new] (swap-vals! todos pop)] ;; new in Clojure 1.9
+        (peek old)))
+#+end_example
+
+I've made a video lesson about this. Check out
+[[https://purelyfunctional.tv/lesson/last-in-first-out/][/Last-in,
+First-out Access Pattern/]].
+
+** Usage Patterns
+   :PROPERTIES:
+   :CUSTOM_ID: patterns
+   :END:
+
+When you're reading someone else's code, you're going to have to take
+this into account. They may have made all of these decisions when they
+wrote it. (And they may have done it incorrectly.) But, luckily, it
+turns out that there are some very common patterns that most usage
+actually falls into. If you know this handful of usage patterns, wow,
+you'll be very well on your way to mastery. Use these patterns to keep
+your code readable.
+
+I've made a video lesson about this. Check out
+[[https://purelyfunctional.tv/lesson/usage-patterns/][/Usage
+patterns/]].
+
+*** Entity
+    :PROPERTIES:
+    :CUSTOM_ID: entity
+    :END:
+
+It's very common in software to be modeling the data you know about an
+entity. For instance, all of the information about a person---their
+name, address, height, date of birth, etc. It's like you filled out a
+form with all of the information. The names of the fields are the same
+for everybody, and the values are different for each person.
+
+In Clojure, we would put this data into a HashMap. The form field labels
+are the keys and the personal data is the values. It might look
+something like this:
+
+#+begin_example clojure
+    {:name “Eric Normand”
+     :address “123 Main St.”
+     :height 1.6
+     :date-of-birth #inst “1981-07-18”}
+#+end_example
+
+The keys are typically keywords and the values are whatever type is
+appropriate for that particular bit of data. In other words, /the value
+types are heterogeneous/. Whenever you want the value for a given key,
+you can just pull it out with =get= (=(get person :name)=), or, if
+you're brave, you can just use the keyword directly in function
+position: =(:name person)=.
+
+To change someone's information, or to add new information, use
+[[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/assoc][=assoc=]]:
+
+#+begin_example clojure
+    (assoc person :name “John Smith”)
+#+end_example
+
+To remove some information, use
+[[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/dissoc][=dissoc=]]:
+
+#+begin_example clojure
+    (dissoc person :name)
+#+end_example
+
+*** Variant Entity
+    :PROPERTIES:
+    :CUSTOM_ID: variant-entity
+    :END:
+
+Very often, you'll use the Entity Pattern above but then kind of lose
+track of what Maps belong to which kinds of entities. They may have
+similar sets of attributes. Is that an employee or a client? Is it a
+debit or a credit?
+
+If you find that you're passing different kinds of entities through
+similar functions, and each type of entity needs different treatment,
+you'll want a convenient way to determine what kind of entity it is.
+Just add a key-value pair that indicates the variant.
+
+#+begin_example clojure
+    {:relationship :client
+     :name “Eric Normand”
+     :address “123 Main St.”
+     :height 1.6
+     :date-of-birth #inst “1981-07-18”}
+
+    {:relationship :employee
+     :name “Jane Smith”
+     :address “532 Oak St.”
+     :height 1.2
+     :date-of-birth #inst “1954-02-01”}
+#+end_example
+
+In the code above, we're using the =:relationship= keyword to
+distinguish clients from employees. We can call that the /variant's
+identifier/. You can use whatever key you like.
+
+*Code smell*
+
+Watch out for generic words like =:type= being used as the variant's
+identifier. Generic words imply that there isn't enough coherence
+between the different variants.
+
+For example, if you're modeling different shapes (triangle, square,
+circle, etc.), those are all very related. But they're probably not at
+all related to login methods (cookie, Basic Auth, JSON Web Token,
+OAuth2, etc.). To use the same word (=:type=) to distinguish between
+them will be confusing.
+
+#+begin_example clojure
+    {:type :circle
+     :radius 15}
+
+    {:type :cookie
+     :session-id "23332"}
+#+end_example
+
+Do these really belong together? It's hard to tell that they don't.
+
+Instead of a generic word, use a more specific word. Often the word that
+describes the category is best. It's clear and doesn't confuse Entities
+from different categories.
+
+#+begin_example clojure
+    {:shape :circle
+     :radius 15}
+
+    {:login-method :cookie
+     :session-id "23332"}
+#+end_example
+
+*End Code smell*
+
+*Antipattern*
+
+Note that it's kind of a bad practice to switch on the type of entity
+when they're totally different. You might think it's totally convenient
+to have the same function handle different kinds of entities. For
+instance, your coffee shop software tracks inventory and processes
+payments for orders. So you could have an entity for payments that looks
+like this:
+
+#+begin_example clojure
+    {:order-id 123
+     :items [{:item :coffee :price 3}]
+     :total 3
+     :payment :cash}
+#+end_example
+
+And then while you're counting the inventory, as you measure each item,
+you create entities that look like this:
+
+#+begin_example clojure
+    {:item :dark-roast
+     :quantity 4
+     :unit :kg}
+#+end_example
+
+And then as a clever programmer, you think to yourself that both of them
+need to be saved to the database. You'll create a =fn= called =save=
+that tries to figure out what it's got and then saves it to the right
+spot.
+
+However, this is a mistake. You shouldn't use the same =save= function
+for both entities. Careful analysis of the code might show that the code
+paths of each entity type never cross. At each point, you know what
+you've got---until you pass it to this =save= function, which has to
+figure out again what you've got. That's why I'm calling it an
+/antipattern/.
+
+Let's look at the two workflows. Fulfilling an order might look like
+this:
+
+-  Save order (unpaid)
+-  Provide goods (coffee, etc.)
+-  Accept payment
+-  Validate payment
+-  Process payment
+-  Save order (paid)
+
+And then doing an inventory check might look like this:
+
+-  For each item on shelves
+
+   -  Count quantity of item
+   -  Save inventory check
+
+The two processes both use the term “save”, and they may both go to the
+same place (the database), so you may be tempted to “abstract” the
+differences out. However, the two share very little in common. The “save
+inventory check” belongs to an entirely different process from the “save
+order”. Each process is distinct. Data flowing through the order process
+will never be confused with data from the inventory process. So we
+should consider the two operations to be distinct and keep them
+distinct. Just create separate functions, like this:
+
+#+begin_example clojure
+    (defn save-inventory-count [inventory-count]
+       ...)
+
+    (defn save-payment [payment]
+       ...)
+#+end_example
+
+You'll save headaches in the long run if you don't use the Variant
+Entity pattern. In this case, don't add a =:type= key. However, some
+people do use this antipattern, so you should be aware of it.
+
+*End Antipattern*
+
+If that's an antipattern, then what is the /real pattern/? Here's how
+the Variant Entity pattern should be applied.
+
+Our coffee shop accepts cash, credit cards, debit cards, checks, and
+gift cards. We need to account for those different types of payments,
+and each type of payment has a different set of information associated
+with it.
+
+Cash requires no information. It's just cold cash.
+
+#+begin_example clojure
+    {:payment-method :cash}
+#+end_example
+
+Credit cards require us to get the name on the card, the card number,
+expiration date, and card code. Debit is similar.
+
+#+begin_example clojure
+    {:payment-method :credit ;; or :debit
+     :name “Jane Doe”
+     :number “12345...”
+     :expiration “11/19”
+     :code “333”}
+#+end_example
+
+Checks require the routing number, account number, check number, and
+date.
+
+#+begin_example clojure
+    {:payment-method :check
+     :routing “123...”
+     :account “00333.”
+     :check-number “445”
+     :date “3/4/2019”}
+#+end_example
+
+And finally, we use an internal gift card system:
+
+#+begin_example clojure
+    {:payment-method :gift-card
+     :card-id “333244...”}
+#+end_example
+
+Notice that in this payment method case, as compared to the
+payment/inventory case, these are just different ways to fulfill the
+same purpose. You could call them different variants of paying your
+system should handle. Each case will have a divergent branch that will
+quickly converge back into the main workflow.
+
+The steps of the workflow are:
+
+-  Record purchase
+-  Provide goods (coffee, etc)
+-  Accept payment
+-  Validate payment
+
+   -  Cash: check security features of bills
+   -  Credit card/debit card: authorize
+   -  Check: check amount, signature, and that account is not banned
+      from using checks
+   -  Gift card: check remaining balance
+
+-  Process payment
+
+   -  Cash: Put cash in drawer and give change
+   -  Credit/debit: finalize payment
+   -  Check: put check in check inbox to be deposited during next trip
+      to bank
+   -  Gift card: debit total
+
+-  Mark purchase as paid
+
+There are 6 steps in this workflow, and four of them are the same
+regardless of payment type. Two depend on the payment type. This is a
+valid case for using a Variant Entity. In this example, the variant's
+identifier is the =:payment-method=.
+
+Also notice that we don't have to use the generic word =:type=. We can
+be much more concrete about the different cases because they are all
+similar enough to fall into a common category. They are payment methods.
+This specificity is a good sign that a Variant Entity pattern is
+appropriate.
+
+I've made a video lesson about this. Check out
+[[https://purelyfunctional.tv/lesson/entity-pattern/][/Entity Usage
+Pattern/]].
+
+*** Index
+    :PROPERTIES:
+    :CUSTOM_ID: index
+    :END:
+
+After we finish our inventory, we'll want to sum things up. We want a
+way to quickly ask “do I have enough of product X to last the day or do
+I need to find a replacement?” The index in the back of a book tells us
+which pages you can find a topic. So, given a topic, we get a set of
+pages. Similarly, we want an index from item to quantity. Given an item,
+we get a quantity.
+
+Let's build one:
+
+#+begin_example clojure
+    {:dark-roast  {:quantity 4 :unit :kg}
+     :light-roast {:quantity 2 :unit :kg}
+     :milk        {:quantity 3 :unit :gallon}}
+#+end_example
+
+We can note a few things about this pattern:
+
+-  We used a Map again
+-  The keys are identifiers of the same type
+-  The values are all the same type (or structure)
+
+It's just like in the phone number index we created before. In that
+example, the keys were all the same type (people's names) and the values
+were all the same type (phone numbers).
+
+*** Accumulator Index
+    :PROPERTIES:
+    :CUSTOM_ID: accumulator-index
+    :END:
+
+A very common type of Index is called the Accumulator Index. It's
+primarily used to accumulate values under keys. While normal Indexes
+associate a key with a value, an Accumulator Index accumulate values
+over time.
+
+We usually use
+[[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/update][=update=]]
+to update the value
+
+Let's build one. Let's say you want to count how many times you eat each
+kind of food during the week. Here we're accumulating the count of each
+food into a HashMap.
+
+#+begin_example clojure
+    (def food-log [:egg :toast :milk :chicken :egg :carrot :orange :milk])
+
+    (reduce (fn [idx food]
+              (update idx food (fnil inc 0)))
+      {} food-log)
+#+end_example
+
+We could also accumulate into a collection. Let's separate out even
+numbers from odd numbers we've seen.
+
+#+begin_example clojure
+    (def numbers [3 4 4 3 2 1 2 3 4 5 6 5 4 3 2 4 3 6 7 8 6 44 6 6])
+
+    (reduce (fn [idx n]
+              (update idx 
+                (if (even? n) :even :odd)
+                (fnil conj [])
+                n))
+      {} numbers)
+#+end_example
+
+*** Dispatch table
+    :PROPERTIES:
+    :CUSTOM_ID: dispatch
+    :END:
+
+What happens if you need to run different code depending on a value?
+Maybe you need to program your kitchen bot to fill orders at your coffee
+shop. You could have a big case statement:
+
+#+begin_example clojure
+    (defn prepare [item]
+      (case item
+        :coffee (brew-coffee)
+        :tea    (make-tea)
+        :bagel  (prepare-bagel)
+        ))
+#+end_example
+
+That will work. But how do you add new items? You have to modify the
+code. Instead, let's take a look at the structure of this conditional.
+Given a keyword, we call a function. It sounds like looking up a value
+given a key! And to do that, we know we need a HashMap.
+
+#+begin_example clojure
+    (def prep-routines {:coffee brew-coffee
+                        :tea    make-tea
+                        :bagel  prepare-bagel})
+
+    (defn prepare [item]
+      (let [f (get prep-routines item)] ;; look up prep-routine
+        (f)))                           ;; then call it
+#+end_example
+
+What we've done is created a /dispatch table/. We can easily add new
+items to the HashMap. We could even make it dynamic by wrapping it in an
+[[atoms][atom]].
+
+*** Conversion Table
+    :PROPERTIES:
+    :CUSTOM_ID: conversion-table
+    :END:
+
+Sometimes we have a fixed number of values that convert into a fixed
+number of other values. Here's an example: I need to convert HTTP
+Methods into CRUD (Create Read Update Delete) operations. I could write
+a function to do it. Or I could store them as data in a conversion
+table, like this:
+
+#+begin_example clojure
+    (def op-table {:post   :create
+                   :get    :read
+                   :put    :update
+                   :delete :delete})
+#+end_example
+
+Then I can either do a =get= to convert, or simply call =op-table= like
+a function:
+
+#+begin_example clojure
+    (op-table :get) ;=> :read
+#+end_example
+
+I've made a video lesson about this. Check out
+[[https://purelyfunctional.tv/lesson/index-usage-pattern/][/Index Usage
+Pattern/]].
+
+*** Tuple
+    :PROPERTIES:
+    :CUSTOM_ID: tuple
+    :END:
+
+Tuples are very convenient when you've got a few pieces of data that you
+need to keep grouped together, but going all the way to an Entity
+pattern, with named keys, seems like overkill. Tuples are easy in
+Clojure. You use a Vector and put values in it, where the position of
+the value in the Vector tells you what that value means.
+
+There's a great example in Clojure's core library:
+[[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/re-find][=re-find=]].
+
+#+begin_example clojure
+    (re-find #”aa(b+)(c+)” “aabbccc”) => [“aabbccc” “bb” “ccc”])
+#+end_example
+
+Notice the return value is a Vector. The first thing that's returned is
+the /whole match/, meaning the maximum string matched by the regex.
+After that, it's the first /group/ (inside parenthesis) match. Then the
+second group match. Notice that the meaning of those elements is given
+by its position.
+
+It's a cool pattern, but it's got disadvantages compared to Entities.
+First of all, when the tuple gets longer, it gets harder to figure out
+what each value means. Check this out:
+
+*Code smell: long tuples*
+
+#+begin_example clojure
+    [“Eric” “Normand” “443-2222” “23 Jones St” “eric@lispcast.com” nil]
+#+end_example
+
+Just imagine trying to remember all of the positions as it gets longer.
+Is that =nil= in the right place? The longer it gets, the harder it is
+to notice if it's right. If it's longer than 3 items, you should
+probably use an Entity.
+
+*End Code smell*
+
+*Code smell: tuples that escape local context*
+
+On a related note, if you saw this example in the wild, would you be
+able to figure out what all of the values mean? For instance, what does
+that =nil= mean? Entities give names to each value, so Entities are much
+more self-sufficient and human readable. If you're using using this
+Tuple locally, where it will never slip out to another library, it's
+probably okay. But if this data is going to be persisted somewhere else,
+or be part of a public API, Entities are probably better.
+
+For example, you should use the return value of =re-find= pretty close
+to where you call =re-find=. If you passed it along to something else,
+would that something else know how to interpret it? Probably not. Here's
+a good test: if you took the tuple and emailed it to your friend, would
+they know what it meant?
+
+*End Code smell*
+
+Finally, Tuples aren't very future-proof. How do you add new values? You
+have to add them to the end--making them longer. Tuples couple code
+together through the order of the elements. If the order where the Tuple
+is defined changes, all code the accesses the values by index has to
+change. Entities don't have this problem because you refer to values by
+key.
+
+*** Variant Tuple
+    :PROPERTIES:
+    :CUSTOM_ID: variant-tuple
+    :END:
+
+Just like you can make a Variant Entity, you can make a Variant Tuple.
+All of the warnings above still apply. However, Tuples are still useful
+(when they're short and used in local scopes), and the Variant kind
+might be just what you're looking for.
+
+Just like regular Tuples, Variant Tuples are Vectors. The difference is
+you reserve the first element to identify the Variant (aka /case/),
+you're dealing with.
+
+For example, if you want to represent different ways to find a file, you
+could use this system:
+
+#+begin_example clojure
+    [:url “http://storage.com/my-file.txt”]
+    [:disk “/home/eric/my-file.txt”]
+    [:paper    5    3      12]
+            ;; ^row ^shelf ^box 
+#+end_example
+
+The first elements of the Tuples represent the kind of thing we've got.
+Then we follow that with the data relevant for that type. To figure out
+what type of thing you've got, it's easy. Just get the =first= element
+and switch on that.
+
+I've made a video lesson about this. Check out
+[[https://purelyfunctional.tv/lesson/tuple-usage-pattern/][/Tuple Usage
+Pattern/]].
+
+*** Multi-comparison
+    :PROPERTIES:
+    :CUSTOM_ID: multi-equals
+    :END:
+
+Let's say you want to compare one value to many other values. Are any of
+them equal? For instance, you're working at a giant conglomerate that
+makes monkey hats, and there are 317 different vice presidents, and just
+for fun, their names are hard coded into the system. You need to write a
+function to test whether someone is a vice president.
+
+You could do this:
+
+#+begin_example clojure
+    (defn vp? [name]
+      (or (= name "John Jacobsson")
+          (= name "Linda Laurens")
+          (= name "June James")
+          (= name "Fred Franklin")
+          ...))
+#+end_example
+
+Now, that sucks, for many reasons. First of all, it's a lot of code!
+Second, what happens if the name matches none of them? You still had to
+go through and compare the name to all 317 of them. So slow! It's
+linear, in fact, no better than using a list. What we really want to do
+is check if the name is in a collection really quickly. So luckily, we
+have the perfect tool for that: Sets.
+
+#+begin_example clojure
+    (def vice-presidents #{"John Jacobsson"
+                           "Linda Laurens"
+                           "June James"
+                           "Fred Franklin"
+                           ...})
+
+    (defn vp? [name]
+      (contains? vice-presidents name))
+#+end_example
+
+This will be much faster. Checking for containment is a very fast
+operation.
+
+Some people will even use just the Set directly as a function. Check out
+this one:
+
+#+begin_example clojure
+    (filter vice-presidents meeting-attendance)
+#+end_example
+
+And many people will do it inline:
+
+#+begin_example clojure
+    (defn vowel? [letter]
+      (#{a e i o u} letter))
+#+end_example
+
+Note that this only works because all of the values are truthy. It won't
+work if for some reason you are storing =nil= or =false=.
+
+#+begin_example clojure
+    (#{false} false) ;=> false
+    (#{nil} nil)     ;=> nil
+#+end_example
+
+Notice these return falsey even when the values are contained inside.
+
+I've made a video lesson about this. Check out
+[[https://purelyfunctional.tv/lesson/multi-comparison-usage-pattern/][/Multi-comparison
+Usage Pattern/]].
+
+** Immutability, Persistence, Transients
+   :PROPERTIES:
+   :CUSTOM_ID: immutability
+   :END:
+
+Clojure's collections are immutable. They don't have any way to modify
+them after they are constructed.
+
+Clojure follows a /copy-on-write/ discipline. That means every time you
+want to change something (like add a new key-value pair to a HashMap),
+you actually create a modified copy.
+
+But with all of that copying, isn't it slow?
+
+Well, it is slower than modifying a collection directly. For instance,
+if you make a modified copy of Clojure's HashMap, it is way slower than
+modifying a Java HashMap. However, it's faster than making a copy of a
+Java HashMap. Clojure's copy-on-write discipline is faster than it would
+be in Java.
+
+How does it do that?
+
+Clojure's collections are /persistent/. That doesn't mean they're
+written to disk. It means they share common structure. HashMaps are
+implemented as a tree, with a root node, branche nodes, and leaf nodes.
+Imagine a HashMap with 1,000 key-value pairs in it. If you add one more
+key-value pair, most of the nodes in the tree are still correct. So the
+modified HashMap will just reuse those. The vast majority of the memory
+used by the original HashMap is also used by the modified copy.
+
+All of this means that copy-on-write can be relatively cheap. Clojure
+can have fast, immutable data structures. And we can take advantage of
+them, mostly without concern for their performance.
+
+However, sometimes we do need a part of our code to be faster. And
+sometimes we're making many modifications to a collection, causing many
+copies to get made, just to be thrown away as they're modified again.
+Clojure has a solution to this. It's called /transients/.
+
+Transients are a way to avoid making intermediate copies of a data
+structure. Your code gets faster because it isn't producing as much
+garbarge. It does so basically by making a mutable copy, modifying that
+copy, then turning it back into an immutable thing.
+
+Here's some code that makes a lot of modifications to a Set.
+
+#+begin_example clojure
+    ;; add one million numbers to a set
+    (time (reduce conj #{} (range 1000000)))
+    "Elapsed time: 1456.145802 msecs"
+#+end_example
+
+We can make this faster by using transients:
+
+#+begin_example clojure
+    (time (persistent! (reduce conj! (transient #{}) (range 1000000))))
+    "Elapsed time: 428.903734 msecs"
+#+end_example
+
+The answers are the same, but the transient version is three times
+faster.
+
+Here's how you do it:
+
+1. Call
+   [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/transient][=transient=]]
+   on your collection. This creates a transient copy.
+2. Use the same operations you normally would, but using the =!=
+   variant, which is made for working with transients.
+3. At the end, convert it back to an immutable collection with
+   [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/persistent!][=persistent!=]].
+
+Transients should only be used locally, where you have total trust in
+the code. Never let a transient collection slip out of your control.
+
+I've made a video lesson about this. Check out
+[[https://purelyfunctional.tv/lesson/transients/][/Transients/]].
+
+** Usage in an atom
+   :PROPERTIES:
+   :CUSTOM_ID: atoms
+   :END:
+
+Clojure's data structures are immutable. And Clojure does not provide
+any mutable variables. We need to model changing state somehow. This
+need is especially pronounced when using a Queue. If you have producers
+adding values to the Queue, and consumers taking values, they obviously
+need to modify something.
+
+The best way to do that is to use an atom.
+[[https://purelyfunctional.tv/guide/clojure-concurrency/#atom][Atoms]]
+are detailed in [[/guide/clojure-concurrency/][my concurrency guide]].
+But I'll give a brief overview of how you can use an atom with a Queue
+to achieve the producer/consumer pattern.
+
+#+begin_example clojure
+    (def queue (atom clojure.lang.PersistentQueue/EMPTY))
+
+    (defn enqueue! ;; mutation, so let's use a !
+      "Add a value to the end of the queue."
+      [value]
+      (swap! queue conj value)
+      nil) ;; we want to return nil
+
+    (defn dequeue!
+      "Remove and return the first item from the queue."
+      []
+      (let [[old new] (swap-vals! queue pop)] ;; pop removes the first
+        (peek old))) ;; return the first
+#+end_example
+
+Note that we're using
+[[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/swap-vals!][=swap-vals!=]],
+which is new in Clojure 1.9. Older versions of Clojure made this more
+awkward. I recommend this =swap-vals!= version. This kind of use case is
+the exact reason it was added.
+
+However, just for completeness, here is an implementation that will work
+with Clojure versions before 1.9.
+
+#+begin_example clojure
+    ;; we use a Tuple to store the previous first value and the Queue.
+    (def queue (atom [nil clojure.lang.PersistentQueue/EMPTY]))
+
+    (defn enqueue! ;; mutation, so let's use a !
+      "Add a value to the end of the queue."
+      [value]
+      (swap! queue update 1 conj value) ;; add a value to the queue (index 1)
+      nil) ;; return nil
+
+    (defn dequeue!
+      "Remove and return the first item from the queue."
+      []
+      (let [[val] (swap! queue (fn [[_ queue]]
+                                 [(peek queue) (pop queue)]))]
+        val))
+#+end_example
+
+It's not so bad, but a little more to deal with on your own.
+
+I've made a video lesson about this. Check out
+[[https://purelyfunctional.tv/lesson/usage-in-an-atom/][/Usage in an
+Atom/]].
+
+** When no one collection fits
+   :PROPERTIES:
+   :CUSTOM_ID: combinations
+   :END:
+
+Okay, we get it. We're supposed to look for the holes, figure out their
+properties, then look for collections that fill those holes because they
+have complementary properties. That's all good, but what happens if you
+can't find one?
+
+Like, for instance, what if I need both a fast lookup by key /and/ I
+need to remember duplicates /and/ rememeber the order I add them in?
+There's no data structure for that!!
+
+So what do we do?
+
+The way I solve that problem is by finding two collections that I can
+combine to get all of the properties I want.
+
+In this case, I can use a HashMap to get the lookup by key, and a Vector
+to remember duplicates and order. I'll call it a hybrid collection.
+
+Here's a simple implementation of my hybrid:
+
+#+begin_example clojure
+    (def empty-hybrid {:map {}
+                       :vec []})
+
+    ;; how we add new elements
+    (defn hybrid-assoc [coll key value]
+      (-> coll
+        (update :map assoc key value) ;; store in the map
+        (update :vec conj key)))      ;; remember the key
+
+    (defn hybrid-get [coll key]
+      (get-in coll [:map key]))
+
+    ;; to get a sequence, we look up the values for each key in the vector
+    (defn hybrid-seq [coll]
+      (seq (map (:map coll) (:vec coll))))
+#+end_example
+
+If you want, you could even
+[[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/deftype][=deftype=]]
+a new type to make this official. I'll leave that up to you, but look at
+[[https://gist.github.com/david-mcneil/1684980][this implementation of a
+new Map type]] for guidance.
+
+I've made a video lesson about this. Check out
+[[https://purelyfunctional.tv/lesson/hybrid-collections/][/Hybrid
+Collections/]].
+
+** Vectors vs Lists in Clojure syntax
+   :PROPERTIES:
+   :CUSTOM_ID: vectors-lists
+   :END:
+
+Someone once asked me what the difference is in Clojure when you use
+Lists for syntax versus when you use Vectors. For instance, in a =let=
+form, you use parens around the whole thing, but square brackets around
+the bindings:
+
+#+begin_example clojure
+    (let [a 1] ;; square
+     ...)      ;; round
+#+end_example
+
+You've also got function definitions:
+
+#+begin_example clojure
+    (defn myfn [arg1 arg2] ;; square
+      ...)                 ;; round
+#+end_example
+
+I believe it's a conscious design decision. Lists (parens) are used to
+denote s-expressions. They're either special forms, macro calls, or
+function calls. But inside of special forms and macros, Clojure uses
+Vectors to group things. You get this nice alternation of round and
+square brackets that makes it clearer what to pay attention to.
+
+I've made a video lesson about this. Check out
+[[https://purelyfunctional.tv/lesson/vectors-and-lists-in-syntax/][/Vectors
+and Lists in syntax/]].
+
+** Laziness and sequences
+   :PROPERTIES:
+   :CUSTOM_ID: sequences
+   :END:
+
+Clojure's sequence functions are lazy. That means they won't evaluate
+all of the sequence at once. Instead, they can evaluate only part of the
+sequence, saving the rest for later. And that later may never come, so
+you save lots of computation. They also let you represent some other
+interesting things like infinite sequences (e.g., all prime numbers) and
+things yet to happen (e.g., the rest of the lines of the file that is
+still being downloaded).
+
+In order to support laziness, all of the sequence functions (=map=,
+=filter=, =take=, etc.) are lazy. It's not the best design ever. There
+are lots of weird gotchas you have to be aware of. I go over them in a
+[[https://purelyfunctional.tv/courses/lazy-sequences/][course on lazy
+sequences]] I recorded. Whether you like them or not, they are present
+in Clojure (and in your face). You can't ignore them, so you should make
+friends with them.
+
+I've made a video lesson about this. Check out
+[[https://purelyfunctional.tv/lesson/lazy-sequences/][/Lazy
+sequences/]].
+
+** Collections vs sequences
+   :PROPERTIES:
+   :CUSTOM_ID: collections-sequences
+   :END:
+
+When I first started learning Clojure, I got a weird feeling that
+argument orders were not consistent across similar functions. Here's
+what I mean:
+
+#+begin_example clojure
+    (map f coll)    ;; collection comes last
+    (update coll f) ;; collection comes first
+#+end_example
+
+Those kinds of inconsistencies can really bum you out, especially when
+you're learning and things aren't cemented in your memory.
+
+However, I eventually learned, by talking to people, that these things
+actually are consistent. But it requires thinking a little different.
+
+What's the key?
+
+The key is to mentally divide them into /collection operations/ and
+/sequence operations/.
+
+[[https://clojure.org/reference/sequences][/Sequence operations/]] will
+coerce their argument to a sequence and return a particular type. These
+are your =map=, =filter=, =take=, =drop=, =group-by=, =frequencies=,
+etc. You'll notice that all sequence operations take the sequence last.
+
+[[https://clojure.org/reference/data_structures][/Collection
+operations/]] take a certain type of collection and return the same
+type. So if you do an =update= with a map, it returns a new map. If you
+do =update= with a vector, it returns a new vector. These operations are
+=update=, =dissoc=, =assoc=, etc.
+
+This division between sequences and collections is why you see a weird
+thing in Clojure: =(cons value sequence)= vs =(conj collection value)=.
+The arguments appear reversed. Now it makes sense. =cons= operates on
+sequences and =conj= works on collections in general.
+
+And now that we know the key, we can see that some stuff lines up really
+well. If you're using threading macros, the =->= (thread first) macro
+works really well with collection operations, while the =->>= (thread
+last) macro works better with sequence operations.
+
+Also, the order of arguments for the function that =swap!= takes works
+out really well for collection functions. Here's an example:
+
+#+begin_example clojure
+    (swap! some-atom-with-a-map update-in [:a :b :c] inc)
+#+end_example
+
+=swap!= puts the collection as the first argument, so it's perfect for
+=update-in=. Now look at what it does for a sequence operation:
+
+#+begin_example clojure
+    (swap! some-atom-with-a-sequence (fn [s] (map inc s)))
+#+end_example
+
+You have to wrap the call to =map= in a function to switch the argument
+order. That's way less convenient and also way less common.
+
+I've made a video lesson about this. Check out
+[[https://purelyfunctional.tv/lesson/collections-vs-sequences/][/Collections
+vs sequences/]].
+
+#+BEGIN_HTML
+  </div>
+#+END_HTML
+
+#+BEGIN_HTML
+  </div>
+#+END_HTML
+
+#+BEGIN_HTML
+  </div>
+#+END_HTML
+
+#+BEGIN_HTML
+  </div>
+#+END_HTML
+
+#+BEGIN_HTML
+  <div id="footer-cta" class="footer-cta">
+#+END_HTML
+
+** Footer CTA
+   :PROPERTIES:
+   :CUSTOM_ID: footer-cta
+   :CLASS: genesis-sidebar-title screen-reader-text
+   :END:
+
+#+BEGIN_HTML
+  <div class="flexible-widgets widget-area widget-full">
+#+END_HTML
+
+#+BEGIN_HTML
+  <div class="wrap">
+#+END_HTML
+
+#+BEGIN_HTML
+  <div id="custom_html-40"
+  class="section widget_text widget widget_custom_html">
+#+END_HTML
+
+#+BEGIN_HTML
+  <div class="widget_text widget-wrap">
+#+END_HTML
+
+#+BEGIN_HTML
+  <div class="textwidget custom-html-widget">
+#+END_HTML
+
+<<subscribe-bottom>>
+
+#+BEGIN_HTML
+  <div class="_form-content">
+#+END_HTML
+
+#+BEGIN_HTML
+  <div class="_form_element _x77315657 _full_width _clear">
+#+END_HTML
+
+*** Get the newsletter for free
+    :PROPERTIES:
+    :CUSTOM_ID: get-the-newsletter-for-free
+    :CLASS: _form-title ma0 bg-green white br4 br--top pa4
+    :END:
+
+#+BEGIN_HTML
+  </div>
+#+END_HTML
+
+#+BEGIN_HTML
+  <div class="bg-light-gray black br4 br--bottom pa4">
+#+END_HTML
+
+#+BEGIN_HTML
+  <div class="_form_element _x31203402 _full_width _clear">
+#+END_HTML
+
+#+BEGIN_HTML
+  <div class="_html-code">
+#+END_HTML
+
+The /PurelyFunctional.tv Newsletter/ is a weekly email to inspire
+functional programmers.
+
+Enter your email address to receive emails about Clojure and Functional
+Programming. These include the weekly newsletter and other great offers.
+You can unsubscribe any time.
+
+#+BEGIN_HTML
+  </div>
+#+END_HTML
+
+#+BEGIN_HTML
+  </div>
+#+END_HTML
+
+#+BEGIN_HTML
+  <div class="_form_element _x71185257 _full_width mt4">
+#+END_HTML
+
+Email Address
+
+#+BEGIN_HTML
+  <div class="_field-wrapper">
+#+END_HTML
+
+#+BEGIN_HTML
+  </div>
+#+END_HTML
+
+#+BEGIN_HTML
+  </div>
+#+END_HTML
+
+#+BEGIN_HTML
+  <div class="_form_element _x61212246 _full_width">
+#+END_HTML
+
+Sorry, but lots of bots like Clojure, too.\\
+Please prove you are human.
+
+#+BEGIN_HTML
+  <div class="g-recaptcha"
+  data-sitekey="6LcwIw8TAAAAACP1ysM08EhCgzd6q5JAOUR1a0Go">
+#+END_HTML
+
+#+BEGIN_HTML
+  </div>
+#+END_HTML
+
+#+BEGIN_HTML
+  </div>
+#+END_HTML
+
+#+BEGIN_HTML
+  <div class="_button-wrapper _full_width">
+#+END_HTML
+
+I want your emails
+
+#+BEGIN_HTML
+  </div>
+#+END_HTML
+
+#+BEGIN_HTML
+  </div>
+#+END_HTML
+
+#+BEGIN_HTML
+  <div class="_clear-element">
+#+END_HTML
+
+#+BEGIN_HTML
+  </div>
+#+END_HTML
+
+#+BEGIN_HTML
+  </div>
+#+END_HTML
+
+#+BEGIN_HTML
+  <div class="_form-thank-you" style="display:none;">
+#+END_HTML
+
+#+BEGIN_HTML
+  </div>
+#+END_HTML
+
+#+BEGIN_HTML
+  </div>
+#+END_HTML
+
+#+BEGIN_HTML
+  </div>
+#+END_HTML
+
+#+BEGIN_HTML
+  </div>
+#+END_HTML
+
+#+BEGIN_HTML
+  </div>
+#+END_HTML
+
+#+BEGIN_HTML
+  </div>
+#+END_HTML
+
+#+BEGIN_HTML
+  </div>
+#+END_HTML
+
+#+BEGIN_HTML
+  <div class="wrap">
+#+END_HTML
+
+Copyright © 2019 LispCast and Eric Normand
+
+#+BEGIN_HTML
+  </div>
+#+END_HTML
+
+#+BEGIN_HTML
+  </div>
+#+END_HTML
