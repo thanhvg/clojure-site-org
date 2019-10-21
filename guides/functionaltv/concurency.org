@@ -1,4 +1,4 @@
-* Clojure Concurrency Tutorial
+#+title: Clojure Concurrency Tutorial
   :PROPERTIES:
   :CUSTOM_ID: clojure-concurrency-tutorial
   :CLASS: entry-title
@@ -10,10 +10,10 @@ Do you want to learn how to do concurrency in Clojure?
 In this tutorial, you'll learn 16 ways for doing concurrency in Clojure
 including how to start threads and how to communicate between them.
 
-** Table of Contents
-   :PROPERTIES:
-   :CUSTOM_ID: table-of-contents
-   :END:
+* Table of Contents
+  :PROPERTIES:
+  :CUSTOM_ID: table-of-contents
+  :END:
 
 -  [[catalog][Catalog of Primitives]]
 
@@ -43,29 +43,27 @@ including how to start threads and how to communicate between them.
 -  [[pure][Pure Functions]]
 -  [[independence][Independence]]
 
-** Concurrency Primitive Catalog
-   :PROPERTIES:
-   :CUSTOM_ID: catalog
-   :END:
+* Concurrency Primitive Catalog
+  :PROPERTIES:
+  :CUSTOM_ID: catalog
+  :END:
 
 So let's go over a bunch of different primitives with examples.
 
-*** Delay
-    :PROPERTIES:
-    :CUSTOM_ID: delay
-    :END:
+** Delay
+   :PROPERTIES:
+   :CUSTOM_ID: delay
+   :END:
 
 Wouldn't it be great if you could write some code that calculates a
 value, but never run the code if no one wants the value? And wouldn't it
 also be great if the value was only calculated once, no matter how many
 threads need the value?
 
-There's a Clojure function called
-[[https://clojuredocs.org/clojure.core/delay][=delay=]]. It creates an
-object called a Delay. A Delay ensures that some code is either run zero
-or one time. It's run zero times if the Delay is never =deref=ed. And
-it's run once if it is =deref=ed, regardless of how many times it's
-=deref=ed.
+There's a Clojure function called [[https://clojuredocs.org/clojure.core/delay][delay]]. It creates an object called a Delay.
+A Delay ensures that some code is either run zero or one time. It's run zero
+times if the Delay is never =deref=ed. And it's run once if it is =deref=ed,
+regardless of how many times it's =deref=ed.
 
 Here's an example:
 
@@ -110,13 +108,12 @@ Thanks to Dan Lebrero for
 I've made a video lesson about this. Check out
 [[https://purelyfunctional.tv/lesson/delay/][/Delay/]].
 
-*** Promise
-    :PROPERTIES:
-    :CUSTOM_ID: promise
-    :END:
+** Promise
+   :PROPERTIES:
+   :CUSTOM_ID: promise
+   :END:
 
-Clojure has a function called
-[[https://clojuredocs.org/clojure.core/promise][=promise=]]. A Promise
+Clojure has a function called [[https://clojuredocs.org/clojure.core/promise][=promise=]]. A Promise
 is like a coupon for a back rub that you get from your significant
 other. It's not a present itself, but instead a Promise to give you a
 present later.
@@ -156,10 +153,10 @@ one answer. Once the answer is delivered, it can't be delivered again.
 I've made a video lesson about this. Check out
 [[https://purelyfunctional.tv/lesson/promise/][/Promise/]].
 
-*** Future
-    :PROPERTIES:
-    :CUSTOM_ID: future
-    :END:
+** Future
+   :PROPERTIES:
+   :CUSTOM_ID: future
+   :END:
 
 A Future is similar to a Promise. The main difference is that Futures
 will evaluate an expression for you in another Thread. You don't have to
@@ -197,10 +194,10 @@ Let's look at some code that demonstrates this:
 I've made a video lesson about this. Check out
 [[https://purelyfunctional.tv/lesson/future/][/Future/]].
 
-*** A word (or two) about =deref=
-    :PROPERTIES:
-    :CUSTOM_ID: deref
-    :END:
+** A word (or two) about =deref=
+   :PROPERTIES:
+   :CUSTOM_ID: deref
+   :END:
 
 We've seen [[https://clojuredocs.org/clojure.core/deref][=deref=]] a
 couple of times now. And we're going to see it a bunch more times. So
@@ -240,15 +237,15 @@ Only blocking variants of references can use the timeout version. For
 instance, Atoms, which we'll see real soon (I promise) always have a
 value. So there's no need to wait, ever.
 
-Ok, let me deliver on that promise. 😉
+Ok, let me deliver on that promise. 
 
 I've made a video lesson about this. Check out
 [[https://purelyfunctional.tv/lesson/deref/][/Deref/]].
 
-*** Atom
-    :PROPERTIES:
-    :CUSTOM_ID: atom
-    :END:
+** Atom
+   :PROPERTIES:
+   :CUSTOM_ID: atom
+   :END:
 
 Atoms are maybe the most popular concurrency primitive in Clojure right
 now. Don't quote me on that, because I don't have any data. But I find
@@ -411,13 +408,12 @@ Okay, I'm going to wipe the sweat off my brow. Because next up we're
 looking at the biggest, most powerful reference type in Clojure.
 
 I've made a video lesson about this. Check out
-[[https://purelyfunctional.tv/lesson/keeping-state-consistent-with-atoms/][/Keeping
-state consistent with Atoms/]].
+[[https://purelyfunctional.tv/lesson/keeping-state-consistent-with-atoms/][/Keeping state consistent with Atoms/]].
 
-*** Ref
-    :PROPERTIES:
-    :CUSTOM_ID: ref
-    :END:
+** Ref
+   :PROPERTIES:
+   :CUSTOM_ID: ref
+   :END:
 
 Listen, back in 2008/2009, everybody was talking about Refs. Why?
 Because they were Software Transactional Memory (STM), which was so hot
@@ -479,8 +475,7 @@ Let's look at some code:
       .start)
 #+end_example
 
-[[https://clojuredocs.org/clojure.core/dosync][=dosync=]] means "do
-synchronized". It means that everything in there is within a
+[[https://clojuredocs.org/clojure.core/dosync][=dosync=]] means "do synchronized". It means that everything in there is within a
 /transaction/. Transactions give you some guarantees: if any funny
 business happens in that transaction (an exception is thrown, for
 example), the transaction will be aborted like it never happened. Inside
@@ -500,10 +495,10 @@ similar. You can even do the extra arguments thing like we do above.
 I've made a video lesson about this. Check out
 [[https://purelyfunctional.tv/lesson/ref/][/Ref/]].
 
-*** Var
-    :PROPERTIES:
-    :CUSTOM_ID: var
-    :END:
+** Var
+   :PROPERTIES:
+   :CUSTOM_ID: var
+   :END:
 
 We need to talk about Vars a little. But before I do, let me say this:
 you almost never use Vars directly as a concurrency primitive. So I'm
@@ -528,10 +523,10 @@ development and dynamic scope.
 I've made a video lesson about this. Check out
 [[https://purelyfunctional.tv/lesson/vars/][/Vars/]].
 
-*** Agent
-    :PROPERTIES:
-    :CUSTOM_ID: agent
-    :END:
+** Agent
+   :PROPERTIES:
+   :CUSTOM_ID: agent
+   :END:
 
 For some reason, whenever you mention Agents, people think of *Actors*,
 which are found in Erlang. They're definitely not the same. An Actor
@@ -695,10 +690,10 @@ them, because they're queued up instead of competing.
 I've made a video lesson about this. Check out
 [[https://purelyfunctional.tv/lesson/agents/][/Agents/]].
 
-*** Volatile
-    :PROPERTIES:
-    :CUSTOM_ID: volatile
-    :END:
+** Volatile
+   :PROPERTIES:
+   :CUSTOM_ID: volatile
+   :END:
 
 Clojure 1.7 introduced a new type of mutable reference called
 =volatile=. Volatiles are used primarily as a way to hold mutable state
@@ -926,10 +921,10 @@ atoms was a bottleneck. Atoms are easier to work with and they have a
 similar interface. Their only downside with respect to volatiles is that
 atoms are slower.
 
-*** Lock
-    :PROPERTIES:
-    :CUSTOM_ID: lock
-    :END:
+** Lock
+   :PROPERTIES:
+   :CUSTOM_ID: lock
+   :END:
 
 Locks are the traditional, old-school way of coordinating access to
 resources. Like a lock on your bathroom, software locks make sure only
@@ -1000,10 +995,10 @@ Threads, this is a simple way to let them share it safely.
 I've made a video lesson about this. Check out
 [[https://purelyfunctional.tv/lesson/locking/][/Locking/]].
 
-*** core.async
-    :PROPERTIES:
-    :CUSTOM_ID: core.async
-    :END:
+** core.async
+   :PROPERTIES:
+   :CUSTOM_ID: core.async
+   :END:
 
 If you've written Clojure, you've probably heard of
 [[https://github.com/clojure/core.async][core.async]]. core.async is a
@@ -1052,8 +1047,7 @@ Let's look at some code:
 #+end_example
 
 You take from a Channel with the function
-[[https://clojuredocs.org/clojure.core.async/%3C!][=<!=]] and put to a
-Channel with [[https://clojuredocs.org/clojure.core.async/%3E!][=>!=]].
+[[https://clojuredocs.org/clojure.core.async/<!][<!]] and put to a Channel with [[https://clojuredocs.org/clojure.core.async/>!][>!]].
 If you try to take and there is no value, your Process will "park" and
 wait for a value. If you put and there is no room for new values, your
 Process will "park" and wait for room on the Channel. Because things
@@ -1069,24 +1063,20 @@ concurrent systems. It's the same abstraction that the
 This is just a very short introduction to a very big topic. You can
 learn more about core.async from these resources:
 
--  [[https://www.infoq.com/presentations/clojure-core-async][Clojure
-   core.async]]: a presentation by Rich Hickey at Strange Loop.
--  [[http://pftv.wpengine.com/courses/clojure-core-async/][Clojure
-   core.async]]: my course on the topic.
--  [[http://pftv.wpengine.com/courses/core-async-patterns/][core.async
-   Patterns]]: an advanced course where you learn interesting patterns
+-  [[https://www.infoq.com/presentations/clojure-core-async][Clojure core.async]]: a presentation by Rich Hickey at Strange Loop.
+-  [[http://pftv.wpengine.com/courses/clojure-core-async/][Clojure core.async]]: my course on the topic.
+-  [[http://pftv.wpengine.com/courses/core-async-patterns/][core.async Patterns]]: an advanced course where you learn interesting patterns
    for using core.async.
--  [[http://www.braveclojure.com/core-async/][Mastering Concurrent
-   Processes with core.async]]: The excellent chapter from /Clojure for
+-  [[http://www.braveclojure.com/core-async/][Mastering Concurrent Processes with core.async]]: The excellent chapter from /Clojure for
    the Brave and True/.
 
    I've made a video lesson about this. Check out
    [[https://purelyfunctional.tv/lesson/core-async/][/Core Async/]].
 
-*** Threads
-    :PROPERTIES:
-    :CUSTOM_ID: threads
-    :END:
+** Threads
+   :PROPERTIES:
+   :CUSTOM_ID: threads
+   :END:
 
 You can create Threads in Java very easily by constructing the
 [[https://docs.oracle.com/javase/8/docs/api/java/lang/Thread.html][=java.lang.Thread=]]
@@ -1144,10 +1134,10 @@ Threads and you want to shut down the JVM, you have to call
    I've made a video lesson about this. Check out
    [[https://purelyfunctional.tv/lesson/threads/][/Threads/]].
 
-*** Excutor Service
-    :PROPERTIES:
-    :CUSTOM_ID: executorservice
-    :END:
+** Excutor Service
+   :PROPERTIES:
+   :CUSTOM_ID: executorservice
+   :END:
 
 The Java standard library contains something called an
 =ExecutorService=. If you have a bunch of similar tasks that need to be
@@ -1190,10 +1180,10 @@ control of the thread pool, you can do it yourself with an
 I've made a video lesson about this. Check out
 [[https://purelyfunctional.tv/lesson/executorservice/][/ExecutorService/]].
 
-*** Manifold
-    :PROPERTIES:
-    :CUSTOM_ID: manifold
-    :END:
+** Manifold
+   :PROPERTIES:
+   :CUSTOM_ID: manifold
+   :END:
 
 [[https://github.com/ztellman/manifold][Manifold]] is an interesting
 library from Zach Tellman. It is used as part of the pervasive
@@ -1207,10 +1197,10 @@ core.async Channels, and even RxJava and ReactiveStreams.
 If you're going to be doing a lot of asynchronous communication between
 your threads, Manifold could be for you.
 
-*** =pmap=
-    :PROPERTIES:
-    :CUSTOM_ID: pmap
-    :END:
+** =pmap=
+   :PROPERTIES:
+   :CUSTOM_ID: pmap
+   :END:
 
 I had to include
 [[https://clojuredocs.org/clojure.core/pmap][=clojure.core/pmap=]] here,
@@ -1222,10 +1212,10 @@ does get run in other Threads. If it is computationally intensive, you
 may want to try =pmap=. Add one more letter and it makes your code
 parallel.
 
-*** Reducers
-    :PROPERTIES:
-    :CUSTOM_ID: reducers
-    :END:
+** Reducers
+   :PROPERTIES:
+   :CUSTOM_ID: reducers
+   :END:
 
 [[https://clojure.org/reference/reducers][Clojure reducers]] is a great
 library for executing things in parallel. Under the hood, it uses
@@ -1264,10 +1254,10 @@ parallel using Fork/Join.
 I've made a video lesson about this. Check out
 [[https://purelyfunctional.tv/lesson/reducers/][/Reducers/]].
 
-*** Fork/Join
-    :PROPERTIES:
-    :CUSTOM_ID: forkjoin
-    :END:
+** Fork/Join
+   :PROPERTIES:
+   :CUSTOM_ID: forkjoin
+   :END:
 
 Another system built into the Java standard library is called
 [[https://docs.oracle.com/javase/tutorial/essential/concurrency/forkjoin.html][Fork/Join]].
@@ -1322,10 +1312,10 @@ an *associative* operation. You will need to tune the size of the work
 done in one thread to make it worth it to fork. In general, you probably
 will want to use Clojure reducers for this kind of work. See below.
 
-** The secret to understanding concurrency and parallelism
-   :PROPERTIES:
-   :CUSTOM_ID: secret
-   :END:
+* The secret to understanding concurrency and parallelism
+  :PROPERTIES:
+  :CUSTOM_ID: secret
+  :END:
 
 A common question is "What is the difference between concurrency and
 parallelism?". If it's confusing you, don't worry. They're almost the
@@ -1347,10 +1337,10 @@ competing over the scarce resource of the teller's time. But because of
 the *concurrency* system set up (the queue), they all know that their
 business will be handled eventually.
 
-*** Definitions
-    :PROPERTIES:
-    :CUSTOM_ID: concurrency-vs-parallelism
-    :END:
+** Definitions
+   :PROPERTIES:
+   :CUSTOM_ID: concurrency-vs-parallelism
+   :END:
 
 */concurrency/*: /ability to share resources (such as CPUs, RAM,
 databases, etc.) safely and efficiently/
@@ -1428,10 +1418,10 @@ But that's for later.
 Let's dive into the computer world and see the basics that Clojure and
 the JVM give us.
 
-** Threads and the JVM
-   :PROPERTIES:
-   :CUSTOM_ID: threadsjvm
-   :END:
+* Threads and the JVM
+  :PROPERTIES:
+  :CUSTOM_ID: threadsjvm
+  :END:
 
 In one computer, the parallelism is the number of cores. Each core can
 execute instructions independently and run at full speed. The JVM does
@@ -1453,10 +1443,10 @@ So let's give them some help!
 
 Let's get into the concurrency tools we've got in Clojure.
 
-** Immutable data structures
-   :PROPERTIES:
-   :CUSTOM_ID: ds
-   :END:
+* Immutable data structures
+  :PROPERTIES:
+  :CUSTOM_ID: ds
+  :END:
 
 The first one is kind of not that obvious because it's everywhere in
 Clojure. But it's one of those important things that makes all of the
@@ -1491,10 +1481,10 @@ concurrent nature of immutable data structures.
 
 Now we can move on to the next tool that really helps us.
 
-** Pure functions
-   :PROPERTIES:
-   :CUSTOM_ID: pure
-   :END:
+* Pure functions
+  :PROPERTIES:
+  :CUSTOM_ID: pure
+  :END:
 
 The next thing that really helps with concurrency is using pure
 functions. Clojure doesn't help much with this, except that it makes it
@@ -1580,10 +1570,10 @@ Okay, there's just one more idea before we get to the catalog of
 primitives. It's an important idea, but I understand if you want to skip
 ahead. In fact, skip around as much as you want!
 
-** Independence
-   :PROPERTIES:
-   :CUSTOM_ID: independence
-   :END:
+* Independence
+  :PROPERTIES:
+  :CUSTOM_ID: independence
+  :END:
 
 We talked before about being able to break up tasks into smaller tasks
 so you can get more concurrency and take advantage of more cores. How

@@ -1,4 +1,4 @@
-* Clojure Data Structures Tutorial
+#+title: Clojure Data Structures Tutorial
   :PROPERTIES:
   :CUSTOM_ID: clojure-data-structures-tutorial
   :CLASS: entry-title
@@ -11,10 +11,10 @@ examples. We'll go through Clojure's main collections, data structure
 usage patterns, and thought processes for using Clojure's powerful
 collection library including how to use collections like vectors,
 hashmaps, and sets, and common patterns like tuple and entity.
-** Table of Contents
-   :PROPERTIES:
-   :CUSTOM_ID: table-of-contents
-   :END:
+* Table of Contents
+  :PROPERTIES:
+  :CUSTOM_ID: table-of-contents
+  :END:
 
 -  [[two-layers][How to choose the right data structure]]
 
@@ -65,18 +65,18 @@ hashmaps, and sets, and common patterns like tuple and entity.
 -  [[sequences][Laziness and sequences]]
 -  [[collections-sequences][Collections vs sequences]]
 
-** How to choose the right data structure
-   :PROPERTIES:
-   :CUSTOM_ID: two-layers
-   :END:
+* How to choose the right data structure
+  :PROPERTIES:
+  :CUSTOM_ID: two-layers
+  :END:
 
 Every program has to deal with two separate layers of
 semantics---otherwise known as meaning.
 
-*** 1. Language semantics
-    :PROPERTIES:
-    :CUSTOM_ID: language-semantics
-    :END:
+** 1. Language semantics
+   :PROPERTIES:
+   :CUSTOM_ID: language-semantics
+   :END:
 
 The programming language has its own semantics, which is how everything
 the language gives you works. The collections come with built-in
@@ -92,10 +92,10 @@ that mean they fit together to build a huge variety of things.
 What we've got to do is learn those pieces and how they work. Then we'll
 be able to build whatever we want out of them.
 
-*** 2. Domain semantics
-    :PROPERTIES:
-    :CUSTOM_ID: domain-semantics
-    :END:
+** 2. Domain semantics
+   :PROPERTIES:
+   :CUSTOM_ID: domain-semantics
+   :END:
 
 The second kind of semantics is governed by your domain. If you're
 writing an accounting system, you have to follow the rules of
@@ -150,10 +150,10 @@ like a List or Vector.
 I've made a video lesson about this. Check out
 [[https://purelyfunctional.tv/lesson/introduction-to-clojure-s-collections/][/Introduction to Clojure's Collections/]].
 
-** Data structures
-   :PROPERTIES:
-   :CUSTOM_ID: data-structures
-   :END:
+* Data structures
+  :PROPERTIES:
+  :CUSTOM_ID: data-structures
+  :END:
 
 Now we're going to go through each collection and give you some details
 of its operation. I won't get into any implementation details. These are
@@ -161,10 +161,10 @@ just the things you need to know to use them effectively.
 
 I've made a video lesson about this. Check out [[https://purelyfunctional.tv/lesson/data-structures/][/Data structures/]].
 
-*** Vector
-    :PROPERTIES:
-    :CUSTOM_ID: vector
-    :END:
+** Vector
+   :PROPERTIES:
+   :CUSTOM_ID: vector
+   :END:
 
 Vectors are very common in Clojure, and for good reason. They strike a
 nice balance between speed and expressivity. They are useful for:
@@ -234,10 +234,10 @@ equivalent to =(get v 0)=.
 I've made a video lesson about this. Check out
 [[https://purelyfunctional.tv/lesson/vector-collection/][/Vector collection/]].
 
-*** HashMap
-    :PROPERTIES:
-    :CUSTOM_ID: hash-map
-    :END:
+** HashMap
+   :PROPERTIES:
+   :CUSTOM_ID: hash-map
+   :END:
 
 HashMaps are the workhorses of Clojure. Essentially, they map keys to
 values. They are used mostly to represent Entities, but they can serve
@@ -367,10 +367,10 @@ an s-expression. Doing so will look up the key provided as an argument.
    I've made a video lesson about this. Check out
    [[https://purelyfunctional.tv/lesson/hashmap-collection/][/HashMap collection/]].
 
-*** Sorted Map
-    :PROPERTIES:
-    :CUSTOM_ID: sorted-map
-    :END:
+** Sorted Map
+   :PROPERTIES:
+   :CUSTOM_ID: sorted-map
+   :END:
 
 Sorted Maps are cool, but I'll be honest: I can't remember ever using
 one. They're kind of like a library: there's a card catolog so you can
@@ -422,10 +422,10 @@ You can use Sorted Maps as a function, which does a lookup:
 I've made a video lesson about this. Check out
 [[https://purelyfunctional.tv/lesson/sorted-map-collection/][/Sorted Map collection/]].
 
-*** Set
-    :PROPERTIES:
-    :CUSTOM_ID: set
-    :END:
+** Set
+   :PROPERTIES:
+   :CUSTOM_ID: set
+   :END:
 
 What if you are coding up a cat university. Each cat has a meow id
 number. And you're taking attendance. Since a classroom full of cats is
@@ -524,10 +524,10 @@ like calling =get=.
 I've made a video lesson about this. Check out
 [[https://purelyfunctional.tv/lesson/set-collection/][/Set collection/]].
 
-*** Sorted Set
-    :PROPERTIES:
-    :CUSTOM_ID: sorted-set
-    :END:
+** Sorted Set
+   :PROPERTIES:
+   :CUSTOM_ID: sorted-set
+   :END:
 
 Sorted Sets are like Sets. The only difference is that you get ordered
 sequential access. The order you get out of a Sorted Set is determined
@@ -566,10 +566,10 @@ call. =((sorted-set 1 2 3) x)= is equivalent to
 I've made a video lesson about this. Check out
 [[https://purelyfunctional.tv/lesson/sorted-set-collection/][/Sorted Set collection/]].
 
-*** List
-    :PROPERTIES:
-    :CUSTOM_ID: list
-    :END:
+** List
+   :PROPERTIES:
+   :CUSTOM_ID: list
+   :END:
 
 Lists are most commonly used in Clojure to represent code. However, they
 are often used interchangeably with seqs. However, they are their own
@@ -617,10 +617,10 @@ representing data.
 I've made a video lesson about this. Check out
 [[https://purelyfunctional.tv/lesson/list-collection/][/List collection/]].
 
-*** Queue
-    :PROPERTIES:
-    :CUSTOM_ID: queue
-    :END:
+** Queue
+   :PROPERTIES:
+   :CUSTOM_ID: queue
+   :END:
 
 Okay, I'm going to be honest: I can't remember ever using a Queue in
 Clojure. But there are times where I should have. I'm open to learn!
@@ -657,10 +657,10 @@ to start with an empty one and build it up with =conj=.
    I've made a video lesson about this. Check out
    [[https://purelyfunctional.tv/lesson/queue-collection/][/Queue collection/]].
 
-** Access patterns
-   :PROPERTIES:
-   :CUSTOM_ID: access-patterns
-   :END:
+* Access patterns
+  :PROPERTIES:
+  :CUSTOM_ID: access-patterns
+  :END:
 
 In Clojure, we organize collections by how they are accessed. Those
 different access patterns define how we use the collections. When we are
@@ -708,10 +708,10 @@ solution.
 I've made a video lesson about this. Check out
 [[https://purelyfunctional.tv/lesson/access-patterns/][/Access patterns/]].
 
-*** Sequential access
-    :PROPERTIES:
-    :CUSTOM_ID: sequential-access
-    :END:
+** Sequential access
+   :PROPERTIES:
+   :CUSTOM_ID: sequential-access
+   :END:
 
 Let's say we want to print out ten strings in sequence. Meaning, we
 print them out in a given order. We can do this like this:
@@ -904,10 +904,10 @@ access pattern, so let's look at it now.
 I've made a video lesson about this. Check out
 [[https://purelyfunctional.tv/lesson/sequential-access/][/Sequential Access Pattern/]].
 
-*** Remember duplicates
-    :PROPERTIES:
-    :CUSTOM_ID: remember-duplicates
-    :END:
+** Remember duplicates
+   :PROPERTIES:
+   :CUSTOM_ID: remember-duplicates
+   :END:
 
 When you're learning things, and storing that information, do you need
 to remember if you've seen it twice? For instance, when you're making an
@@ -958,10 +958,10 @@ I've made a video lesson about this. Check out
 [[https://purelyfunctional.tv/lesson/remembering-duplicates/][/Remembering
 Duplicates Access Pattern/]].
 
-*** Lookup by key
-    :PROPERTIES:
-    :CUSTOM_ID: lookup-by-key
-    :END:
+** Lookup by key
+   :PROPERTIES:
+   :CUSTOM_ID: lookup-by-key
+   :END:
 
 If you've got a bunch of friends, you probably have their phone numbers
 in your phone. How do you look up their number? Well, if you were to do
@@ -1019,10 +1019,10 @@ I've made a video lesson about this. Check out
 [[https://purelyfunctional.tv/lesson/lookup-by-key/][/Lookup by key
 Access Pattern/]].
 
-*** Associate a key and value
-    :PROPERTIES:
-    :CUSTOM_ID: associate-key-value
-    :END:
+** Associate a key and value
+   :PROPERTIES:
+   :CUSTOM_ID: associate-key-value
+   :END:
 
 Now, being able to look up values based on keys is very useful. But how
 do we store a new key and value? That's what Associate is all about.
@@ -1111,10 +1111,10 @@ I've made a video lesson about this. Check out
 [[https://purelyfunctional.tv/lesson/associate-key-and-value/][/Associate
 key and value Access Pattern/]].
 
-*** Dissociate a key and value
-    :PROPERTIES:
-    :CUSTOM_ID: dissociate
-    :END:
+** Dissociate a key and value
+   :PROPERTIES:
+   :CUSTOM_ID: dissociate
+   :END:
 
 Well, once you put something in your HashMap, you might want to get rid
 of it out of the data structure also based on the key. HashMaps are the
@@ -1151,10 +1151,10 @@ I've made a video lesson about this. Check out
 [[https://purelyfunctional.tv/lesson/dissociate-a-key-and-value/][/Dissociate
 a key and value Access Pattern/]].
 
-*** Count
-    :PROPERTIES:
-    :CUSTOM_ID: count
-    :END:
+** Count
+   :PROPERTIES:
+   :CUSTOM_ID: count
+   :END:
 
 To know how many items are in a collection, you can call the =count=
 operation. =count= typically is very fast on collections, but it's
@@ -1200,10 +1200,10 @@ it out.
 I've made a video lesson about this. Check out
 [[https://purelyfunctional.tv/lesson/count-the-elements/][/Count the elements Access Pattern/]].
 
-*** Equality comparison
-    :PROPERTIES:
-    :CUSTOM_ID: equality
-    :END:
+** Equality comparison
+   :PROPERTIES:
+   :CUSTOM_ID: equality
+   :END:
 
 All collections have their own version of equality checks. You can use
 the === function to compare two values, including collections. For
@@ -1278,10 +1278,10 @@ I've made a video lesson about this. Check out
 [[https://purelyfunctional.tv/lesson/equality-comparisons/][/Equality
 Comparison Access Pattern/]].
 
-*** Removing an item from a Set
-    :PROPERTIES:
-    :CUSTOM_ID: removing
-    :END:
+** Removing an item from a Set
+   :PROPERTIES:
+   :CUSTOM_ID: removing
+   :END:
 
 If you've got a Set, you can remove items very quickly with =disj=
 (short for /disjoin/, the opposite of /conjoin/). The reason it's only
@@ -1320,10 +1320,10 @@ I've made a video lesson about this. Check out
 [[https://purelyfunctional.tv/lesson/removing-an-item-from-a-set/][/Removing
 an item from a set Access Pattern/]].
 
-*** Split a sequence
-    :PROPERTIES:
-    :CUSTOM_ID: subvectors
-    :END:
+** Split a sequence
+   :PROPERTIES:
+   :CUSTOM_ID: subvectors
+   :END:
 
 Sometimes you are interested in quickly creating a subsequence from a
 longer sequence. Lists can't do this. To make a subsequence from a List,
@@ -1376,10 +1376,10 @@ I've made a video lesson about this. Check out
 [[https://purelyfunctional.tv/lesson/splitting-a-sequence/][/Splitting a
 sequence Access Pattern/]].
 
-*** Containment check
-    :PROPERTIES:
-    :CUSTOM_ID: contains
-    :END:
+** Containment check
+   :PROPERTIES:
+   :CUSTOM_ID: contains
+   :END:
 
 Sometimes you have a value and you want to know if that value is in your
 collection. Now, you can imagine going to each item, in turn, and
@@ -1446,10 +1446,10 @@ I've made a video lesson about this. Check out
 [[https://purelyfunctional.tv/lesson/containment-check/][/Containment
 Check Access Pattern/]].
 
-*** FIFO (first-in, first-out, like a queue)
-    :PROPERTIES:
-    :CUSTOM_ID: fifo
-    :END:
+** FIFO (first-in, first-out, like a queue)
+   :PROPERTIES:
+   :CUSTOM_ID: fifo
+   :END:
 
 If you want to put values into a data structure and pull them out in the
 same order you put them in, you'll want a FIFO data structure. FIFO data
@@ -1500,10 +1500,10 @@ I've made a video lesson about this. Check out
 [[https://purelyfunctional.tv/lesson/first-in-first-out/][/First-in,
 first-out Access Pattern/]].
 
-*** LIFO (last-in, first-out, like a stack)
-    :PROPERTIES:
-    :CUSTOM_ID: lifo
-    :END:
+** LIFO (last-in, first-out, like a stack)
+   :PROPERTIES:
+   :CUSTOM_ID: lifo
+   :END:
 
 Now, sometimes you want to keep track of the most recent value you add
 to the data structure. There's a thing called a LIFO data structure.
@@ -1557,10 +1557,10 @@ I've made a video lesson about this. Check out
 [[https://purelyfunctional.tv/lesson/last-in-first-out/][/Last-in,
 First-out Access Pattern/]].
 
-** Usage Patterns
-   :PROPERTIES:
-   :CUSTOM_ID: patterns
-   :END:
+* Usage Patterns
+  :PROPERTIES:
+  :CUSTOM_ID: patterns
+  :END:
 
 When you're reading someone else's code, you're going to have to take
 this into account. They may have made all of these decisions when they
@@ -1574,10 +1574,10 @@ I've made a video lesson about this. Check out
 [[https://purelyfunctional.tv/lesson/usage-patterns/][/Usage
 patterns/]].
 
-*** Entity
-    :PROPERTIES:
-    :CUSTOM_ID: entity
-    :END:
+** Entity
+   :PROPERTIES:
+   :CUSTOM_ID: entity
+   :END:
 
 It's very common in software to be modeling the data you know about an
 entity. For instance, all of the information about a person---their
@@ -1617,10 +1617,10 @@ To remove some information, use
     (dissoc person :name)
 #+end_example
 
-*** Variant Entity
-    :PROPERTIES:
-    :CUSTOM_ID: variant-entity
-    :END:
+** Variant Entity
+   :PROPERTIES:
+   :CUSTOM_ID: variant-entity
+   :END:
 
 Very often, you'll use the Entity Pattern above but then kind of lose
 track of what Maps belong to which kinds of entities. They may have
@@ -1850,10 +1850,10 @@ I've made a video lesson about this. Check out
 [[https://purelyfunctional.tv/lesson/entity-pattern/][/Entity Usage
 Pattern/]].
 
-*** Index
-    :PROPERTIES:
-    :CUSTOM_ID: index
-    :END:
+** Index
+   :PROPERTIES:
+   :CUSTOM_ID: index
+   :END:
 
 After we finish our inventory, we'll want to sum things up. We want a
 way to quickly ask “do I have enough of product X to last the day or do
@@ -1880,10 +1880,10 @@ It's just like in the phone number index we created before. In that
 example, the keys were all the same type (people's names) and the values
 were all the same type (phone numbers).
 
-*** Accumulator Index
-    :PROPERTIES:
-    :CUSTOM_ID: accumulator-index
-    :END:
+** Accumulator Index
+   :PROPERTIES:
+   :CUSTOM_ID: accumulator-index
+   :END:
 
 A very common type of Index is called the Accumulator Index. It's
 primarily used to accumulate values under keys. While normal Indexes
@@ -1920,10 +1920,10 @@ numbers from odd numbers we've seen.
       {} numbers)
 #+end_example
 
-*** Dispatch table
-    :PROPERTIES:
-    :CUSTOM_ID: dispatch
-    :END:
+** Dispatch table
+   :PROPERTIES:
+   :CUSTOM_ID: dispatch
+   :END:
 
 What happens if you need to run different code depending on a value?
 Maybe you need to program your kitchen bot to fill orders at your coffee
@@ -1957,10 +1957,10 @@ What we've done is created a /dispatch table/. We can easily add new
 items to the HashMap. We could even make it dynamic by wrapping it in an
 [[atoms][atom]].
 
-*** Conversion Table
-    :PROPERTIES:
-    :CUSTOM_ID: conversion-table
-    :END:
+** Conversion Table
+   :PROPERTIES:
+   :CUSTOM_ID: conversion-table
+   :END:
 
 Sometimes we have a fixed number of values that convert into a fixed
 number of other values. Here's an example: I need to convert HTTP
@@ -1986,10 +1986,10 @@ I've made a video lesson about this. Check out
 [[https://purelyfunctional.tv/lesson/index-usage-pattern/][/Index Usage
 Pattern/]].
 
-*** Tuple
-    :PROPERTIES:
-    :CUSTOM_ID: tuple
-    :END:
+** Tuple
+   :PROPERTIES:
+   :CUSTOM_ID: tuple
+   :END:
 
 Tuples are very convenient when you've got a few pieces of data that you
 need to keep grouped together, but going all the way to an Entity
@@ -2052,10 +2052,10 @@ is defined changes, all code the accesses the values by index has to
 change. Entities don't have this problem because you refer to values by
 key.
 
-*** Variant Tuple
-    :PROPERTIES:
-    :CUSTOM_ID: variant-tuple
-    :END:
+** Variant Tuple
+   :PROPERTIES:
+   :CUSTOM_ID: variant-tuple
+   :END:
 
 Just like you can make a Variant Entity, you can make a Variant Tuple.
 All of the warnings above still apply. However, Tuples are still useful
@@ -2085,10 +2085,10 @@ I've made a video lesson about this. Check out
 [[https://purelyfunctional.tv/lesson/tuple-usage-pattern/][/Tuple Usage
 Pattern/]].
 
-*** Multi-comparison
-    :PROPERTIES:
-    :CUSTOM_ID: multi-equals
-    :END:
+** Multi-comparison
+   :PROPERTIES:
+   :CUSTOM_ID: multi-equals
+   :END:
 
 Let's say you want to compare one value to many other values. Are any of
 them equal? For instance, you're working at a giant conglomerate that
@@ -2156,10 +2156,10 @@ I've made a video lesson about this. Check out
 [[https://purelyfunctional.tv/lesson/multi-comparison-usage-pattern/][/Multi-comparison
 Usage Pattern/]].
 
-** Immutability, Persistence, Transients
-   :PROPERTIES:
-   :CUSTOM_ID: immutability
-   :END:
+* Immutability, Persistence, Transients
+  :PROPERTIES:
+  :CUSTOM_ID: immutability
+  :END:
 
 Clojure's collections are immutable. They don't have any way to modify
 them after they are constructed.
@@ -2234,10 +2234,10 @@ the code. Never let a transient collection slip out of your control.
 I've made a video lesson about this. Check out
 [[https://purelyfunctional.tv/lesson/transients/][/Transients/]].
 
-** Usage in an atom
-   :PROPERTIES:
-   :CUSTOM_ID: atoms
-   :END:
+* Usage in an atom
+  :PROPERTIES:
+  :CUSTOM_ID: atoms
+  :END:
 
 Clojure's data structures are immutable. And Clojure does not provide
 any mutable variables. We need to model changing state somehow. This
@@ -2300,10 +2300,10 @@ I've made a video lesson about this. Check out
 [[https://purelyfunctional.tv/lesson/usage-in-an-atom/][/Usage in an
 Atom/]].
 
-** When no one collection fits
-   :PROPERTIES:
-   :CUSTOM_ID: combinations
-   :END:
+* When no one collection fits
+  :PROPERTIES:
+  :CUSTOM_ID: combinations
+  :END:
 
 Okay, we get it. We're supposed to look for the holes, figure out their
 properties, then look for collections that fill those holes because they
@@ -2352,10 +2352,10 @@ I've made a video lesson about this. Check out
 [[https://purelyfunctional.tv/lesson/hybrid-collections/][/Hybrid
 Collections/]].
 
-** Vectors vs Lists in Clojure syntax
-   :PROPERTIES:
-   :CUSTOM_ID: vectors-lists
-   :END:
+* Vectors vs Lists in Clojure syntax
+  :PROPERTIES:
+  :CUSTOM_ID: vectors-lists
+  :END:
 
 Someone once asked me what the difference is in Clojure when you use
 Lists for syntax versus when you use Vectors. For instance, in a =let=
@@ -2384,10 +2384,10 @@ I've made a video lesson about this. Check out
 [[https://purelyfunctional.tv/lesson/vectors-and-lists-in-syntax/][/Vectors
 and Lists in syntax/]].
 
-** Laziness and sequences
-   :PROPERTIES:
-   :CUSTOM_ID: sequences
-   :END:
+* Laziness and sequences
+  :PROPERTIES:
+  :CUSTOM_ID: sequences
+  :END:
 
 Clojure's sequence functions are lazy. That means they won't evaluate
 all of the sequence at once. Instead, they can evaluate only part of the
@@ -2409,10 +2409,10 @@ I've made a video lesson about this. Check out
 [[https://purelyfunctional.tv/lesson/lazy-sequences/][/Lazy
 sequences/]].
 
-** Collections vs sequences
-   :PROPERTIES:
-   :CUSTOM_ID: collections-sequences
-   :END:
+* Collections vs sequences
+  :PROPERTIES:
+  :CUSTOM_ID: collections-sequences
+  :END:
 
 When I first started learning Clojure, I got a weird feeling that
 argument orders were not consistent across similar functions. Here's
@@ -2496,186 +2496,3 @@ vs sequences/]].
   <div id="footer-cta" class="footer-cta">
 #+END_HTML
 
-** Footer CTA
-   :PROPERTIES:
-   :CUSTOM_ID: footer-cta
-   :CLASS: genesis-sidebar-title screen-reader-text
-   :END:
-
-#+BEGIN_HTML
-  <div class="flexible-widgets widget-area widget-full">
-#+END_HTML
-
-#+BEGIN_HTML
-  <div class="wrap">
-#+END_HTML
-
-#+BEGIN_HTML
-  <div id="custom_html-40"
-  class="section widget_text widget widget_custom_html">
-#+END_HTML
-
-#+BEGIN_HTML
-  <div class="widget_text widget-wrap">
-#+END_HTML
-
-#+BEGIN_HTML
-  <div class="textwidget custom-html-widget">
-#+END_HTML
-
-<<subscribe-bottom>>
-
-#+BEGIN_HTML
-  <div class="_form-content">
-#+END_HTML
-
-#+BEGIN_HTML
-  <div class="_form_element _x77315657 _full_width _clear">
-#+END_HTML
-
-*** Get the newsletter for free
-    :PROPERTIES:
-    :CUSTOM_ID: get-the-newsletter-for-free
-    :CLASS: _form-title ma0 bg-green white br4 br--top pa4
-    :END:
-
-#+BEGIN_HTML
-  </div>
-#+END_HTML
-
-#+BEGIN_HTML
-  <div class="bg-light-gray black br4 br--bottom pa4">
-#+END_HTML
-
-#+BEGIN_HTML
-  <div class="_form_element _x31203402 _full_width _clear">
-#+END_HTML
-
-#+BEGIN_HTML
-  <div class="_html-code">
-#+END_HTML
-
-The /PurelyFunctional.tv Newsletter/ is a weekly email to inspire
-functional programmers.
-
-Enter your email address to receive emails about Clojure and Functional
-Programming. These include the weekly newsletter and other great offers.
-You can unsubscribe any time.
-
-#+BEGIN_HTML
-  </div>
-#+END_HTML
-
-#+BEGIN_HTML
-  </div>
-#+END_HTML
-
-#+BEGIN_HTML
-  <div class="_form_element _x71185257 _full_width mt4">
-#+END_HTML
-
-Email Address
-
-#+BEGIN_HTML
-  <div class="_field-wrapper">
-#+END_HTML
-
-#+BEGIN_HTML
-  </div>
-#+END_HTML
-
-#+BEGIN_HTML
-  </div>
-#+END_HTML
-
-#+BEGIN_HTML
-  <div class="_form_element _x61212246 _full_width">
-#+END_HTML
-
-Sorry, but lots of bots like Clojure, too.\\
-Please prove you are human.
-
-#+BEGIN_HTML
-  <div class="g-recaptcha"
-  data-sitekey="6LcwIw8TAAAAACP1ysM08EhCgzd6q5JAOUR1a0Go">
-#+END_HTML
-
-#+BEGIN_HTML
-  </div>
-#+END_HTML
-
-#+BEGIN_HTML
-  </div>
-#+END_HTML
-
-#+BEGIN_HTML
-  <div class="_button-wrapper _full_width">
-#+END_HTML
-
-I want your emails
-
-#+BEGIN_HTML
-  </div>
-#+END_HTML
-
-#+BEGIN_HTML
-  </div>
-#+END_HTML
-
-#+BEGIN_HTML
-  <div class="_clear-element">
-#+END_HTML
-
-#+BEGIN_HTML
-  </div>
-#+END_HTML
-
-#+BEGIN_HTML
-  </div>
-#+END_HTML
-
-#+BEGIN_HTML
-  <div class="_form-thank-you" style="display:none;">
-#+END_HTML
-
-#+BEGIN_HTML
-  </div>
-#+END_HTML
-
-#+BEGIN_HTML
-  </div>
-#+END_HTML
-
-#+BEGIN_HTML
-  </div>
-#+END_HTML
-
-#+BEGIN_HTML
-  </div>
-#+END_HTML
-
-#+BEGIN_HTML
-  </div>
-#+END_HTML
-
-#+BEGIN_HTML
-  </div>
-#+END_HTML
-
-#+BEGIN_HTML
-  </div>
-#+END_HTML
-
-#+BEGIN_HTML
-  <div class="wrap">
-#+END_HTML
-
-Copyright © 2019 LispCast and Eric Normand
-
-#+BEGIN_HTML
-  </div>
-#+END_HTML
-
-#+BEGIN_HTML
-  </div>
-#+END_HTML
