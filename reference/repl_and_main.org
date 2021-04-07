@@ -15,43 +15,43 @@ launcher tool =java=.
 The =clojure.main/main= entry point accepts a variety of arguments and
 flags.
 
--  With no options or args, runs an interactive Read-Eval-Print Loop
+- With no options or args, runs an interactive Read-Eval-Print Loop
 
--  init options:
+- init options:
 
-   -  -i, --init path Load a file or resource
+  - -i, --init path Load a file or resource
 
-   -  -e, --eval string Evaluate expressions in string; print non-nil
-      values
+  - -e, --eval string Evaluate expressions in string; print non-nil
+    values
 
-   -  --report target Report uncaught exception to "file" (default),
-      "stderr", or "none", overrides System property clojure.main.report
-      (added in 1.10.1)
+  - --report target Report uncaught exception to "file" (default),
+    "stderr", or "none", overrides System property clojure.main.report
+    (added in 1.10.1)
 
--  main options:
+- main options:
 
-   -  -r, --repl Run a repl
+  - -r, --repl Run a repl
 
-   -  path Run a script from a file or resource
+  - path Run a script from a file or resource
 
-   -  - Run a script from standard input
+  - - Run a script from standard input
 
-   -  -m, --main A namespace to find a -main function for execution
+  - -m, --main A namespace to find a -main function for execution
 
-   -  -h, -?, --help Print this help message and exit
+  - -h, -?, --help Print this help message and exit
 
--  operation:
+- operation:
 
-   -  Establishes thread-local bindings for commonly set!-able vars
+  - Establishes thread-local bindings for commonly set!-able vars
 
-   -  Enters the user namespace
+  - Enters the user namespace
 
-   -  Binds =*command-line-args*= to a seq of strings containing command
-      line args that appear after any main option
+  - Binds =*command-line-args*= to a seq of strings containing command
+    line args that appear after any main option
 
-   -  Runs all init options in order
+  - Runs all init options in order
 
-   -  Runs a repl or script if requested
+  - Runs a repl or script if requested
 
 The init options may be repeated and mixed freely, but must appear
 before any main option. The appearance of any eval option before running
@@ -81,31 +81,30 @@ defaults to /user/.
 
 Several special vars are available when using the REPL:
 
--  *1, *2, *3 - hold the result of the last three expressions that were
-   evaluated
+- *1, *2, *3 - hold the result of the last three expressions that were
+  evaluated
 
--  *e - holds the result of the last exception.
+- *e - holds the result of the last exception.
 
 The
 [[https://clojure.github.io/clojure/clojure.repl-api.html][clojure.repl]]
 namespace has a number of useful functions for inspecting the source and
 documentation of available functions:
 
--  [[https://clojure.github.io/clojure/clojure.repl-api.html#clojure.repl/doc][doc]]
-   - prints the docstring for a var given its name
+- [[https://clojure.github.io/clojure/clojure.repl-api.html#clojure.repl/doc][doc]] -
+  prints the docstring for a var given its name
 
--  [[https://clojure.github.io/clojure/clojure.repl-api.html#clojure.repl/find-doc][find-doc]]
-   - prints the docstring for any var whose doc or name matches the
-   pattern
+- [[https://clojure.github.io/clojure/clojure.repl-api.html#clojure.repl/find-doc][find-doc]] -
+  prints the docstring for any var whose doc or name matches the pattern
 
--  [[https://clojure.github.io/clojure/clojure.repl-api.html#clojure.repl/apropos][apropos]]
-   - returns a seq of definitions matching a regex
+- [[https://clojure.github.io/clojure/clojure.repl-api.html#clojure.repl/apropos][apropos]] -
+  returns a seq of definitions matching a regex
 
--  [[https://clojure.github.io/clojure/clojure.repl-api.html#clojure.repl/source][source]]
-   - prints the source for a symbol
+- [[https://clojure.github.io/clojure/clojure.repl-api.html#clojure.repl/source][source]] -
+  prints the source for a symbol
 
--  [[https://clojure.github.io/clojure/clojure.repl-api.html#clojure.repl/pst][pst]]
-   - *p*rint *s*tack *t*race for a given exception or *e by default
+- [[https://clojure.github.io/clojure/clojure.repl-api.html#clojure.repl/pst][pst]] -
+  *p*rint *s*tack *t*race for a given exception or *e by default
 
 * Launching a Script
   :PROPERTIES:
@@ -116,7 +115,7 @@ To run a file full of Clojure code as a script, pass the path to the
 script to =clojure.main= as an argument:
 
 #+BEGIN_EXAMPLE
-    clj /path/to/myscript.clj
+    clj -M /path/to/myscript.clj
 #+END_EXAMPLE
 
 * Passing arguments to a Script
@@ -128,7 +127,7 @@ To pass in arguments to a script, pass them in as further arguments when
 launching =clojure.main=:
 
 #+BEGIN_EXAMPLE
-    clj /path/to/myscript.clj arg1 arg2 arg3
+    clj -M /path/to/myscript.clj arg1 arg2 arg3
 #+END_EXAMPLE
 
 The arguments will be provided to your program as a seq of strings bound
@@ -151,61 +150,61 @@ to the var =*command-line-args*=:
 As of Clojure 1.10, Clojure errors categorized into one of several
 phases:
 
--  =:read-source= - an error thrown while reading characters at the REPL
-   or from a source file.
+- =:read-source= - an error thrown while reading characters at the REPL
+  or from a source file.
 
--  =:macro-syntax-check= - a syntax error found in the syntax of a macro
-   call, either from spec or from a macro throwing
-   IllegalArgumentException, IllegalStateException, or ExceptionInfo.
+- =:macro-syntax-check= - a syntax error found in the syntax of a macro
+  call, either from spec or from a macro throwing
+  IllegalArgumentException, IllegalStateException, or ExceptionInfo.
 
--  =:macroexpansion= - all other errors thrown during macro evaluation
-   are categorized as macroexpansion errors.
+- =:macroexpansion= - all other errors thrown during macro evaluation
+  are categorized as macroexpansion errors.
 
--  =:compile-syntax-check= - a syntax error caught during compilation.
+- =:compile-syntax-check= - a syntax error caught during compilation.
 
--  =:compilation= - non-syntax errors caught during compilation.
+- =:compilation= - non-syntax errors caught during compilation.
 
--  =:execution= - any errors thrown at execution time.
+- =:execution= - any errors thrown at execution time.
 
--  =:read-eval-result= - any error thrown while reading the result of
-   execution (only applicable for REPLs that read the result).
+- =:read-eval-result= - any error thrown while reading the result of
+  execution (only applicable for REPLs that read the result).
 
--  =:print-eval-result= - any error thrown while printing the result of
-   execution.
+- =:print-eval-result= - any error thrown while printing the result of
+  execution.
 
 Exceptions thrown during all phases (exception =:execution=) will have
-ex-data attached with one or more the following keys:
+ex-data attached with one or more of the following keys:
 
--  =:clojure.error/phase= - phase indicator
+- =:clojure.error/phase= - phase indicator
 
--  =:clojure.error/source= - file name (no path)
+- =:clojure.error/source= - file name (no path)
 
--  =:clojure.error/line= - integer line number
+- =:clojure.error/line= - integer line number
 
--  =:clojure.error/column= - integer column number
+- =:clojure.error/column= - integer column number
 
--  =:clojure.error/symbol= - symbol being expanded/compiled/invoked
+- =:clojure.error/symbol= - symbol being expanded/compiled/invoked
 
--  =:clojure.error/class= - cause exception class symbol
+- =:clojure.error/class= - cause exception class symbol
 
--  =:clojure.error/cause= - cause exception message
+- =:clojure.error/cause= - cause exception message
 
--  =:clojure.error/spec= - explain-data for a spec error
+- =:clojure.error/spec= - explain-data for a spec error
 
 The clojure.main REPL includes the categorization and printing of errors
 by default, but the individual steps of this process are exposed as well
 for other REPLs to use, specifically the functions:
 
--  [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/Throwable-%3Emap][Throwable->map]]
-   - converts an Exception chain into Clojure data
+- [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/Throwable-%3Emap][Throwable->map]] -
+  converts an Exception chain into Clojure data
 
--  [[https://clojure.github.io/clojure/clojure.main-api.html#clojure.main/ex-triage][ex-triage]]
-   - analyzes Clojure exception data to pull relevant information from
-   the top and bottom of the exception chain into a map describing just
-   the set of data needed to format an exception string
+- [[https://clojure.github.io/clojure/clojure.main-api.html#clojure.main/ex-triage][ex-triage]] -
+  analyzes Clojure exception data to pull relevant information from the
+  top and bottom of the exception chain into a map describing just the
+  set of data needed to format an exception string
 
--  [[https://clojure.github.io/clojure/clojure.main-api.html#clojure.main/ex-str][ex-str]]
-   - produces a phase-appropriate message given a set of exception data
+- [[https://clojure.github.io/clojure/clojure.main-api.html#clojure.main/ex-str][ex-str]] -
+  produces a phase-appropriate message given a set of exception data
 
 The clojure.main REPL combines these functions in a pipeline to produce
 the printed exception message:
@@ -230,11 +229,11 @@ be printed to a target specified by the configuration.
 
 The three available error targets are:
 
--  =file= - write to a temp file (default, falls back to =stderr=)
+- =file= - write to a temp file (default, falls back to =stderr=)
 
--  =stderr= - write to stderr stream
+- =stderr= - write to stderr stream
 
--  =none= - don't write
+- =none= - don't write
 
 These error targets can be specified either as options to clojure.main,
 or as Java system properties (flags take precedence). When invoking
@@ -281,22 +280,22 @@ A socket server will be started for each JVM system property like
 map representing the configuration of the socket server with the
 following properties:
 
--  =server-daemon= - defaults to true, socket server thread doesn't
-   block exit
+- =server-daemon= - defaults to true, socket server thread doesn't block
+  exit
 
--  =address= - host or address, defaults to loopback
+- =address= - host or address, defaults to loopback
 
--  =port= - positive integer, required
+- =port= - positive integer, required
 
--  =accept= - namespaced symbol of function to invoke on socket accept,
-   required
+- =accept= - namespaced symbol of function to invoke on socket accept,
+  required
 
--  =args= - sequential collection of args to pass to accept
+- =args= - sequential collection of args to pass to accept
 
--  =bind-err= - defaults to true, binds =*err*= to socket out stream
+- =bind-err= - defaults to true, binds =*err*= to socket out stream
 
--  =client-daemon= - defaults to true, socket client thread doesn't
-   block exit
+- =client-daemon= - defaults to true, socket client thread doesn't block
+  exit
 
 Additionally, there is a repl function provided that is slightly
 customized for use with the socket server in
@@ -310,7 +309,8 @@ to accept external REPL clients via a local connection to port 5555.
     -Dclojure.server.repl="{:port 5555 :accept clojure.core.server/repl}"
 #+END_EXAMPLE
 
-An example client you can use to connect to this socket repl is telnet:
+An example client you can use to connect to this repl remotely is
+telnet:
 
 #+BEGIN_EXAMPLE
     $ telnet 127.0.0.1 5555
@@ -321,8 +321,8 @@ An example client you can use to connect to this socket repl is telnet:
     hello
 #+END_EXAMPLE
 
-You can instruct the server to close the client socket repl session by
-using the special command =:repl/quit=:
+You can instruct the server to close the client repl session by using
+the special command =:repl/quit=:
 
 #+BEGIN_EXAMPLE
     user=> :repl/quit
@@ -331,10 +331,10 @@ using the special command =:repl/quit=:
 
 Also see:
 
--  [[https://clojure.atlassian.net/browse/CLJ-1671][CLJ-1671]]
+- [[https://clojure.atlassian.net/browse/CLJ-1671][CLJ-1671]]
 
--  [[https://archive.clojure.org/design-wiki/display/design/Socket%2BServer%2BREPL.html][Socket
-   REPL design page]]
+- [[https://archive.clojure.org/design-wiki/display/design/Socket%2BServer%2BREPL.html][Socket
+  Server and REPL design page]]
 
 * Related functions
   :PROPERTIES:

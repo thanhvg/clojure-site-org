@@ -10,14 +10,14 @@ more common use case of pragmatic software development.
 
 Programs commonly offer User Interfaces through a variety of media:
 
--  Graphical: web pages, mobile and desktop apps
+- Graphical: web pages, mobile and desktop apps
 
--  Network-based: Web Services / HTTP APIs / ...​
+- Network-based: Web Services / HTTP APIs / ...​
 
--  Storage-based: the program keeps a database up to date, which can
-   then be queried
+- Storage-based: the program keeps a database up to date, which can then
+  be queried
 
--  Command-Line Interfaces (CLI): from interaction via a terminal
+- Command-Line Interfaces (CLI): from interaction via a terminal
 
 You should think of the REPL as another medium for user-to-program
 interaction; compared to those listed above, it requires advanced
@@ -32,7 +32,7 @@ alternative to CLI, dashboards, etc.
 
 * Don't get carried away by the REPL
   :PROPERTIES:
-  :CUSTOM_ID: _don_t_get_carried_away_by_the_repl
+  :CUSTOM_ID: _dont_get_carried_away_by_the_repl
   :END:
 
 The REPL can give you a lot of velocity, but do not mistake motion for
@@ -49,7 +49,7 @@ problem-solving./*
 
 * Don't forget to save your work, and make it accessible
   :PROPERTIES:
-  :CUSTOM_ID: _don_t_forget_to_save_your_work_and_make_it_accessible
+  :CUSTOM_ID: _dont_forget_to_save_your_work_and_make_it_accessible
   :END:
 
 The REPL is a very ephemeral and exclusive medium. If there is anything
@@ -69,16 +69,16 @@ should do some extra work to make it accessible to other contributors
 There are other tools which provide a tight feedback loop while
 programming:
 
--  auto-reloading test suites (example:
-   [[https://github.com/marick/Midje][Midje]])
+- auto-reloading test suites (example:
+  [[https://github.com/marick/Midje][Midje]])
 
--  static code analysis tools (linters, static type checkers)
+- static code analysis tools (linters, static type checkers)
 
--  hot-code reloading (example:
-   [[https://github.com/bhauman/lein-figwheel][Figwheel]])
+- hot-code reloading (example:
+  [[https://github.com/bhauman/lein-figwheel][Figwheel]])
 
--  'visual' test suites (example:
-   [[https://github.com/bhauman/devcards][Devcards]])
+- 'visual' test suites (example:
+  [[https://github.com/bhauman/devcards][Devcards]])
 
 There is no reason to see these approaches as 'competing' with
 REPL-aided development, and oftentimes the REPL can assist you in using

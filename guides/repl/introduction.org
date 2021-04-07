@@ -46,19 +46,19 @@ In Clojure, a programmer will typically use the REPL for a wide spectrum
 of programming tasks, when in another language she would turn to other
 sorts of tools. Such tasks include:
 
--  launching local development environments,
+- launching local development environments,
 
--  running automated test suites,
+- running automated test suites,
 
--  one-off database queries and interventions,
+- one-off database queries and interventions,
 
--  debugging,
+- debugging,
 
--  orchestrating remote machines,
+- orchestrating remote machines,
 
--  getting familiar with libraries and APIs,
+- getting familiar with libraries and APIs,
 
--  ...​and many forms of exploration.
+- ...​and many forms of exploration.
 
 Fundamentally, the reason programmers use the REPL for all these tasks
 is always the same: because they want a mix of automation and
@@ -78,22 +78,22 @@ gradually move to more and more advanced ways of using Clojure REPLs.
 Depending on your needs, you may not need to read the entirety of this
 guide:
 
--  If you are */just starting to learn Clojure/*, the first 2 chapters
-   [[file:launching_a_basic_repl.org][Launching a basic Clojure REPL]]
-   and [[file:basic_usage.org][Basic Usage]] are enough to get you
-   started with a productive learning environment.
+- If you are */just starting to learn Clojure/*, the first 2 chapters
+  [[file:launching_a_basic_repl.org][Launching a basic Clojure REPL]]
+  and [[file:basic_usage.org][Basic Usage]] are enough to get you
+  started with a productive learning environment.
 
--  As soon as you start */developing non-trivial programs/* (such as a
-   hobby web app), you will need the ideas presented in at least the
-   next 2 chapters: [[file:data_visualization_at_the_repl.org][Data
-   visualization at the REPL]] and
-   [[file:navigating_namespaces.org][Navigating namespaces]].
+- As soon as you start */developing non-trivial programs/* (such as a
+  hobby web app), you will need the ideas presented in at least the next
+  2 chapters: [[file:data_visualization_at_the_repl.org][Data
+  visualization at the REPL]] and
+  [[file:navigating_namespaces.org][Navigating namespaces]].
 
--  For */working on Clojure projects at a professional level/*,
-   [[file:enhancing_your_repl_workflow.org][Enhancing your REPL
-   workflow]] and
-   [[file:guidelines_for_repl_aided_development.org][Guidelines for
-   REPL-Aided Development]] are must-reads.
+- For */working on Clojure projects at a professional level/*,
+  [[file:enhancing_your_repl_workflow.org][Enhancing your REPL
+  workflow]] and
+  [[file:guidelines_for_repl_aided_development.org][Guidelines for
+  REPL-Aided Development]] are must-reads.
 
 First, we'll learn how to [[file:launching_a_basic_repl.org][launch a
 basic Clojure REPL]].

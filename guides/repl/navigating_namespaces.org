@@ -23,8 +23,8 @@ the context of the /current namespace/.
 
 *The current namespace determines:*
 
--  */How the code that you are writing may refer to code from other
-   namespaces./*
+- */How the code that you are writing may refer to code from other
+  namespaces./*
 
 For example, if the current namespace is =myapp.foo.bar= and you
 evaluate =(require [clojure.set :as cset :refer [union]])=, you can now
@@ -70,8 +70,8 @@ the =:as cset= alias) or just =union= (because of =:refer [union]=):
   #+END_EXAMPLE
 #+END_QUOTE
 
--  */In what namespace the Vars that you define (using for example
-   =(def …​)= or =(defn …​)=) will exist./*
+- */In what namespace the Vars that you define (using for example
+  =(def …​)= or =(defn …​)=) will exist./*
 
 For example, if the current namespace is =myapp.foo.bar= and you define
 a Var named =my-favorite-number=, you will be able to reference that Var
@@ -114,7 +114,7 @@ as =myapp.foo.bar/my-favorite-number= from other namespaces:
 
 * Creating a namespace with =ns=
   :PROPERTIES:
-  :CUSTOM_ID: _creating_a_namespace_with_literal_ns_literal
+  :CUSTOM_ID: _creating_a_namespace_with_ns
   :END:
 
 You can create and switch to a new namespace by evaluating
@@ -159,7 +159,7 @@ were defined in the previous namespaces are no longer available:
 
 * Switching to an existing namespace with =in-ns=
   :PROPERTIES:
-  :CUSTOM_ID: _switching_to_an_existing_namespace_with_literal_in_ns_literal
+  :CUSTOM_ID: _switching_to_an_existing_namespace_with_in_ns
   :END:
 
 You can switch to an existing namespace by evaluating

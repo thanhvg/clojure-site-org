@@ -47,13 +47,13 @@ function.
 
 The reducers version differs in that:
 
--  Map colls are reduced with reduce-kv
+- Map colls are reduced with reduce-kv
 
--  When init is not provided, f is invoked with no arguments to produce
-   an identity value
+- When init is not provided, f is invoked with no arguments to produce
+  an identity value
 
-   -  /Note: f may be invoked multiple times to provide the identity
-      value/
+  - /Note: f may be invoked multiple times to provide the identity
+    value/
 
 In general most users will not call r/reduce directly and instead should
 prefer
@@ -145,16 +145,16 @@ Specify a reduce function and a combine function with fold:
 
 Use the reducer form of these operations for:
 
--  Efficient eager application of a multi-step transformation
+- Efficient eager application of a multi-step transformation
 
--  Avoiding the dangling I/O resource issues (as seen with lazy seqs)
+- Avoiding the dangling I/O resource issues (as seen with lazy seqs)
 
 Use =fold= when:
 
--  Source data can be generated and held in memory
+- Source data can be generated and held in memory
 
--  Work to be performed is computation (not I/O or blocking)
+- Work to be performed is computation (not I/O or blocking)
 
--  Number of data items or work to be done is "large"
+- Number of data items or work to be done is "large"
 
 

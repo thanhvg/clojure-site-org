@@ -5,52 +5,52 @@ rather than as reference documentation.)/
 
 In working on streams a few things became evident:
 
--  stream code is ugly and imperative
+- stream code is ugly and imperative
 
-   -  even when made safe, still ugly, stateful
+  - even when made safe, still ugly, stateful
 
--  streams support full laziness
+- streams support full laziness
 
-   -  this ends up being extremely nice
+  - this ends up being extremely nice
 
--  Integrating streams transparently (i.e. not having both map and
-   map-stream) would require a change, to relax the contract of the core
-   sequence functions (map, filter etc)
+- Integrating streams transparently (i.e. not having both map and
+  map-stream) would require a change, to relax the contract of the core
+  sequence functions (map, filter etc)
 
-   -  If I am going to do that, could I achieve the same full laziness
-      while keeping the beautiful recursive style of Clojure?
+  - If I am going to do that, could I achieve the same full laziness
+    while keeping the beautiful recursive style of Clojure?
 
-      -  while being substantially compatible with existing code
+    - while being substantially compatible with existing code
 
-      -  Yes!
+    - Yes!
 
-         -  but - ideally some names should change
+      - but - ideally some names should change
 
 * The current seq model
   :PROPERTIES:
   :CUSTOM_ID: _the_current_seq_model
   :END:
 
--  Originally modeled on Common Lisp's cons
+- Originally modeled on Common Lisp's cons
 
--  Either you have a seq, with a valid first, or nothing (nil)
+- Either you have a seq, with a valid first, or nothing (nil)
 
--  A seq is like a logical cursor
+- A seq is like a logical cursor
 
--  rest is fundamentally eager
+- rest is fundamentally eager
 
-   -  returns another seq or nil
+  - returns another seq or nil
 
-   -  needs to determine if there is any more in order to determine if
-      return value is nil
+  - needs to determine if there is any more in order to determine if
+    return value is nil
 
-   -  lazy-cons can delay the calculation of first/rest, but not the
-      determination if there is a rest
+  - lazy-cons can delay the calculation of first/rest, but not the
+    determination if there is a rest
 
-      -  determining that often requires 'pulling' on an inner seq,
-         reducing effective laziness
+    - determining that often requires 'pulling' on an inner seq,
+      reducing effective laziness
 
--  sequence functions currently return a seq or nil
+- sequence functions currently return a seq or nil
 
 The eagerness of *rest* means the sequence functions are not fully lazy,
 they need to at least determine if there is a first.
@@ -60,114 +60,112 @@ they need to at least determine if there is a first.
   :CUSTOM_ID: _enhancing_the_seq_model_a_third_operation_on_seqs_next
   :END:
 
--  /*Changed:*/ (*rest* aseq) - returns a possibly empty seq, /never
-   nil/
+- /*Changed:*/ (*rest* aseq) - returns a possibly empty seq, /never nil/
 
-   -  calls seq on arg if not already a seq
+  - calls seq on arg if not already a seq
 
-   -  the returned seq may be empty
+  - the returned seq may be empty
 
-      -  will print (), but not a single sentinel object
+    - will print (), but not a single sentinel object
 
-   -  never returns nil
+  - never returns nil
 
-      -  currently not enforced on 3rd-party seqs
+    - currently not enforced on 3rd-party seqs
 
-   -  a (possibly) delayed path to the remaining items, if any
+  - a (possibly) delayed path to the remaining items, if any
 
--  /*Changed*/: seqs can be empty
+- /*Changed*/: seqs can be empty
 
-   -  always an ISeq
+  - always an ISeq
 
--  /*Changed*/: the *seq* function - no longer an identity for ISeqs
+- /*Changed*/: the *seq* function - no longer an identity for ISeqs
 
-   -  still returns either a seq or nil
+  - still returns either a seq or nil
 
-   -  (seq aseq) → //*no longer an identity, if aseq empty returns
-      nil*//
+  - (seq aseq) → //*no longer an identity, if aseq empty returns nil*//
 
-   -  still works on nil
+  - still works on nil
 
--  the *first* function doesn't change
+- the *first* function doesn't change
 
-   -  calls seq on arg if not already a seq
+  - calls seq on arg if not already a seq
 
-   -  returns first item
+  - returns first item
 
-   -  still works on nil
+  - still works on nil
 
--  /*New*:/ the *next* function does what *rest* used to do
+- /*New*:/ the *next* function does what *rest* used to do
 
-   -  returns the next seq, if any, else nil
+  - returns the next seq, if any, else nil
 
-   -  calls seq on arg if not already a seq
+  - calls seq on arg if not already a seq
 
-   -  (next aseq) === (seq (rest aseq))
+  - (next aseq) === (seq (rest aseq))
 
-   -  works on nil
+  - works on nil
 
--  /*Changed*/: seq?
+- /*Changed*/: seq?
 
-   -  (seq? ()) → true
+  - (seq? ()) → true
 
--  /*Changed:*/ Sequence fns (map, filter etc) return seqs, but not nil
+- /*Changed:*/ Sequence fns (map, filter etc) return seqs, but not nil
 
-   -  You'll need to call seq on their return value in order to get a
-      seq/nil
+  - You'll need to call seq on their return value in order to get a
+    seq/nil
 
-      -  seq also serves as test for end, already idiomatic
+    - seq also serves as test for end, already idiomatic
 
-         #+BEGIN_SRC clojure
-             (when (seq coll)
-               ...)
-         #+END_SRC
+      #+BEGIN_SRC clojure
+          (when (seq coll)
+            ...)
+      #+END_SRC
 
-   -  allows full laziness
+  - allows full laziness
 
-   -  doesn't support nil punning
+  - doesn't support nil punning
 
-      -  since sequence fns no longer return seq/nil
+    - since sequence fns no longer return seq/nil
 
 * Recipe - How to write lazy sequence functions in new model
   :PROPERTIES:
   :CUSTOM_ID: _recipe_how_to_write_lazy_sequence_functions_in_new_model
   :END:
 
--  Goodbye lazy-cons, hello lazy-seq
+- Goodbye lazy-cons, hello lazy-seq
 
-   -  lazy-cons is gone
+  - lazy-cons is gone
 
-   -  new laziness macro - /*lazy-seq*/
+  - new laziness macro - /*lazy-seq*/
 
-      -  takes a body that yields a seq, nil or anything seq-able
+    - takes a body that yields a seq, nil or anything seq-able
 
-      -  returns a logical collection that implements seq by calling the
-         body
+    - returns a logical collection that implements seq by calling the
+      body
 
-         -  invokes the body only the first time seq is called on it,
-            caches result
+      - invokes the body only the first time seq is called on it, caches
+        result
 
-         -  will call seq on the body's return value if not already a
-            seq or nil
+      - will call seq on the body's return value if not already a seq or
+        nil
 
-   -  The net effect is the creation of a virtual collection that does
-      no work until seq is called upon it - fully delayed
+  - The net effect is the creation of a virtual collection that does no
+    work until seq is called upon it - fully delayed
 
-   -  Supports all collection ops
+  - Supports all collection ops
 
-   -  Can be empty - e.g. calling seq on it can return nil
+  - Can be empty - e.g. calling seq on it can return nil
 
-      -  when empty will print as ()
+    - when empty will print as ()
 
--  lazy-seq goes at top level of lazy sequence function
+- lazy-seq goes at top level of lazy sequence function
 
-   -  instead of nested lazy-cons
+  - instead of nested lazy-cons
 
--  inside, use a normal cons call
+- inside, use a normal cons call
 
-   -  won't be created until needed
+  - won't be created until needed
 
--  if consuming another seq, use rest instead of next
+- if consuming another seq, use rest instead of next
 
 The old way:
 
@@ -225,41 +223,41 @@ rename your rest() method to next().
 To move to the new model you'll need to take the following steps, in
 this order:
 
--  Rename all your calls to *rest* to call *next*
+- Rename all your calls to *rest* to call *next*
 
--  If you were defining your own lazy sequence functions, using
-   *lazy-cons*, switch them over to *lazy-seq* using the recipe above.
-   Make sure to call *rest* and not *next* in your recursive call.
+- If you were defining your own lazy sequence functions, using
+  *lazy-cons*, switch them over to *lazy-seq* using the recipe above.
+  Make sure to call *rest* and not *next* in your recursive call.
 
--  Audit your code for nil-punning. The lazy branch has supports
-   compilation in a debug mode that asserts if you try to test the truth
-   value of a lazy sequence in a conditional, and will throw an
-   exception if you do. Just build clojure like so:
+- Audit your code for nil-punning. The lazy branch has supports
+  compilation in a debug mode that asserts if you try to test the truth
+  value of a lazy sequence in a conditional, and will throw an exception
+  if you do. Just build clojure like so:
 
-   -  ant -Dclojure.assert-if-lazy-seq=true
+  - ant -Dclojure.assert-if-lazy-seq=true
 
-   -  Then, nil puns like the following will throw exceptions:
+  - Then, nil puns like the following will throw exceptions:
 
-      -  (when (filter neg? [1 2]) :all-pos)
+    - (when (filter neg? [1 2]) :all-pos)
 
-      -  (not (concat))
+    - (not (concat))
 
-      -  (if (rest (seq [])) 1 2)
+    - (if (rest (seq [])) 1 2)
 
-   -  In all cases you can fix a nil pun by wrapping the sequence with a
-      seq call:
+  - In all cases you can fix a nil pun by wrapping the sequence with a
+    seq call:
 
-      #+BEGIN_SRC clojure
-          (when (seq (filter neg? [1 2])) :all-pos)
-          -> nil
-      #+END_SRC
+    #+BEGIN_SRC clojure
+        (when (seq (filter neg? [1 2])) :all-pos)
+        -> nil
+    #+END_SRC
 
-   -  After you are done, rebuild without the flag, as it will slow
-      things down.
+  - After you are done, rebuild without the flag, as it will slow things
+    down.
 
 * Don't hang (onto) your head
   :PROPERTIES:
-  :CUSTOM_ID: _don_t_hang_onto_your_head
+  :CUSTOM_ID: _dont_hang_onto_your_head
   :END:
 
 Recursively defined lazy sequence functions are elegant and easy to

@@ -315,7 +315,7 @@ type selection flowchart]])
 | =#_=              | Ignore next form                                                                                                                                 |
 ** Metadata
 ([[https://clojure.org/reference/reader#_metadata][clojure.org/reference/reader]],
-[[https://clojure.org/reference/special_forms][special\_forms]])
+[[https://clojure.org/reference/special_forms][special_forms]])
    :PROPERTIES:
    :CUSTOM_ID: metadata-clojure.orgreferencereader-special_forms
    :END:
@@ -327,7 +327,7 @@ type selection flowchart]])
 |            | =(def ^:dynamic *dyn-var* val)=                                        |
 | On Vars    | =meta with-meta vary-meta alter-meta! reset-meta! doc find-doc test=   |
 ** Special Forms
-([[https://clojure.org/reference/special_forms][clojure.org/reference/special\_forms]])
+([[https://clojure.org/reference/special_forms][clojure.org/reference/special_forms]])
    :PROPERTIES:
    :CUSTOM_ID: special-forms-clojure.orgreferencespecial_forms
    :END:
@@ -395,7 +395,7 @@ type selection flowchart]])
 | Error             | =error-handler set-error-handler! error-mode set-error-mode!=                                  |
 | Misc              | =*agent* release-pending-sends=                                                                |
 ** Java Interoperation
-([[https://clojure.org/reference/java_interop][clojure.org/reference/java\_interop]])
+([[https://clojure.org/reference/java_interop][clojure.org/reference/java_interop]])
    :PROPERTIES:
    :CUSTOM_ID: java-interoperation-clojure.orgreferencejava_interop
    :END:

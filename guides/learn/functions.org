@@ -128,7 +128,7 @@ flow control expressions like =if=.
 
 ** =defn= vs =fn=
    :PROPERTIES:
-   :CUSTOM_ID: __literal_defn_literal_vs_literal_fn_literal
+   :CUSTOM_ID: _defn_vs_fn
    :END:
 
 It might be useful to think of =defn= as a contraction of =def= and
@@ -150,11 +150,11 @@ There is a shorter form for the =fn= anonymous function syntax
 implemented in the Clojure reader: =#()=. This syntax omits the
 parameter list and names parameters based on their position.
 
--  =%= is used for a single parameter
+- =%= is used for a single parameter
 
--  =%1=, =%2=, =%3=, etc are used for multiple parameters
+- =%1=, =%2=, =%3=, etc are used for multiple parameters
 
--  =%&= is used for any remaining (variadic) parameters
+- =%&= is used for any remaining (variadic) parameters
 
 Nested anonymous functions would create an ambiguity as the parameters
 are not named, so nesting is not allowed.
@@ -210,7 +210,7 @@ arguments (the extra pair of parentheses). Instead:
 
 ** =apply=
    :PROPERTIES:
-   :CUSTOM_ID: __literal_apply_literal
+   :CUSTOM_ID: _apply
    :END:
 
 The =apply= function invokes a function with 0 or more fixed arguments,
@@ -249,7 +249,7 @@ Instead you can simply write:
 
 ** =let=
    :PROPERTIES:
-   :CUSTOM_ID: __literal_let_literal
+   :CUSTOM_ID: _let
    :END:
 
 =let= binds symbols to values in a "lexical scope". A lexical scope
@@ -342,11 +342,11 @@ Clojure:
    :CUSTOM_ID: _java_methods_vs_functions
    :END:
 
--  Java methods are not Clojure functions
+- Java methods are not Clojure functions
 
--  Can't store them or pass them as arguments
+- Can't store them or pass them as arguments
 
--  Can wrap them in functions when necessary
+- Can wrap them in functions when necessary
 
 #+BEGIN_SRC clojure
     ;; make a function to invoke .length on arg
@@ -380,11 +380,11 @@ then with the =#()= reader macro.
 
 3) Define a function =greeting= which:
 
--  Given no arguments, returns "Hello, World!"
+- Given no arguments, returns "Hello, World!"
 
--  Given one argument x, returns "Hello, *x*!"
+- Given one argument x, returns "Hello, *x*!"
 
--  Given two arguments x and y, returns "*x*, *y*!"
+- Given two arguments x and y, returns "*x*, *y*!"
 
 #+BEGIN_EXAMPLE
     ;; Hint use the str function to concatenate strings
@@ -487,9 +487,9 @@ exercise.
 class (=Math/pow=, =Math/cos=, =Math/sin=, =Math/PI=), demonstrate the
 following mathematical facts:
 
--  The cosine of pi is -1
+- The cosine of pi is -1
 
--  For some x, sin(x)\^2 + cos(x)\^2 = 1
+- For some x, sin(x)^2 + cos(x)^2 = 1
 
 11) Define a function that takes an HTTP URL as a string, fetches that
 URL from the web, and returns the content as a string.
@@ -516,9 +516,9 @@ first before trying it as a file name. Write a simplified http-get:
 
 12) Define a function =one-less-arg= that takes two arguments:
 
--  =f=, a function
+- =f=, a function
 
--  =x=, a value
+- =x=, a value
 
 and returns another function which calls =f= on =x= plus any additional
 arguments.\\

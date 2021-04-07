@@ -88,11 +88,11 @@ Here's a very typical example, some code that builds up a vector for
 return, all 'changes' being local to the function. Note how the
 transient-using version has exactly the same structure, just:
 
--  Calling *transient* on the source vector
+- Calling *transient* on the source vector
 
--  Using *conj!* instead of *conj*
+- Using *conj!* instead of *conj*
 
--  Calling *persistent!* on return
+- Calling *persistent!* on return
 
 #+BEGIN_EXAMPLE
     (defn vrange [n]
@@ -142,26 +142,26 @@ Transients provide a high-performance optimization of functional
 data-structure-building code that works with Clojure's data structures
 and provides critical safety guarantees.
 
--  Single-path use
+- Single-path use
 
--  O(1) creation from persistent data structures
+- O(1) creation from persistent data structures
 
--  Shares structure with persistent source
+- Shares structure with persistent source
 
--  O(1) creation of persistent data structure when editing session
-   finished
+- O(1) creation of persistent data structure when editing session
+  finished
 
--  Same code structure as functional version
+- Same code structure as functional version
 
-   -  Capture return value, use for next call
+  - Capture return value, use for next call
 
-   -  Don't bash in place
+  - Don't bash in place
 
-   -  Not persistent, so you can't hang onto interim values or alias
+  - Not persistent, so you can't hang onto interim values or alias
 
--  Can't use after returning a persistent version
+- Can't use after returning a persistent version
 
--  Fast
+- Fast
 
 Transient persistent vectors, hash-maps, and hash-sets were added in
 Clojure 1.1.

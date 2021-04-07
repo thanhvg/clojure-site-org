@@ -10,7 +10,7 @@ which we will describe in this chapter.
 
 * Pretty-printing using =clojure.pprint=
   :PROPERTIES:
-  :CUSTOM_ID: _pretty_printing_using_literal_clojure_pprint_literal
+  :CUSTOM_ID: _pretty_printing_using_clojure_pprint
   :END:
 
 As an example, consider the following code, which computes a summary of
@@ -182,7 +182,7 @@ and pretty-pretting.
 
 * Accessing recent results: =*1=, =*2=, =*3=
   :PROPERTIES:
-  :CUSTOM_ID: _accessing_recent_results_literal_1_literal_literal_2_literal_literal_3_literal
+  :CUSTOM_ID: _accessing_recent_results_1_2_3
   :END:
 
 In the REPL, the last evaluated result can be retrieved by evaluating
@@ -192,7 +192,7 @@ In the REPL, the last evaluated result can be retrieved by evaluating
 #+BEGIN_EXAMPLE
     user=> (mapv number-summary [6 12 28])
     [{:n 6, :proper-divisors #{1 2 3}, :even? true, :prime? false, :perfect-number? true} {:n 12, :proper-divisors #{1 2 3 4 6}, :even? true, :prime? false, :perfect-number? false} {:n 28, :proper-divisors #{1 2 4 7 14}, :even? true, :prime? false, :perfect-number? true}]
-    user=> (pp/pprint *1) ;; using *1 instead of re-typing the pevious expression (or its result)
+    user=> (pp/pprint *1) ;; using *1 instead of re-typing the previous expression (or its result)
     [{:n 6,
      :proper-divisors #{1 2 3},
      :even? true,
@@ -343,13 +343,13 @@ than what is needed to diagnose the issue; but this visualization
 becomes more helpful for 'real-world' Exceptions, which tend to have the
 following charateristics in Clojure programs:
 
--  *Exceptions convey data:* in Clojure programs, it's common to attach
-   additional data to an Exception (not just a human-readable error
-   message): this is done by creating the Exception via
-   [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/ex-info][clojure.core/ex-info]].
+- *Exceptions convey data:* in Clojure programs, it's common to attach
+  additional data to an Exception (not just a human-readable error
+  message): this is done by creating the Exception via
+  [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/ex-info][clojure.core/ex-info]].
 
--  *Exceptions are chained:* an Exception can be annotated with an
-   optional /cause/, which is another (lower-level) Exception.
+- *Exceptions are chained:* an Exception can be annotated with an
+  optional /cause/, which is another (lower-level) Exception.
 
 Here's an example program which demonstrates these sort of Exceptions.
 
@@ -470,10 +470,13 @@ lets you open GUI-based visualizations of data, for instance:
 
 [[/images/content/guides/repl/clj-inspect-table.png]]
 
-Finally,
 [[https://clojure.github.io/clojure/clojure.java.browse-api.html#clojure.java.browse/browse-url][clojure.java.browse/browse-url]]
 lets you open any URL in a Web browser, which can be handy for specific
 needs.
+
+Finally, there also exist 3rd-party Clojure tools for data
+visualization; we will see a selection of them in chapter
+[[file:enhancing_your_repl_workflow.org][Enhancing your REPL workflow]].
 
 * Dealing with mysterious values (advanced)
   :PROPERTIES:
@@ -507,7 +510,7 @@ interact with it at the REPL so as to gain more understanding of it.
 
 ** Viewing the type hierarchy using =type= and =ancestors=
    :PROPERTIES:
-   :CUSTOM_ID: _viewing_the_type_hierarchy_using_literal_type_literal_and_literal_ancestors_literal
+   :CUSTOM_ID: _viewing_the_type_hierarchy_using_type_and_ancestors
    :END:
 
 The printed representation of =v= tells us one thing about it: its
@@ -541,7 +544,7 @@ lib to view online documentation about a Java type:
 
 ** Inspecting Java types with =clojure.reflect=
    :PROPERTIES:
-   :CUSTOM_ID: _inspecting_java_types_with_literal_clojure_reflect_literal
+   :CUSTOM_ID: _inspecting_java_types_with_clojure_reflect
    :END:
 
 Javadoc is helpful, but sometimes Javadoc won't even be available. In
@@ -560,7 +563,7 @@ about a Java type as a plain Clojure data structure:
 
 Now, that is a /very/ hairy data structure. Fortunately, we have learned
 how to deal with hairy data structures in the
-[[_pretty_printing_using_code_clojure_pprint_code][first section]] of
+[[#_pretty_printing_using_code_clojure_pprint_code][first section]] of
 this chapter: pretty-printing to the rescue! Let's use pretty-printing
 to display the methods exposed by =java.io.InputStream= in a table:
 

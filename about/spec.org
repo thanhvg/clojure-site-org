@@ -136,17 +136,17 @@ the same and live in a globally-namespaced directory.
 
 Writing a spec should enable /automatic/:
 
--  Validation
+- Validation
 
--  Error reporting
+- Error reporting
 
--  Destructuring
+- Destructuring
 
--  Instrumentation
+- Instrumentation
 
--  Test-data generation
+- Test-data generation
 
--  Generative test generation
+- Generative test generation
 
 ** Minimize intrusion
    :PROPERTIES:
@@ -159,7 +159,7 @@ written specs to adorn fn/macro behavior without redefinition.
 
 ** Decomplect maps/keys/values
    :PROPERTIES:
-   :CUSTOM_ID: _decomplect_maps_keys_values
+   :CUSTOM_ID: _decomplect_mapskeysvalues
    :END:
 
 Keep map (keyset) specs separate from attribute (key→value) specs.
@@ -243,7 +243,7 @@ dynamic contexts, and encourages composition and consistency.
 
 ** Don't further add to/overload the (reified) namespaces of Clojure
    :PROPERTIES:
-   :CUSTOM_ID: _don_t_further_add_to_overload_the_reified_namespaces_of_clojure
+   :CUSTOM_ID: _dont_further_add_tooverload_the_reified_namespaces_of_clojure
    :END:
 
 Nothing will be attached to vars, metadata etc. All functions have
@@ -271,7 +271,7 @@ overwhelmingly written by people and, when composed, manually so.
 
 ** Sets (maps) are about membership, that's it
    :PROPERTIES:
-   :CUSTOM_ID: _sets_maps_are_about_membership_that_s_it
+   :CUSTOM_ID: _sets_maps_are_about_membership_thats_it
    :END:
 
 As per above, maps defining the details of the values at their keys is a
@@ -309,7 +309,7 @@ valuable properties. We will prefer these over ad hoc solutions.
 
 ** Build on test.check but don't require knowledge of it
    :PROPERTIES:
-   :CUSTOM_ID: _build_on_test_check_but_don_t_require_knowledge_of_it
+   :CUSTOM_ID: _build_on_test_check_but_dont_require_knowledge_of_it
    :END:
 
 The generative testing underpinning of *spec* will leverage =test.check=
@@ -365,16 +365,16 @@ specification of values associated with a namespaced keyword, like
 in any map in which that keyword appears. There are a number of
 advantages to this:
 
--  It ensures consistency for all uses of that keyword in an application
-   where all uses should share a semantic
+- It ensures consistency for all uses of that keyword in an application
+  where all uses should share a semantic
 
--  It similarly ensures consistency between a library and its consumers
+- It similarly ensures consistency between a library and its consumers
 
--  It reduces redundancy, since otherwise many map specs would need to
-   make matching declarations about k
+- It reduces redundancy, since otherwise many map specs would need to
+  make matching declarations about k
 
--  Namespaced keyword specs can be checked even when no map spec
-   declares those keys
+- Namespaced keyword specs can be checked even when no map spec declares
+  those keys
 
 This last point is vital when dynamically building up, composing, or
 generating maps. Creating a spec for every map subset/union/intersection
@@ -403,18 +403,18 @@ are not self-describing.
 Specs for sequences/vectors use a set of standard regular expression
 operators, with the standard semantics of regular expressions:
 
--  =cat= - a concatenation of predicates/patterns
+- =cat= - a concatenation of predicates/patterns
 
--  =alt= - a choice of one among a set of predicates/patterns
+- =alt= - a choice of one among a set of predicates/patterns
 
--  =*= - zero or more occurrences of a predicate/pattern
+- =*= - zero or more occurrences of a predicate/pattern
 
--  =+= - one or more
+- =+= - one or more
 
--  =?= - one or none
+- =?= - one or none
 
--  =&= - takes a regex op and further constrains it with one or more
-   predicates
+- =&= - takes a regex op and further constrains it with one or more
+  predicates
 
 These nest arbitrarily to form complex expressions.
 
@@ -445,7 +445,7 @@ parsing tools.
 
 *** conform/explain
     :PROPERTIES:
-    :CUSTOM_ID: _conform_explain
+    :CUSTOM_ID: _conformexplain
     :END:
 
 As you can see above, the basic operation for using specs is =conform=,
@@ -526,7 +526,7 @@ forms.
 
 *** Parsing/destructuring
     :PROPERTIES:
-    :CUSTOM_ID: _parsing_destructuring
+    :CUSTOM_ID: _parsingdestructuring
     :END:
 
 You can use =conform= directly in your implementations to get its
@@ -588,15 +588,15 @@ examples and usage information.
 Many parts of the spec API call for 'predicates' or 'preds'. These
 arguments can be satisfied by:
 
--  predicate (boolean) fns
+- predicate (boolean) fns
 
--  sets
+- sets
 
--  registered names of specs
+- registered names of specs
 
--  specs (the return values of =spec=, =and=, =or=, =keys=)
+- specs (the return values of =spec=, =and=, =or=, =keys=)
 
--  regex ops (the return values of =cat=, =alt=, =*=, =+=, =?=, =&=)
+- regex ops (the return values of =cat=, =alt=, =*=, =+=, =?=, =&=)
 
 Note that if you want to nest an independent regex predicate within a
 regex you will have to wrap it in a call to =spec=, else it will be
@@ -670,3 +670,18 @@ contracts]].
 *I hope you find spec useful and powerful.*
 
 Rich Hickey
+
+* More information
+  :PROPERTIES:
+  :CUSTOM_ID: _more_information
+  :END:
+
+- [[file:xref/../../../guides/spec.org][spec Guide]]
+
+- [[https://clojure.github.io/spec.alpha][API Docs]]
+
+- [[https://github.com/clojure/spec.alpha][Project]]
+
+- [[file:xref/../../../community/resources.xml#spec][spec Resources]]
+
+

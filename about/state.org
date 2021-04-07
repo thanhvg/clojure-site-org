@@ -167,10 +167,10 @@ identity to a new state by reading its current value, calling a pure
 function on that value to create a new value, and setting that value as
 the new state. These composite operations are made easy and atomic by
 the
-[[https://clojure.github.com/clojure/clojure.core-api.html#clojure.core/alter][alter]],
-[[https://clojure.github.com/clojure/clojure.core-api.html#clojure.core/commute][commute]]
+[[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/alter][alter]],
+[[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/commute][commute]]
 and
-[[https://clojure.github.com/clojure/clojure.core-api.html#clojure.core/send][send]]
+[[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/send][send]]
 functions.
 
 * Message Passing and Actors
@@ -198,35 +198,34 @@ the code.
 I chose not to use the actor model for same-process state management in
 Clojure for several reasons:
 
--  It is a much more complex programming model, requiring 2-message
-   conversations for the simplest data reads, and forcing the use of
-   blocking message receives, which introduce the potential for
-   deadlock. Programming for the failure modes of distribution means
-   utilizing timeouts etc. It causes a bifurcation of the program
-   protocols, some of which are represented by functions and others by
-   the values of messages.
+- It is a much more complex programming model, requiring 2-message
+  conversations for the simplest data reads, and forcing the use of
+  blocking message receives, which introduce the potential for deadlock.
+  Programming for the failure modes of distribution means utilizing
+  timeouts etc. It causes a bifurcation of the program protocols, some
+  of which are represented by functions and others by the values of
+  messages.
 
--  It doesn't let you fully leverage the efficiencies of being in the
-   same process. It is quite possible to efficiently directly share a
-   large immutable data structure between threads, but the actor model
-   forces intervening conversations and, potentially, copying. Reads and
-   writes get serialized and block each other, etc.
+- It doesn't let you fully leverage the efficiencies of being in the
+  same process. It is quite possible to efficiently directly share a
+  large immutable data structure between threads, but the actor model
+  forces intervening conversations and, potentially, copying. Reads and
+  writes get serialized and block each other, etc.
 
--  It reduces your flexibility in modeling - this is a world in which
-   everyone sits in a windowless room and communicates only by mail.
-   Programs are decomposed as piles of blocking switch statements. You
-   can only handle messages you anticipated receiving. Coordinating
-   activities involving multiple actors is very difficult. You can't
-   observe anything without its cooperation/coordination - making ad-hoc
-   reporting or analysis impossible, instead forcing every actor to
-   participate in each protocol.
+- It reduces your flexibility in modeling - this is a world in which
+  everyone sits in a windowless room and communicates only by mail.
+  Programs are decomposed as piles of blocking switch statements. You
+  can only handle messages you anticipated receiving. Coordinating
+  activities involving multiple actors is very difficult. You can't
+  observe anything without its cooperation/coordination - making ad-hoc
+  reporting or analysis impossible, instead forcing every actor to
+  participate in each protocol.
 
--  It is often the case that taking something that works well locally
-   and transparently distributing it doesn't work out - the conversation
-   granularity is too chatty or the message payloads are too large or
-   the failure modes change the optimal work partitioning, i.e.
-   transparent distribution isn't transparent and the code has to change
-   anyway.
+- It is often the case that taking something that works well locally and
+  transparently distributing it doesn't work out - the conversation
+  granularity is too chatty or the message payloads are too large or the
+  failure modes change the optimal work partitioning, i.e. transparent
+  distribution isn't transparent and the code has to change anyway.
 
 Clojure may eventually support the actor model for distributed
 programming, paying the price only when distribution is required, but I
@@ -257,4 +256,4 @@ In the local case, since Clojure does not have mutable local variables,
 instead of building up values in a mutating loop, you can instead do it
 functionally with
 [[file:xref/../../reference/special_forms.xml#recur][recur]] or
-[[https://clojure.github.com/clojure/clojure.core-api.html#clojure.core/reduce][reduce]].
+[[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/reduce][reduce]].

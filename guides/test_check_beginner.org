@@ -121,11 +121,11 @@ namespace.
 The built-in generators fall into three categories: scalars (basic data
 types), collections, and combinators.
 
--  scalars (basic data types: numbers, strings, etc.)
+- scalars (basic data types: numbers, strings, etc.)
 
--  collections (lists, maps, sets, etc.)
+- collections (lists, maps, sets, etc.)
 
--  combinators
+- combinators
 
 The combinators are general enough to support creating generators for
 arbitrary custom types.
@@ -243,7 +243,7 @@ combinators.
 
 *** =gen/one-of=
     :PROPERTIES:
-    :CUSTOM_ID: __literal_gen_one_of_literal
+    :CUSTOM_ID: _genone_of
     :END:
 
 =gen/one-of= takes a collection of generators and returns a generator
@@ -259,7 +259,7 @@ weight for each generator.
 
 *** =gen/such-that=
     :PROPERTIES:
-    :CUSTOM_ID: __literal_gen_such_that_literal
+    :CUSTOM_ID: _gensuch_that
     :END:
 
 =gen/such-that= restricts an existing generator to a subset of its
@@ -290,7 +290,7 @@ the generator, as we'll see with =gen/fmap=.
 
 *** =gen/fmap=
     :PROPERTIES:
-    :CUSTOM_ID: __literal_gen_fmap_literal
+    :CUSTOM_ID: _genfmap
     :END:
 
 =gen/fmap= allows you to modify any generator by supplying a function to
@@ -324,7 +324,7 @@ Here's a generator that only generates upper-case strings:
 
 *** =gen/bind=
     :PROPERTIES:
-    :CUSTOM_ID: __literal_gen_bind_literal
+    :CUSTOM_ID: _genbind
     :END:
 
 The most advanced combinator allows generating things in multiple
@@ -395,7 +395,7 @@ the generated values.
 Properties are created using the =clojure.test.check.properties/for-all=
 macro.
 
-The property in [[quick-check-examples][the first example]] generates a
+The property in [[#quick-check-examples][the first example]] generates a
 vector and then calls the function being tested (=sort=) three times.
 
 Properties can also combine several generators, for example:
@@ -412,7 +412,7 @@ two sections are about.
 
 ** =quick-check=
    :PROPERTIES:
-   :CUSTOM_ID: __literal_quick_check_literal
+   :CUSTOM_ID: _quick_check
    :END:
 
 The standalone and functional method of running tests is via the
@@ -421,11 +421,11 @@ The standalone and functional method of running tests is via the
 It takes a property and a number of trials, and runs the property up to
 that many times, returning a map describing success or failure.
 
-See [[quick-check-examples][the examples above]].
+See [[#quick-check-examples][the examples above]].
 
 ** =defspec=
    :PROPERTIES:
-   :CUSTOM_ID: __literal_defspec_literal
+   :CUSTOM_ID: _defspec
    :END:
 
 =defspec= is a macro for writing property-based-tests that are
@@ -434,7 +434,7 @@ recognized and run by =clojure.test=.
 The difference from =quick-check= is partly just syntactic, and partly
 that it /defines/ a test instead of running it.
 
-For example, the [[quick-check-examples][first =quick-check= example in
+For example, the [[#quick-check-examples][first =quick-check= example in
 this guide]] could also be written like this:
 
 #+BEGIN_SRC clojure

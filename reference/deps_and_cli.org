@@ -10,11 +10,11 @@ target the JVM platform, Clojure needs to provide ready access to Java
 libraries, ideally in a way suited for dynamic development. In practice,
 this means meeting the JVM platform in two places:
 
--  the classpath used when invoking JVM processes (and/or
-   URLClassLoaders)
+- the classpath used when invoking JVM processes (and/or
+  URLClassLoaders)
 
--  transitive dependency download and resolution from providers like
-   Maven
+- transitive dependency download and resolution from providers like
+  Maven
 
 Clojure build tools have traditionally taken the approach of wrapping
 the Maven ecosystem to gain access to Java libraries. However, they have
@@ -25,24 +25,360 @@ making it hard to e.g. work with libs not yet publishing artifacts, work
 on speculative changes w/o artifacts or across multiple libs, or give
 control to a 3rd party to manage shared dependencies.
 
-Clojure provides:
+To this end Clojure provides:
 
--  [[https://github.com/clojure/tools.deps.alpha][tools.deps.alpha]] - a
-   library providing a functional API for resolving dependency graphs
-   and building classpaths that can utilize both Maven and other
-   providers of code or artifacts
+- [[https://github.com/clojure/tools.deps.alpha][tools.deps.alpha]] - a
+  library providing an API for resolving dependency graphs and building
+  classpaths that can utilize both Maven and other providers of code or
+  artifacts
 
--  Command line tools (=clojure= and =clj=) that enable users to make
-   use of this capability at the terminal to declare dependencies,
-   assemble classpaths, and launch Clojure programs
+- Command line tools (=clojure= and =clj=) that enable users to make use
+  of this capability at the terminal to declare dependencies, assemble
+  classpaths, and launch Clojure programs with data
 
--  System-specific installers for downloading the tools, improving the
-   "Getting Started" experience
+- System-specific installers for downloading the tools, improving the
+  "Getting Started" experience
 
-* Building classpaths with tools.deps.alpha
+* Overview
   :PROPERTIES:
-  :CUSTOM_ID: _building_classpaths_with_tools_deps_alpha
+  :CUSTOM_ID: _overview
   :END:
+
+You use the Clojure tools (=clj= or =clojure=) to run Clojure programs
+on the JVM, e.g. to start a REPL or invoke a specific function with
+data. The Clojure tools will configure the JVM process by defining a
+classpath (with desired libraries), an execution environment (JVM
+options), the main class, and args.
+
+Using a deps.edn file (or files), you tell Clojure where your source
+code resides and what libraries you need. Clojure will then calculate
+the full set of required libraries and a classpath, caching expensive
+parts of this process for better performance.
+
+The internal steps of the Clojure tools, as well as the Clojure
+functions you intend to run, are parameterized by data structures, often
+maps. Shell command lines are not optimized for passing nested data, so
+instead you will put the data structures in your deps edn file and refer
+to them on the command line via /aliases/ - keywords that name data
+structures.
+
+=clj= and =clojure= differ in that =clj= has extra support for use as a
+REPL in a terminal, and should be preferred unless you don't want that
+support, then use =clojure=. The invocation structure is the same for
+both:
+
+#+BEGIN_EXAMPLE
+    clj     [clj-opt*] [exec-opt]
+    clojure [clj-opt*] [exec-opt]
+#+END_EXAMPLE
+
+** Start a REPL
+   :PROPERTIES:
+   :CUSTOM_ID: _start_a_repl
+   :END:
+
+To run a REPL, invoke =clj= without any exec-opt:
+
+#+BEGIN_EXAMPLE
+    $ clj
+    Clojure 1.10.1
+    user=>
+#+END_EXAMPLE
+
+** Executing a function
+   :PROPERTIES:
+   :CUSTOM_ID: _executing_a_function
+   :END:
+
+Use the following exec-opt to invoke a function that takes a map:
+
+#+BEGIN_EXAMPLE
+    clojure [clj-opt*] -X[aliases] [a/fn] [kpath v]*
+#+END_EXAMPLE
+
+=-X= is configured with an arg map with =:exec-fn= and =:exec-args=
+keys, and stored under an alias in =deps.edn=:
+
+#+BEGIN_SRC clojure
+    ;; deps.edn
+    {:aliases
+     {:my-fn
+      {:exec-fn my.qualified/fn
+       :exec-args {:my {:data 123}
+                   :config 456}}}}
+#+END_SRC
+
+To invoke, pass the name of the alias to =-X=:
+
+#+BEGIN_EXAMPLE
+    clj -X:my-fn
+#+END_EXAMPLE
+
+You can supply additional keys, or override values stored in the
+deps.edn file by passing pairs of key-path and value. The key-path
+should either be a single key or a vector of keys to refer to a nested
+key (as with =assoc-in=). Each key-path will be used to =assoc-in= to
+the original =:exec-args= map, overriding the value there.
+
+#+BEGIN_EXAMPLE
+    # Top key override
+    clj -X:my-fn :config 789
+
+    # Nested key override
+    clj -X:my-fn '[:my :data]' 789
+#+END_EXAMPLE
+
+#+BEGIN_QUOTE
+  *Note*
+
+  See the later section on [[#quoting]["Quoting keys and values"]] for
+  more details on how to properly quote edn values on the command line.
+#+END_QUOTE
+
+If you want to execute an arbitrary function, you can pass it on the
+command instead, along with pairs of key-path and value:
+
+#+BEGIN_EXAMPLE
+    clj -X my.qualified/fn :config 789
+#+END_EXAMPLE
+
+#+BEGIN_QUOTE
+  *Note*
+
+  Alias arg maps can also include a default namespace or namespace
+  aliases for resolving the function (see [[#namespaces]["Namespace
+  resolution"]] for more details).
+#+END_QUOTE
+
+** Running a main or script
+   :PROPERTIES:
+   :CUSTOM_ID: _running_a_main_or_script
+   :END:
+
+You can use the =-M= exec-opt to invoke clojure.main, which supports
+calling a namespace with a =-main= function or a Clojure script:
+
+#+BEGIN_EXAMPLE
+    clojure [clj-opt*] -M[aliases] [main-opts]
+#+END_EXAMPLE
+
+The -M aliases are pulled from =deps.edn= and combined to form an arg
+map. The arg map can modify the classpath or supply main options.
+
+See the [[file:repl_and_main.org][clojure.main]] documentation for more
+details on main options.
+
+* Operation
+  :PROPERTIES:
+  :CUSTOM_ID: _operation
+  :END:
+
+When you execute the Clojure tool, there are a series of steps performed
+to prepare and execute your command. This section is an overview of
+those steps, see later sections for how to modify those steps in a
+variety of ways.
+
+*Locate deps edn sources*
+
+Configuration is stored in one or more "deps edn" maps. These are edn
+maps with the following top-level keys:
+
+- =:deps= - map of lib (symbol) to coordinate
+
+- =:paths= - vector of project source paths
+
+- =:aliases= - map of alias name to alias data
+
+- provider-specific keys for configuring dependency sources
+
+The Clojure tools look for 4 potential deps edn sources:
+
+- Root - part of the clj installation (a resource in the tools.deps
+  library)
+
+- User - cross-project configuration (typically tools), usually found at
+  =~/.clojure/deps.edn=
+
+- Project - the =deps.edn= in the current directory
+
+- Config data - a deps edn map passed on the command line
+
+*Check cache*
+
+The next several steps of this execution can be skipped if we have
+already computed the classpath and cached it. Classpath and the runtime
+basis files are cached in the current directory under =.cpcache/=. The
+key is based on the contents of the deps.edn files and some of the
+command arguments passed and several files will be cached, most
+importantly the classpath and runtime basis.
+
+If the key is found, and the cached files are newer than all deps.edn
+sources, they will be used and execution begins immediately.
+
+*Replace project environment ("tool")*
+
+When you execute a tool in the context of your project, the tool can use
+its own paths and/or deps in place of the project's paths and/or deps.
+
+*Merge sources*
+
+All deps edn sources are merged into a single master edn file in the
+order listed above - root, user, project (possibly with tool
+replacements), config. This merged deps will be included in the runtime
+basis and used after this point.
+
+The merge is essentially =merge-with merge=, except for the =:paths=
+key, where only the last =:paths= found is used (they replace, not
+combine).
+
+*Resolve dependencies*
+
+Starting from the master edn's merged :deps, the full transitive
+expansion of the dependency tree is computed. Dependency sources
+(procurers) are used to obtain metadata and other dependency
+information. At the completion of this step, all libraries to use in the
+execution have been found and downloaded to local files if needed.
+
+See [[file:dep_expansion.org][dep expansion]] for more details on the
+dep expansion algorithm.
+
+*Make classpath*
+
+JVM execution relies on computing the classpath for the execution. The
+classpath will consist of the =:paths= in the merged =deps.edn= and the
+locations of all resolved dependencies.
+
+*Prepare JVM environment*
+
+JVM arguments may either be passed on the command line (with =-J=) or by
+using data stored in an alias under =:jvm-opts= and passed with =-X= or
+=-A= or =-M=
+
+*Execute command*
+
+Finally the command is executed - see the Overview above for the
+execution options. The already computed (or loaded from cache)
+classpath, JVM environment, and main arguments if relevant are used in
+the execution.
+
+* deps.edn
+  :PROPERTIES:
+  :CUSTOM_ID: _deps_edn
+  :END:
+
+The configuration file format (in =deps.edn= files) is an edn map with
+top-level keys =:deps=, =:paths=, and =:aliases=, plus provider-specific
+keys for configuring dependency sources.
+
+** Paths
+   :PROPERTIES:
+   :CUSTOM_ID: _paths
+   :END:
+
+Paths are declared in a top level key =:paths= and are a vector of
+string paths or alias names. Relative paths are resolved in relation to
+the directory containing the deps.edn (the project root). These source
+paths will be added to the classpath. Source paths should be at or under
+the project root directory (where =deps.edn= is located).
+
+Example:
+
+#+BEGIN_SRC clojure
+    {:paths ["src"]}
+#+END_SRC
+
+If used, alias names should refer to a path vector in the alias data:
+
+#+BEGIN_SRC clojure
+    {:paths [:clj-paths :resource-paths]
+     :aliases
+     {:clj-paths ["src/clj" "src/cljc"]
+      :resource-paths ["resources"]}}
+#+END_SRC
+
+** Dependencies
+   :PROPERTIES:
+   :CUSTOM_ID: _dependencies
+   :END:
+
+Dependencies are declared in deps.edn with a top level key =:deps= - a
+map from library to coordinate. Libraries are symbols of the form
+=<groupID>/<artifactId>=. To indicate a Maven classifier, use
+=<groupId>/<artifactId>$<classifier>=.
+
+Coordinates can take several forms depending on the coordinate type:
+
+- Maven coordinate: ={:mvn/version "1.2.3"}=
+
+  - Other optional keys: =:exclusions=
+
+  - Note: =:classifier= is not supported - add to lib name as specified
+    above
+
+- Local project coordinate: ={:local/root "/path/to/project"}=
+
+  - Optional key =:deps/manifest=
+
+    - Specifies the project manifest type
+
+    - Default is to auto-detect the project type (currently either
+      =:deps= or =:pom=)
+
+- Local jar coordinate: ={:local/root "/path/to/file.jar"}=
+
+  - If the jar includes a pom.xml file, it will be used to find
+    transitive deps
+
+- Git coordinate:
+  ={:git/url "https://github.com/user/project.git", :sha "sha", :tag "tag"}=
+
+  - Required key =:git/url= can be one of the following:
+
+    - https - secure anonymous access to public repos
+
+    - ssh or user@host form urls (including GitHub) - ssh-based access
+      (see Git configuration section)
+
+  - Required key =:sha= should indicate the full commit sha
+
+  - Optional key =:tag= is used only to indicate the semantics of the
+    sha
+
+  - Optional key =:deps/root=
+
+    - Specifies the relative path within the root to search for the
+      manifest file
+
+  - Optional key =:deps/manifest= - same as in =:local= deps
+
+#+BEGIN_SRC clojure
+    {:deps
+     {org.clojure/tools.reader {:mvn/version "1.1.1"}
+      github-sally/awesome {:git/url "https://github.com/sally/awesome.git", :sha "123abcd549214b5cba04002b6875bdf59f9d88b6"}
+      ;; ... add more here
+     }}
+#+END_SRC
+
+** Aliases
+   :PROPERTIES:
+   :CUSTOM_ID: _aliases
+   :END:
+
+Aliases give a name to a data structure that can be used either by the
+Clojure tool itself or other consumers of deps.edn. They are defined in
+the =:aliases= section of the config file. These Clojure tool
+subprocesses use data which can be read from aliases:
+
+* Basis and classpath
+  :PROPERTIES:
+  :CUSTOM_ID: _basis_and_classpath
+  :END:
+
+The core of the tools.deps library is a process to take a merged
+deps.edn file, arg maps for the resolve-deps and make-classpath steps,
+and produce the "runtime basis", or "basis" for short. The basis is a
+superset of the deps.edn file also containing those args, the lib map,
+and the classpath map.
 
 The JVM classpath consists of a series of roots, either directory paths
 or the path to a jar file. Classes (and Clojure files) map via package
@@ -54,10 +390,7 @@ When the JVM needs to load one of these files it searches each root for
 the relative path and loads it when found.
 
 We divide the process of building a classpath into two primary
-operations: =resolve-deps= and =make-classpath=. Below is a high-level
-view of this process:
-
-[[/images/content/guides/deps/deps.svg]]
+operations: =resolve-deps= and =make-classpath=.
 
 ** resolve-deps
    :PROPERTIES:
@@ -69,12 +402,13 @@ view of this process:
 =resolve-deps= takes an initial map of required dependencies and a map
 of args that modify the resolution process. It builds a full graph of
 transitive dependencies, resolves any version differences, and flattens
-that graph to a full list of dependencies required in the classpath.
+that graph to a full list of libraries to be included on the classpath.
 
-The deps are a map of library to coordinate. The library is (in Maven
-terms) the groupId and artifactId, which are sufficient to locate the
-desired project. The coordinate is used to describe a particular version
-that is being requested from a particular provider (like Maven).
+The deps from the merged deps.edn is a map of library to coordinate. The
+library is (in Maven terms) the groupId and artifactId, which are
+sufficient to locate the desired project. The coordinate is used to
+describe a particular version that is being requested from a particular
+provider (like Maven or git).
 
 For example, this deps map specifies a (Maven-based) dependency:
 
@@ -168,6 +502,9 @@ source:
     {:extra-paths ["test" "resources"]}
 #+END_SRC
 
+Note that external paths should be at or under the root directory of the
+project (location of the =deps.edn= file).
+
 =:classpath-overrides= specify a location to pull a dependency that
 overrides the path found during dependency resolution, for example to
 replace a dependency with a local debug version. Many of these use cases
@@ -179,287 +516,309 @@ are ones where you would be tempted to prepend the classpath to
      {org.clojure/clojure "/my/clojure/target"}}
 #+END_SRC
 
-* Command line tools
+* Clojure tools usage
   :PROPERTIES:
-  :CUSTOM_ID: _command_line_tools
+  :CUSTOM_ID: _clojure_tools_usage
   :END:
 
-** Directories
+** deps.edn sources
    :PROPERTIES:
-   :CUSTOM_ID: _directories
+   :CUSTOM_ID: _deps_edn_sources
    :END:
 
-The tools rely on several directories and optionally on several
-environment variables.
+The Clojure tools will use the following deps.edn map sources, in this
+order:
 
--  Installation directory
+- Root - found in the installation of clj (or as a resource in
+  tools.deps)
 
-   -  Created during installation
+- User - cross-project configuration (typically tools)
 
-   -  Contents:
+  - Locations used in this order:
 
-      -  =bin/clojure= - main tool
+    - If =$CLJ_CONFIG= is set, then use =$CLJ_CONFIG= (explicit
+      override)
 
-      -  =bin/clj= - wrapper for interactive repl use (uses =rlwrap=)
+    - If =$XDG_CONFIG_HOME= is set, then use =$XDG_CONFIG_HOME/clojure=
+      (Freedesktop conventions)
 
-      -  =deps.edn= - install level deps.edn file, with some default
-         deps (Clojure, etc) and provider config
+    - Else use =$HOME/.clojure= (most common)
 
-      -  =example-deps.edn= - commented example that gets copied to
-         =<config_dir>/deps.edn=
+- Project - the =deps.edn= in the current directory
 
-      -  =libexec/clojure-tools-X.Y.Z.jar= - uberjar invoked by
-         =clojure= to construct classpaths
+- Config data - a =deps.edn= map passed on the command line
 
--  Config directory
+The deps.edn sources can be modified or inspected by the following
+options:
 
-   -  Holds a deps.edn file that persists across tool upgrades and
-      affects all projects
+- =-Sverbose= - print all source locations
 
-   -  Locations used in this order:
+- =-Sdeps= - pass the config data on the command line
 
-      -  If =$CLJ_CONFIG= is set, then use =$CLJ_CONFIG= (explicit
-         override)
+- =-Srepro= - omit the user deps source (other sources will be used if
+  found)
 
-      -  If =$XDG_CONFIG_HOME= is set, then use
-         =$XDG_CONFIG_HOME/clojure= (Freedesktop conventions)
-
-      -  Else use =$HOME/.clojure= (most common)
-
-   -  Contents:
-
-      -  =deps.edn= - user deps file, defines default Clojure version
-         and provider defaults
-
--  Cache directory
-
-   -  Lazily created when =clojure= is invoked without a local
-      =deps.edn= file. Locations used in this order:
-
-      -  If =$CLJ_CACHE= is set, then use =$CLJ_CACHE= (explicit
-         override)
-
-      -  If =$XDG_CACHE_HOME= is set, then use =$XDG_CACHE_HOME/clojure=
-         (Freedesktop conventions)
-
-      -  Else use =config_dir/.cpcache= (most common)
-
--  Project directory
-
-   -  The current directory
-
-   -  Contents:
-
-      -  =deps.edn= - optional project deps
-
-      -  =.cpcache= - project cache directory, same as the user-level
-         cache directory, created if there is a =deps.edn=
-
-** deps.edn
+** Classpath caching
    :PROPERTIES:
-   :CUSTOM_ID: _deps_edn
+   :CUSTOM_ID: _classpath_caching
    :END:
 
-The configuration file format (in "deps.edn" files) is an edn map with
-top-level keys for =:deps=, =:paths=, and =:aliases=, plus
-provider-specific keys for configuring dependency sources.
+The cached classpath file is used for execution when:
 
-After installation, deps.edn configuration files can be found in (up to)
-three locations:
+- It exists and
 
--  installation directory - created only at install time
+- It is newer than all =deps.edn= sources
 
--  config directory (often ~/.clojure) - modified to change
-   cross-project (or no-project) defaults
+Classpath and basis files are cached in a directory computed as follows:
 
--  the local directory - per-project settings
+- If there is a project deps.edn
 
-The =deps.edn= files in each of these locations (if they exist) are
-merged to form one combined dependency configuration. The merge is done
-in the order above install/config/local, last one wins. The operation is
-essentially =merge-with merge=, except for the =:paths= key, where only
-the last one found is used (they are not combined).
+  - Use =./.cpcache=
 
-You can use the =-Sverbose= option to see all of the actual directory
-locations.
+- Else (no project deps.edn)
 
-** Dependencies
+  - If =$CLJ_CACHE= is set, then use =$CLJ_CACHE= (explicit override)
+
+  - If =$XDG_CACHE_HOME= is set, then use =$XDG_CACHE_HOME/clojure=
+    (Freedesktop conventions)
+
+  - Else use =config_dir/.cpcache= (see deps.edn sources for config_dir
+    logic, usually =~/.clojure=)
+
+A hash is computed based on the config file paths, the resolve-aliases,
+and the classpath aliases.
+
+Files cached (if needed):
+
+- =<hash>.libs= - a =::lib-map= in the
+  [[https://github.com/clojure/tools.deps.alpha/blob/master/src/main/clojure/clojure/tools/deps/alpha/specs.clj][specs]],
+  the output of running =resolve-deps=
+
+- =<hash>.cp= - a classpath string, the output of =make-classpath=
+
+- =<hash>.jvm= - jvm options for main execution
+
+- =<hash>.main= - main options for main execution
+
+- =<hash>.basis= - the runtime basis, passed to the program
+
+Caching can be modified by the following options:
+
+- =-Sforce= - ignore cache and force recomputation
+
+- =-Scp CP= - don't use cache or compute, use the provided classpath
+  instead
+
+** Replace project environment (tool)
    :PROPERTIES:
-   :CUSTOM_ID: _dependencies
+   :CUSTOM_ID: _replace_project_environment_tool
    :END:
 
-Dependencies are declared in deps.edn with a top level key =:deps= - a
-map from library to coordinate. Libraries are symbols of the form
-<groupID>/<artifactId> or simply <id> if the group and artifact ID are
-the same. To indicate a classifier, use
-<groupId>/<artifactId>$<classifier>.
+The =tool= process is used when executing a tool that should not use the
+project classpath environment. This process takes the project deps.edn
+and the following modifier args and replaces them (if provided) before
+the project deps is merged:
 
-Coordinates can take several forms depending on the coordinate type:
+- =:replace-deps= - a deps map from lib to coordinate of deps to REPLACE
+  the project =:deps=
 
--  Maven coordinate: ={:mvn/version "1.2.3"}=
+- =:replace-paths= a collection of string paths to REPLACE project
+  =:paths= (note these should be under the project root)
 
-   -  Other optional keys: =:extension=, =:exclusions=
+This tool map should be provided as an alias in one of the deps sources
+and provided to the Clojure tools using -A (for REPL invocation), -X
+(for function execution), or -M (for clojure.main execution). Multiple
+aliases can be provided by concatentating the alias names.
 
-   -  Note: =:classifier= is no longer supported - add to lib name as
-      specified above
-
--  Local project coordinate: ={:local/root "/path/to/project"}=
-
-   -  Optional key =:deps/manifest=
-
-      -  Specifies the project manifest type
-
-      -  Default is to auto-detect the project type (currently either
-         =:deps= or =:pom=)
-
--  Local jar: ={:local/root "/path/to/file.jar"}=
-
-   -  If the jar has been packaged with a pom.xml file, the pom will be
-      read and used to find transitive deps
-
--  Git coordinate:
-   ={:git/url "https://github.com/user/project.git", :sha "sha", :tag "tag"}=
-
-   -  Required key =:git/url= can be one of the following:
-
-      -  https - secure anonymous access to public repos
-
-      -  ssh or user@host form urls (including GitHub) - ssh-based
-         access (see Git configuration section)
-
-   -  Required key =:sha= should indicate the full commit sha
-
-   -  Optional key =:tag= is used only to indicate the semantics of the
-      sha
-
-   -  Optional key =:deps/root=
-
-      -  Specifies the relative path within the root to search for the
-         manifest file
-
-   -  Optional key =:deps/manifest= - same as in =:local= deps
-
-#+BEGIN_SRC clojure
-    {:deps
-     {org.clojure/tools.reader {:mvn/version "1.1.1"}
-      github-sally/awesome {:git/url "https://github.com/sally/awesome.git", :sha "123abcd549214b5cba04002b6875bdf59f9d88b6"}
-      ;; ... add more here
-     }}
-#+END_SRC
-
-** Paths
+** Merging deps.edn
    :PROPERTIES:
-   :CUSTOM_ID: _paths
+   :CUSTOM_ID: _merging_deps_edn
    :END:
 
-Paths are declared in a top level key =:paths= and is a vector of string
-paths (typically relative to the project root). These source paths will
-be included on the classpath.
+The =deps.edn= files found from the source locations (with Clojure tool
+modifications by any options) are merged to form one master deps map.
+The merge is done in the order above root/user/project/config, last one
+wins. The operation is essentially =merge-with merge=, except for the
+=:paths= key, where only the last one found is used (they are not
+combined).
 
-While dependency sets are merged across all of the configuration files,
-only the last paths found in one of the config files is used, prior ones
-are ignored.
-
-#+BEGIN_SRC clojure
-    {:paths ["src"]}
-#+END_SRC
-
-** Aliases
+** Resolve deps modifiers
    :PROPERTIES:
-   :CUSTOM_ID: _aliases
+   :CUSTOM_ID: _resolve_deps_modifiers
    :END:
 
-Aliases are defined in the =:aliases= section of the config file. The
-Clojure tool supports several kinds of aliases:
+The resolve-deps modifiers are provided in a map that was described in a
+prior section:
 
--  -R - =resolve-deps= aliases are modifications applied during
-   =resolve-deps=
+- =:extra-deps= - a deps map from lib to coordinate of deps to add to
+  the deps
 
-   -  Allowed keys in these aliases are:
+- =:override-deps= - a deps map from lib to coordinate of override
+  versions to use
 
-      -  =:extra-deps= - a deps map from lib to coordinate of deps to
-         add to the deps
+- =:default-deps= - a deps map from lib to coordinate of versions to use
+  if none is found
 
-      -  =:override-deps= - a deps map from lib to coordinate of
-         override versions to use
+- If multiple alias maps with these keys are activated, all of them are
+  merge-with merged
 
-      -  =:default-deps= - a deps map from lib to coordinate of versions
-         to use if none is found
+The resolve-deps args should be provided as an alias in one of the deps
+sources and provided to the Clojure tools using -A (for REPL
+invocation), -X (for function execution), or -M (for clojure.main
+execution). Multiple aliases can be provided by concatentating the alias
+names.
 
-   -  If multiple -R alias maps are activated, all of these are
-      merge-with merged
+** Make classpath modifiers
+   :PROPERTIES:
+   :CUSTOM_ID: _make_classpath_modifiers
+   :END:
 
--  -C - =make-classpath= aliases are modifications applied during
-   =make-classpath=
+The make-classpath modifiers are provided in a map that was described in
+a prior section:
 
-   -  Allowed keys in these aliases are:
+- =:extra-paths= - a collection of string paths to add to =:paths=
+  (should be in the project)
 
-      -  =:extra-paths= - a collection of string paths to add to
-         =:paths=
+- =:classpath-overrides= - a map of lib to string path to replace the
+  location of the lib
 
-      -  =:classpath-overrides= - a map of lib to string path to replace
-         the location of the lib
+- If multiple maps with these keys are activated, =:extra-paths=
+  concatenate and =:classpath-overrides= merge-with merge
 
-      -  If multiple -C alias maps are activated, =:extra-paths=
-         concatenate and =:classpath-overrides= merge-with merge
+The resolve-deps args should be provided as an alias in one of deps
+sources and provided to the Clojure tools using -A (for REPL
+invocation), -X (for function execution), or -M (for clojure.main
+execution). Multiple aliases can be provided by concatentating the alias
+names.
 
--  -O - JVM option aliases
+** Prepare JVM environment
+   :PROPERTIES:
+   :CUSTOM_ID: _prepare_jvm_environment
+   :END:
 
-   -  Allowed keys in these aliases are:
+The JVM has many options and some programs also take configuration via
+Java system properties. JVM options can be passed on the command line
+for any execution specfier by prefixing with =-J=. If multiple options
+are specified, each must be prefixed.
 
-      -  =:jvm-opts= - a collection of string JVM options
+Additionally, main execution can take a map with key =:jvm-opts=:
 
-   -  If multiple -O alias maps are activated, =:jvm-opts= concatenate
+- =:jvm-opts= - a collection of string JVM options
 
-   -  If -J JVM options are also specified on the command line, they are
-      concatenated after the alias options
+- If multiple maps with these keys are activated, =:jvm-opts=
+  concatenate
 
--  -M - clojure.main option aliases
+- If -J JVM options are also specified on the command line, they are
+  concatenated after the alias options
 
-   -  Allowed keys in these aliases are:
+This map is stored in alias data and provided to the Clojure tools using
+-A (for REPL invocation), -X (for function execution), or -M (for
+clojure.main execution). Multiple aliases can be provided by
+concatentating the alias names.
 
-      -  =:main-opts= - a collection of clojure.main options
+** Execution
+   :PROPERTIES:
+   :CUSTOM_ID: _execution
+   :END:
 
-   -  If multiple -M alias maps are activated, only the last one will be
-      used
+*** Main execution
+    :PROPERTIES:
+    :CUSTOM_ID: _main_execution
+    :END:
 
-   -  If command line clojure.main arguments are supplied on the command
-      line, they are concatenated after the last main alias map
+One additional option for main execution is a map with key =:main-opts=:
 
--  -A - applies across all alias types
+- =:main-opts= - a collection of clojure.main options
 
-   -  These aliases support ALL alias keys above and all will be applied
+- If multiple maps with these keys are activated, only the last one will
+  be used
 
-So given a deps.edn like:
+- If command line clojure.main arguments are supplied on the command
+  line, they are concatenated after the last main alias map
 
-#+BEGIN_SRC clojure
-    {:paths ["src"]
-     :deps {}
-     :aliases
-     {:1.7 {:override-deps {org.clojure/clojure {:mvn/version "1.7.0"}}}
-      :bench {:extra-deps {criterium/criterium {:mvn/version "0.4.4"}}}
-      :test {:extra-paths ["test"]}}}
-#+END_SRC
+This map is stored in alias data and provided to the Clojure tools using
+=-M:an-alias=. Multiple aliases can be provided by concatentating the
+alias names.
 
-You can activate all three aliases to create a classpath that switches
-to an older Clojure version, adds the benchmarking library, and includes
-the test directory in the classpath to see how it changes the classpath:
+*** Prepare for execution
+    :PROPERTIES:
+    :CUSTOM_ID: _prepare_for_execution
+    :END:
+
+The =-P= flag can be used with any other execution mode to "prepare" but
+not execute. Importantly, this flag will cause the Clojure tool to
+resolve deps, download libraries, make and cache classpaths. This may be
+useful in containers, continuous integration systems, etc where an
+environment can be prepared to execute and do necessary network activity
+first, and then later execute without that activity.
+
+** Other programs
+   :PROPERTIES:
+   :CUSTOM_ID: _other_programs
+   :END:
+
+There are some options that can be provided to =clj= that short circuit
+normal execution and run an alternate program instead:
+
+- =-Sdescribe= - print environment and command parsing info as data
+
+- =-Spath= - compute classpath and echo to stdout only
+
+The =:deps= alias is built into the root deps.edn and provides a default
+namespace with several additional programs:
+
+- =-X:deps tree= - print dependency tree (also see
+  [[file:dep_expansion.xml#_tree_printing][tree printing]])
+
+- =-X:deps mvn-pom= - generate (or update an existing) pom.xml with deps
+  and paths
+
+- =-X:deps git-resolve-tags= - resolve git coordinate tags to shas and
+  update deps.edn
+
+*** Local Maven install
+    :PROPERTIES:
+    :CUSTOM_ID: _local_maven_install
+    :END:
+
+The =-X:deps mvn-install= program is provided with the Clojure tools for
+convenience and can be executed with =-X= to install a jar into your
+local Maven cache.
+
+The install argmap takes the following options:
 
 #+BEGIN_EXAMPLE
-    clj -R:1.7:bench -C:test -Spath
+    Required:
+    :jar - path to jar file, use pom inside jar by default
+
+    To supply an explicit pom file:
+    :pom - path to pom file (used instead of pom inside the jar)
+
+    To generate a minimal pom file:
+    :lib - qualified symbol like my.org/lib
+    :version - string
+    :classifier - string
+
+    Other options:
+    :local-repo - path to local repo (default = ~/.m2/repository)
 #+END_EXAMPLE
 
-You can use -A to include all types of aliases or define aliases that
-cross multiple alias types:
+You can pass overrides on the command line for these as needed:
 
 #+BEGIN_EXAMPLE
-    clj -A:1.7:bench:test -Spath
+    clj -X:deps mvn-install :jar '"/path/to.jar"'
 #+END_EXAMPLE
 
-** Procurers
-   :PROPERTIES:
-   :CUSTOM_ID: _procurers
-   :END:
+As mentioned above, edn strings must be in double quotes, and then
+single-quoted for the shell.
+
+A pom file must be either provided explicitly, generated from
+:lib/:version, or found inside the .jar file (the default).
+
+* Procurers
+  :PROPERTIES:
+  :CUSTOM_ID: _procurers
+  :END:
 
 Coordinates are interpreted by procurers, which know how to determine
 dependencies for a library and download artifacts. tools.deps.alpha is
@@ -473,15 +832,33 @@ coordinate contains a =:mvn/version= attribute and a local coordinate
 contains a =:local/root= attribute.
 
 Procurers may also have configuration attributes stored at the root of
-the configuration map under the same qualifier. The =mvn= procurer will
-look for =:mvn/repos=. The installation deps.edn configures the default
-Maven repos:
+the configuration map under the same qualifier.
+
+** Maven
+   :PROPERTIES:
+   :CUSTOM_ID: _maven
+   :END:
+
+The =mvn= procurer will look for =:mvn/repos=. The installation deps.edn
+configures the default Maven repos:
 
 #+BEGIN_SRC clojure
     {:mvn/repos
      {"central" {:url "https://repo1.maven.org/maven2/"}
       "clojars" {:url "https://clojars.org/repo"}}}
 #+END_SRC
+
+*** Modifying the default repositories
+    :PROPERTIES:
+    :CUSTOM_ID: _modifying_the_default_repositories
+    :END:
+
+The =:mvn/repos= map is =merge-with= =merge= across the deps.edn
+sources, so you can modify the default repositories by specifying a new
+definition or remove it by specifying =nil=.
+
+tools.deps guarantees that the ="central"= and ="clojars"= repositories
+will be checked first for Maven libraries.
 
 *** Maven authenticated repos
     :PROPERTIES:
@@ -491,7 +868,7 @@ Maven repos:
 For Maven deps in authenticated repositories, existing Maven
 infrastructure is used to convey credentials.
 
-In your ~/.m2/settings.xml:
+In your =~/.m2/settings.xml=:
 
 #+BEGIN_EXAMPLE
     <settings>
@@ -508,8 +885,8 @@ In your ~/.m2/settings.xml:
     </settings>
 #+END_EXAMPLE
 
-Then in your deps.edn include a repo with a name matching the server id
-(here =my-auth-repo=):
+Then in your =deps.edn= include a repo with a name matching the server
+id (here =my-auth-repo=):
 
 #+BEGIN_SRC clojure
     {:deps
@@ -525,24 +902,27 @@ Then just refer to your dependencies as usual in the =:deps=.
     :CUSTOM_ID: _maven_s3_repos
     :END:
 
-The tools also provide support for connecting to private S3 Maven
-repositories (thanks to the
-[[https://github.com/s3-wagon-private/s3-wagon-private][s3-wagon-private]]
-and [[https://github.com/spring-projects/aws-maven][aws-maven]]
-projects).
+The tools also provide support for connecting to public and private S3
+Maven repositories.
 
 Add a =:mvn/repos= that includes the s3 repository root:
 
 #+BEGIN_SRC clojure
     {:deps
-     {my.library {:mvn/version "0.1.2"}}
+     {my/library {:mvn/version "0.1.2"}}
      :mvn/repos
      {"my-private-repo" {:url "s3://my-bucket/maven/releases"}}}
 #+END_SRC
 
-AWS credentials can be set in the ~/.m2/settings.xml on a per-server
-basis. The repository name in deps.edn must match the server id in
-settings.xml:
+S3 buckets are specific to the AWS region they were created in. The s3
+transporter will attempt to determine the bucket's location. If that
+doesn't work, you can specify the bucket region in the url explicitly:
+="s3://my-bucket/maven/releases?region=us-west-2"=.
+
+For authenticated repos, AWS credentials can be set in the
+=~/.m2/settings.xml= on a per-server basis or will be loaded ambiently
+from the AWS credential chain (env vars, etc). The repository name in
+=deps.edn= must match the server id in =settings.xml=:
 
 #+BEGIN_EXAMPLE
     <settings>
@@ -558,11 +938,6 @@ settings.xml:
       ...
     </settings>
 #+END_EXAMPLE
-
-It is also possible to specify your AWS credentials using the AWS
-credential chain. This is NOT RECOMMENDED as the same AWS credentials
-will be used for all AWS repositories (unlike settings.xml, which lets
-you set these on a per-repository basis).
 
 AWS S3 credentials can be set in the environment using one of these
 mechanisms:
@@ -613,174 +988,229 @@ Refer to the Maven
 [[https://maven.apache.org/guides/mini/guide-proxies.html][Guide to
 using proxies]] for further details.
 
-*** Git configuration
+*** Maven HTTP headers
     :PROPERTIES:
-    :CUSTOM_ID: _git_configuration
+    :CUSTOM_ID: _maven_http_headers
     :END:
+
+For adding custom headers to outgoing HTTP requests, existing Maven
+configuration in =~/.m2/settings.xml= is used.
+
+#+BEGIN_EXAMPLE
+    <settings>
+      ...
+      <servers>
+        <server>
+          <id>my-token-repo</id>
+          <configuration>
+            <httpHeaders>
+              <property>
+                <name>Private-Token</name>
+                <value>abc123</value>
+              </property>
+            </httpHeaders>
+          </configuration>
+        </server>
+        ...
+      </servers>
+      ...
+    </settings>
+#+END_EXAMPLE
+
+The server id in =settings.xml= must match the repository name in
+=deps.edn=:
+
+#+BEGIN_SRC clojure
+    {:mvn/repos
+     {"my-token-repo" {:url "https://my.auth.com/repo"}}}
+#+END_SRC
+
+This mechanism is used by repositories that authenticate using a token,
+rather than by username and password.
+
+** Git
+   :PROPERTIES:
+   :CUSTOM_ID: _git
+   :END:
 
 The supported git url protocols are https and ssh. https repos will be
 accessed anonymously and require no additional authentication
-information. This approach is recommended for public repos.
+information. This approach is recommended for public repos. ssh repos
+may be either public or private.
 
-ssh repos may be either public or private. Access to a git repo via ssh
-requires an ssh keypair. The private key of this keypair may or may not
-have a passphrase. ssh authentication works by connecting to the local
-ssh agent (ssh-agent on *nix or Pageant via PuTTY on Windows). The
-ssh-agent must have a registered identity for the key being used to
-access the Git repository. To check whether you have registered
-identities, use:
-
-#+BEGIN_EXAMPLE
-    $ ssh-add -l
-    2048 SHA256:S2SMY1YRTRFg3sqsMy1eTve4ag78XEzhbzzdVxZroDk /Users/me/.ssh/id_rsa (RSA)
-#+END_EXAMPLE
-
-which should return one or more registered identities, typically the one
-at =~/.ssh/id_rsa=.
+Support for git deps occurs via shelling out to command-line git (and
+ssh). git >= 2.5 is required. In general, if access works at the command
+line, it should work via =clj=. Git is expected to be installed and by
+default, =git= is expected to be on the path. For ssh access, refer to
+documentation for your system (typically you will register your ssh keys
+in =~/.ssh/id_rsa=).
 
 For more information on creating keys and using the ssh-agent to manage
 your ssh identities, GitHub provides excellent info:
 
--  [[https://help.github.com/articles/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent/]]
+- [[https://help.github.com/articles/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent/]]
 
--  [[https://help.github.com/articles/working-with-ssh-key-passphrases/]]
+- [[https://help.github.com/articles/working-with-ssh-key-passphrases/]]
 
-/Note: user/password authentication is not supported for any protocol./
+*** Configuration and debugging
+    :PROPERTIES:
+    :CUSTOM_ID: _configuration_and_debugging
+    :END:
 
-** Usage
+The following environment variables can be set to control the git
+integration:
+
+- =GITLIBS= - the path to the gitlibs storage directory (default =
+  =~/.gitlibs=)
+
+- =GITLIBS_COMMAND= - the command to run for git access (default =
+  =git=)
+
+- =GITLIBS_DEBUG= - set =true= to see a log of the actual git commands
+  being run and their output (default = =false=)
+
+** Installers
    :PROPERTIES:
-   :CUSTOM_ID: _usage
+   :CUSTOM_ID: _installers
    :END:
-
-Usage:
-
--  =clojure [dep-opt*] [init-opt*] [main-opt] [arg*]=
-
--  =clj     [dep-opt*] [init-opt*] [main-opt] [arg*]=
-
-The clojure tool is a runner for Clojure. clj is a wrapper for
-interactive repl use. These tools ultimately construct and invoke a
-command-line of the form:
-
-=java [java-opt*] -cp classpath clojure.main [init-opt*] [main-opt] [arg*]=
-
-The dep-opts are used to build the java-opts and classpath:
-
-#+BEGIN_EXAMPLE
-    -Jopt           Pass opt through in java_opts, ex: -J-Xmx512m
-    -Ralias...      Concatenated resolve-deps aliases, ex: -R:bench:1.9
-    -Calias...      Concatenated make-classpath aliases, ex: -C:dev
-    -Oalias...      Concatenated jvm option aliases, ex: -O:mem
-    -Malias...      Concatenated clojure.main option aliases, ex: -M:myapp
-    -Aalias...      Concatenated aliases of any type
-    -Sdeps DEPS     Deps data to use as the final deps file
-    -Spath          Compute classpath and echo to stdout only
-    -Scp CP         Do NOT compute or cache classpath, use this one instead
-    -Srepro         Ignore the ~/.clojure/deps.edn config file
-    -Sforce         Force recomputation of the classpath (don't use the cache)
-    -Spom           Generate (or update an existing) pom.xml with deps and paths
-    -Stree          Print dependency tree
-    -Sresolve-tags  Resolve git coordinate tags to shas and update deps.edn
-    -Sverbose       Print important path info to console
-    -Sdescribe     Print environment and command parsing info as data
-#+END_EXAMPLE
-
-init-opt:
-
-#+BEGIN_EXAMPLE
-    -i, --init path     Load a file or resource
-    -e, --eval string   Eval exprs in string; print non-nil values
-#+END_EXAMPLE
-
-main-opt:
-
-#+BEGIN_EXAMPLE
-    -m, --main ns-name  Call the -main function from namespace w/args
-    -r, --repl          Run a repl
-    path                Run a script from a file or resource
-    -                   Run a script from standard input
-    -h, -?, --help      Print this help message and exit
-#+END_EXAMPLE
-
-** Classpath construction
-   :PROPERTIES:
-   :CUSTOM_ID: _classpath_construction
-   :END:
-
-The following process is used to construct the classpath for invoking
-clojure.main:
-
--  Compute the deps map
-
-   -  Read the deps.edn configuration file in the following locations:
-
-      -  Install directory (unless -Srepro)
-
-      -  Config directory (if it exists and unless -Srepro)
-
-      -  Current directory (if it exists)
-
-      -  -Sdeps data (if it exists)
-
-   -  Combine the deps.edn maps in that order with =merge-with merge=
-      (except for :paths where last wins)
-
--  Compute the resolve-deps args
-
-   -  If =-R= specifies one or more aliases, find each alias in the deps
-      map =:aliases=
-
-   -  =merge-with= =merge= the alias maps - the result is the
-      resolve-args map
-
--  Invoke =resolve-deps= with deps map and resolve-args map
-
--  Compute the classpath-overrides map
-
-   -  If =-C= specifies one or more aliases, find each alias in the deps
-      map =:aliases=
-
-   -  =merge= the classpath-override alias maps
-
--  Invoke =make-classpath= with the libs map returned by =resolve-deps=,
-   the paths, and the classpath-args map
-
-** Classpath caching
-   :PROPERTIES:
-   :CUSTOM_ID: _classpath_caching
-   :END:
-
-Classpath files are cached in the current directory under =.cpcache/=.
-File are of two forms:
-
--  =.cpcache/<hash>.libs= - a =::lib-map= in the
-   [[https://github.com/clojure/tools.deps.alpha/blob/master/src/main/clojure/clojure/tools/deps/alpha/specs.clj][specs]],
-   the output of running =resolve-deps=
-
--  =.cpcache/<hash>.cp= - a classpath string, the output of
-   =make-classpath=
-
-where the =<hash>= is based on the config file paths, the
-resolve-aliases, and the classpath aliases.
-
-The cached classpath file is used when:
-
--  It exists
-
--  It is newer than all =deps.edn= files
-
-* Installers
-  :PROPERTIES:
-  :CUSTOM_ID: _installers
-  :END:
 
 For tools installation, see the instructions in the
 [[file:xref/../../guides/getting_started.org][Getting Started]] guide.
 
-* Glossary
+* Command line reference
   :PROPERTIES:
-  :CUSTOM_ID: _glossary
+  :CUSTOM_ID: _command_line_reference
   :END:
+
+** Arg map keys
+   :PROPERTIES:
+   :CUSTOM_ID: _arg_map_keys
+   :END:
+
+This section summarizes all of the available arg map keys that =clj=
+uses and that can be conveyed via alias data in deps.edn. For clarity,
+these are separated by category, but in general, all of them can be used
+with =-X= (exec), =-A= (repl), and =-M= (main).
+
+- tool
+
+  - =:replace-deps= - map of lib to coords that should *replace* the
+    project deps
+
+  - =:replace-paths= - vector of path strings that should *replace* the
+    project paths
+
+- resolve-deps
+
+  - =:extra-deps= - map of lib to coords that should be added to the
+    root deps
+
+  - =:override-deps= - map of lib to coords that should *replace* deps
+    in the root deps
+
+  - =:default-deps= - map of lib to coords that should be used if the
+    coord is nil in root or transitive deps
+
+- make-classpath
+
+  - =:extra-paths= - vector of string paths (or keyword aliases to same)
+    to add to base paths
+
+  - =:classpath-overrides= - map of lib to string path to replace lib on
+    classpath
+
+- jvm opts
+
+  - =:jvm-opts= - vector of strings to pass as jvm args
+
+- namespace aliasing
+
+  - =:ns-aliases= - map of alias symbol to namespace symbol, used to
+    resolve symbols (such as :exec-fn)
+
+  - =:ns-default= - default namespace for unqualified symbols (such as
+    :exec-fn)
+
+- execution (-X only)
+
+  - =:exec-fn= - function to execute with -X
+
+  - =:exec-args= - function args to pass to -X (can be overridden at
+    command line)
+
+- main (-M only)
+
+  - =:main-opts= - vector of string args to pass to clojure.main
+
+** Namespace resolution
+   :PROPERTIES:
+   :CUSTOM_ID: namespaces
+   :END:
+
+Symbols in the exec-opts or argmaps (like =:exec-fn=) are resolved with
+the following rules:
+
+- If function is unqualified, use the namespace in the =:ns-default= key
+  in the arg map (if none, this is an error)
+
+- If function is qualified, and the qualifier is an alias in the arg map
+  under =:ns-aliases=, use that namespace
+
+- Else use the fully qualified function symbol
+
+** Keys and key paths
+   :PROPERTIES:
+   :CUSTOM_ID: _keys_and_key_paths
+   :END:
+
+With the -X exec-opt you can supply key-path/value pairs on the command
+line. The key-path is either a single key or a vector of keys to refer
+to a nested key (as with =assoc-in=). Each key-path will be used to
+=assoc-in= to the original =:exec-args= map, overriding the value there.
+
+#+BEGIN_EXAMPLE
+    # Top key override
+    clj -X:my-fn :val 789
+
+    # Nested key override
+    clj -X:my-fn '[:my :data]' 789
+#+END_EXAMPLE
+
+** Quoting keys and values
+   :PROPERTIES:
+   :CUSTOM_ID: quoting
+   :END:
+
+Keys and values on the command line are read as edn. The following data
+can be used without quoting:
+
+- Numbers - =123=, =12.4=
+
+- Booleans - =true=, =false=
+
+- Nil - =nil=
+
+- Symbols - =name=, =foo/bar=
+
+- Keywords - =:id=, =:company/name=
+
+These data types need to be surrounded by single quotes:
+
+- Strings - ='"hi there"'= - note use of both single quotes for the
+  shell and double quotes to be read as an edn string
+
+- Vectors - ='[1 2 3]'=
+
+- Maps - ='{:a 1, :b 2}'=
+
+- Sets - ='#{:a :b}'=
+
+- Lists - ='(1 2 3)'=
+
+** Glossary
+   :PROPERTIES:
+   :CUSTOM_ID: _glossary
+   :END:
 
 *Library*
 
@@ -808,12 +1238,12 @@ attrs. Actual (functional) dependencies are more fine-grained.
 
 Dependency types:
 
--  maven artifacts
+- maven artifacts
 
--  unversioned libraries - a file location identifying a jar or
-   directory root
+- unversioned libraries - a file location identifying a jar or directory
+  root
 
--  git coordinates
+- git coordinates
 
 *Classpath (and roots/paths)*
 
@@ -865,13 +1295,13 @@ A version conflict occurs when the dependency expansion contains the
 same library with more than one "version" such that the best choice
 cannot be automatically chosen:
 
--  semver version breakage (major version changed)
+- semver version breakage (major version changed)
 
--  github shas that do not contain any common root or ancestry (two shas
-   on different branches or unrelated repos, for example)
+- github shas that do not contain any common root or ancestry (two shas
+  on different branches or unrelated repos, for example)
 
--  versions that cross different repos or repo types such that no
-   relative relationship can be established
+- versions that cross different repos or repo types such that no
+  relative relationship can be established
 
 *Maven Repo*
 
@@ -882,3 +1312,13 @@ A repository of library artifacts - e.g. Maven central or Clojars
 Mentions in source code of library (sub)components that must be in the
 classpath in order to succeed. namespace and package/class names are
 transformed into path components.
+
+** Tools
+   :PROPERTIES:
+   :CUSTOM_ID: _tools
+   :END:
+
+See the project's wiki for a
+[[https://github.com/clojure/tools.deps.alpha/wiki/Tools][list of tools
+that use or work with tools.deps.alpha (or the clojure tools)]] - tools
+for project creation, packaging, and much more.

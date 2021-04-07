@@ -3,7 +3,8 @@
   :CUSTOM_ID: _getting_started
   :END:
 
-The [[file:xref/../../../about/spec.org][spec]] library specifies the
+The [[file:xref/../../../about/spec.org][spec]] library
+([[https://clojure.github.io/spec.alpha][API docs]]) specifies the
 structure of data, validates or conforms it, and can generate data based
 on the spec.
 
@@ -123,18 +124,22 @@ in the operations we've seen so far - =conform= and =valid?=.
 You will see later that registered specs can (and should) be used
 anywhere we compose specs.
 
-In this guide we will often use auto-resolved keywords like =::date=.
-The Clojure reader resolves these to a fully-qualified keyword using the
-current namespace. You may also see some cases where a fully-qualified
-keyword like =:animal/dog= is used to name a spec.
+#+BEGIN_QUOTE
+  *Important*
 
-Generally, Clojure code should use keyword namespaces that are
-sufficiently unique such that they will not conflict with other spec
-users. If you are writing a library for public use, spec namespaces
-should include the project name, url, or organization such that you will
-not conflict. Within a private organization, you may be able to use
-shorter names - the important thing is that they are sufficiently unique
-to avoid conflicts.
+  In this guide we will often use auto-resolved keywords like =::date=.
+  The Clojure reader resolves these to a fully-qualified keyword using
+  the current namespace (=*ns*=). You may also see some cases where a
+  fully-qualified keyword like =:animal/dog= is used to name a spec.
+
+  Generally, Clojure code should use keyword namespaces that are
+  sufficiently unique such that they will not conflict with other spec
+  users. If you are writing a library for public use, spec namespaces
+  should include the project name, url, or organization such that you
+  will not conflict. Within a private organization, you may be able to
+  use shorter names - the important thing is that they are sufficiently
+  unique to avoid conflicts.
+#+END_QUOTE
 
 Once a spec has been added to the registry, =doc= knows how to find it
 and print it as well:
@@ -236,20 +241,20 @@ that there are two errors being reported - spec will evaluate all
 possible alternatives and report errors on every path. The parts of each
 error are:
 
--  val - the value in the user's input that does not match
+- val - the value in the user's input that does not match
 
--  spec - the spec that was being evaluated
+- spec - the spec that was being evaluated
 
--  at - a path (a vector of keywords) indicating the location within the
-   spec where the error occurred - the tags in the path correspond to
-   any tagged part in a spec (the alternatives in an =or= or =alt=, the
-   parts of a =cat=, the keys in a map, etc)
+- at - a path (a vector of keywords) indicating the location within the
+  spec where the error occurred - the tags in the path correspond to any
+  tagged part in a spec (the alternatives in an =or= or =alt=, the parts
+  of a =cat=, the keys in a map, etc)
 
--  predicate - the actual predicate that was not satisfied by val
+- predicate - the actual predicate that was not satisfied by val
 
--  in - the key path through a nested data val to the failing value. In
-   this example, the top-level value is the one that is failing so this
-   is essentially an empty path and is omitted.
+- in - the key path through a nested data val to the failing value. In
+  this example, the top-level value is the one that is failing so this
+  is essentially an empty path and is omitted.
 
 For the first reported error we can see that the value =:foo= did not
 satisfy the predicate =string?= at the path =:name= in the spec
@@ -364,17 +369,17 @@ keys are required or optional.
 Let's take a moment to examine the explain error output on that final
 example:
 
--  in - the path within the data to the failing value (here, a key in
-   the person instance)
+- in - the path within the data to the failing value (here, a key in the
+  person instance)
 
--  val - the failing value, here ="n/a"=
+- val - the failing value, here ="n/a"=
 
--  spec - the spec that failed, here =:my.domain/email-type=
+- spec - the spec that failed, here =:my.domain/email-type=
 
--  at - the path in the spec where the failing value is located
+- at - the path in the spec where the failing value is located
 
--  predicate - the predicate that failed, here
-   =(re-matches email-regex %)=
+- predicate - the predicate that failed, here
+  =(re-matches email-regex %)=
 
 Much existing Clojure code does not use maps with namespaced keys and so
 =keys= can also specify =:req-un= and =:opt-un= for required and
@@ -550,18 +555,18 @@ failure is due to the missing required =:event/timestamp= key in the
 event. The second is from the invalid =:search/url= value (a number
 instead of a string). We see the same parts as prior explain errors:
 
--  in - the path within the data to the failing value. This is omitted
-   on the first error as it's at the root value but is the key in the
-   map on the second error.
+- in - the path within the data to the failing value. This is omitted on
+  the first error as it's at the root value but is the key in the map on
+  the second error.
 
--  val - the failing value, either the full map or the individual key in
-   the map
+- val - the failing value, either the full map or the individual key in
+  the map
 
--  spec - the actual spec that failed
+- spec - the actual spec that failed
 
--  at - the path in the spec where the failing value occurred
+- at - the path in the spec where the failing value occurred
 
--  predicate - the actual predicate that failed
+- predicate - the actual predicate that failed
 
 The =multi-spec= approach allows us to create an *open* system for spec
 validation, just like multimethods and protocols. New event types can be
@@ -591,18 +596,18 @@ predicate.
 
 Additionally, =coll-of= can be passed a number of keyword arg options:
 
--  =:kind= - a predicate that the incoming collection must satisfy, such
-   as =vector?=
+- =:kind= - a predicate that the incoming collection must satisfy, such
+  as =vector?=
 
--  =:count= - specifies exact expected count
+- =:count= - specifies exact expected count
 
--  =:min-count=, =:max-count= - checks that collection has
-   =(<= min-count count max-count)=
+- =:min-count=, =:max-count= - checks that collection has
+  =(<= min-count count max-count)=
 
--  =:distinct= - checks that all elements are distinct
+- =:distinct= - checks that all elements are distinct
 
--  =:into= - one of [], (), {}, or #{} for output conformed value. If
-   =:into= is not specified, the input collection type will be used.
+- =:into= - one of [], (), {}, or #{} for output conformed value. If
+  =:into= is not specified, the input collection type will be used.
 
 Following is an example utilizing some of these options to spec a vector
 containing three distinct numbers conformed as a set and some of the
@@ -643,23 +648,23 @@ different positions. For that we have =tuple=.
 Note that in this case of a "point" structure with x/y/z values we
 actually had a choice of three possible specs:
 
--  Regular expression - =(s/cat :x double? :y double? :z double?)=
+- Regular expression - =(s/cat :x double? :y double? :z double?)=
 
-   -  Allows for matching nested structure (not needed here)
+  - Allows for matching nested structure (not needed here)
 
-   -  Conforms to map with named keys based on the =cat= tags
+  - Conforms to map with named keys based on the =cat= tags
 
--  Collection - =(s/coll-of double?)=
+- Collection - =(s/coll-of double?)=
 
-   -  Designed for arbitrary size homogenous collections
+  - Designed for arbitrary size homogenous collections
 
-   -  Conforms to a vector of the values
+  - Conforms to a vector of the values
 
--  Tuple - =(s/tuple double? double? double?)=
+- Tuple - =(s/tuple double? double? double?)=
 
-   -  Designed for fixed size with known positional "fields"
+  - Designed for fixed size with known positional "fields"
 
-   -  Conforms to a vector of the values
+  - Conforms to a vector of the values
 
 In this example, =coll-of= will match other (invalid) values as well
 (like =[1.0]= or =[1.0 2.0 3.0 4.0])=, so it is not a suitable choice -
@@ -695,20 +700,20 @@ Sometimes sequential data is used to encode additional structure
 [[https://en.wikipedia.org/wiki/Regular_expression][regular expression]]
 operators to describe the structure of a sequential data value:
 
--  [[https://clojure.github.io/spec.alpha/clojure.spec.alpha-api.html#clojure.spec.alpha/cat][=cat=]]
-   - concatenation of predicates/patterns
+- [[https://clojure.github.io/spec.alpha/clojure.spec.alpha-api.html#clojure.spec.alpha/cat][=cat=]] -
+  concatenation of predicates/patterns
 
--  [[https://clojure.github.io/spec.alpha/clojure.spec.alpha-api.html#clojure.spec.alpha/alt][=alt=]]
-   - choice among alternative predicates/patterns
+- [[https://clojure.github.io/spec.alpha/clojure.spec.alpha-api.html#clojure.spec.alpha/alt][=alt=]] -
+  choice among alternative predicates/patterns
 
--  [[https://clojure.github.io/spec.alpha/clojure.spec.alpha-api.html#clojure.spec.alpha/*][=*=]]
-   - 0 or more of a predicate/pattern
+- [[https://clojure.github.io/spec.alpha/clojure.spec.alpha-api.html#clojure.spec.alpha/*][=*=]] -
+  0 or more of a predicate/pattern
 
--  [[https://clojure.github.io/spec.alpha/clojure.spec.alpha-api.html#clojure.spec.alpha/%2B][=+=]]
-   - 1 or more of a predicate/pattern
+- [[https://clojure.github.io/spec.alpha/clojure.spec.alpha-api.html#clojure.spec.alpha/%2B][=+=]] -
+  1 or more of a predicate/pattern
 
--  [[https://clojure.github.io/spec.alpha/clojure.spec.alpha-api.html#clojure.spec.alpha/%3F][=?=]]
-   - 0 or 1 of a predicate/pattern
+- [[https://clojure.github.io/spec.alpha/clojure.spec.alpha-api.html#clojure.spec.alpha/%3F][=?=]] -
+  0 or 1 of a predicate/pattern
 
 Like =or=, both =cat= and =alt= tag their "parts" - these tags are then
 used in the conformed value to identify what was matched, to report
@@ -923,7 +928,7 @@ the specification, and the predicate it was attempting to match.
 
 * Spec'ing functions
   :PROPERTIES:
-  :CUSTOM_ID: _spec_ing_functions
+  :CUSTOM_ID: _specing_functions
   :END:
 
 The pre- and post-condition example in the previous section hinted at an
@@ -1299,7 +1304,7 @@ the args and the return value.
 
 ** Using =s/and= Generators
    :PROPERTIES:
-   :CUSTOM_ID: _using_literal_s_and_literal_generators
+   :CUSTOM_ID: _using_sand_generators
    :END:
 
 All of the generators we've seen worked fine but there are a number of
@@ -1689,7 +1694,7 @@ without any arguments.
 
 ** Combining =check= and =instrument=
    :PROPERTIES:
-   :CUSTOM_ID: _combining_literal_check_literal_and_literal_instrument_literal
+   :CUSTOM_ID: _combining_check_and_instrument
    :END:
 
 While both =instrument= (for enabling =:args= checking) and =check= (for
@@ -1765,3 +1770,18 @@ based on the generated stub results returned from =invoke-service=.
 In this guide we have covered most of the features for designing and
 using specs and generators. We expect to add some more advanced
 generator techniques and help on testing in a future update.
+
+* More information
+  :PROPERTIES:
+  :CUSTOM_ID: _more_information
+  :END:
+
+- [[file:xref/../../../about/spec.org][spec Rationale]]
+
+- [[https://clojure.github.io/spec.alpha][API Docs]]
+
+- [[https://github.com/clojure/spec.alpha][Project]]
+
+- [[file:xref/../../../community/resources.xml#spec][spec Resources]]
+
+

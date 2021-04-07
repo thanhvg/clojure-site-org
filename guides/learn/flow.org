@@ -11,12 +11,12 @@ In Java, expressions return values, whereas statements do not.
     if (x > 10) {
         s = "greater";
     } else {
-        s = "greater or equal";
+        s = "less or equal";
     }
     obj.someMethod(s);
 
     // Ternary operator is an expression; it returns a value:
-    obj.someMethod(x > 10 ? "greater" : "greater or equal");
+    obj.someMethod(x > 10 ? "greater" : "less or equal");
 #+END_SRC
 
 In Clojure, however, everything is an expression! /Everything/ returns a
@@ -44,7 +44,7 @@ True]], among many other places.
 
 ** =if=
    :PROPERTIES:
-   :CUSTOM_ID: __literal_if_literal
+   :CUSTOM_ID: _if
    :END:
 
 =if= is the most important conditional expression - it consists of a
@@ -84,7 +84,7 @@ values are =false= and =nil= - all other values are logically true.
 
 ** =if= and =do=
    :PROPERTIES:
-   :CUSTOM_ID: __literal_if_literal_and_literal_do_literal
+   :CUSTOM_ID: _if_and_do
    :END:
 
 The =if= only takes a single expression for the "then" and "else". Use
@@ -103,7 +103,7 @@ effects! (Why?)
 
 ** =when=
    :PROPERTIES:
-   :CUSTOM_ID: __literal_when_literal
+   :CUSTOM_ID: _when
    :END:
 
 =when= is an =if= with only a =then= branch. It checks a condition and
@@ -120,7 +120,7 @@ condition is false, nil is returned.
 
 ** =cond=
    :PROPERTIES:
-   :CUSTOM_ID: __literal_cond_literal
+   :CUSTOM_ID: _cond
    :END:
 
 =cond= is a series of tests and expressions. Each test is evaluated in
@@ -136,7 +136,7 @@ test.
 
 ** =cond= and =else=
    :PROPERTIES:
-   :CUSTOM_ID: __literal_cond_literal_and_literal_else_literal
+   :CUSTOM_ID: _cond_and_else
    :END:
 
 If no test is satisfied, nil is returned. A common idiom is to use a
@@ -153,7 +153,7 @@ so this will always be selected as a default.
 
 ** =case=
    :PROPERTIES:
-   :CUSTOM_ID: __literal_case_literal
+   :CUSTOM_ID: _case
    :END:
 
 =case= compares an argument to a series of values to find a match. This
@@ -178,7 +178,7 @@ Unlike =cond=, =case= will throw an exception if no value matches.
 
 ** =case= with =else=-expression
    :PROPERTIES:
-   :CUSTOM_ID: __literal_case_literal_with_literal_else_literal_expression
+   :CUSTOM_ID: _case_with_else_expression
    :END:
 
 =case= can have a final trailing expression that will be evaluated if no
@@ -203,12 +203,12 @@ test matches.
 
 ** =dotimes=
    :PROPERTIES:
-   :CUSTOM_ID: __literal_dotimes_literal
+   :CUSTOM_ID: _dotimes
    :END:
 
--  Evaluate expression /n/ times
+- Evaluate expression /n/ times
 
--  Returns =nil=
+- Returns =nil=
 
 #+BEGIN_SRC clojure
     user=> (dotimes [i 3]
@@ -221,14 +221,14 @@ test matches.
 
 ** =doseq=
    :PROPERTIES:
-   :CUSTOM_ID: __literal_doseq_literal
+   :CUSTOM_ID: _doseq
    :END:
 
--  Iterates over a sequence
+- Iterates over a sequence
 
--  If a lazy sequence, forces evaluation
+- If a lazy sequence, forces evaluation
 
--  Returns =nil=
+- Returns =nil=
 
 #+BEGIN_EXAMPLE
     user=> (doseq [n (range 3)]
@@ -241,14 +241,14 @@ test matches.
 
 ** =doseq= with multiple bindings
    :PROPERTIES:
-   :CUSTOM_ID: __literal_doseq_literal_with_multiple_bindings
+   :CUSTOM_ID: _doseq_with_multiple_bindings
    :END:
 
--  Similar to nested =foreach= loops
+- Similar to nested =foreach= loops
 
--  Processes all permutations of sequence content
+- Processes all permutations of sequence content
 
--  Returns =nil=
+- Returns =nil=
 
 #+BEGIN_EXAMPLE
     user=> (doseq [letter [:a :b]
@@ -265,14 +265,14 @@ test matches.
 
 * Clojure's =for=
   :PROPERTIES:
-  :CUSTOM_ID: _clojure_s_literal_for_literal
+  :CUSTOM_ID: _clojures_for
   :END:
 
--  List comprehension, *not* a for-loop
+- List comprehension, *not* a for-loop
 
--  Generator function for sequence permutation
+- Generator function for sequence permutation
 
--  Bindings behave like =doseq=
+- Bindings behave like =doseq=
 
 #+BEGIN_EXAMPLE
     user=> (for [letter [:a :b]
@@ -291,32 +291,32 @@ test matches.
    :CUSTOM_ID: _recursion_and_iteration
    :END:
 
--  Clojure provides recur and the sequence abstraction
+- Clojure provides recur and the sequence abstraction
 
--  =recur= is "classic" recursion
+- =recur= is "classic" recursion
 
-   -  Consumers don't control it, considered a lower-level facility
+  - Consumers don't control it, considered a lower-level facility
 
--  Sequences represent iteration as values
+- Sequences represent iteration as values
 
-   -  Consumers can partially iterate
+  - Consumers can partially iterate
 
--  Reducers represent iteration as function composition
+- Reducers represent iteration as function composition
 
-   -  Added in Clojure 1.5, not covered here
+  - Added in Clojure 1.5, not covered here
 
 ** =loop= and =recur=
    :PROPERTIES:
-   :CUSTOM_ID: __literal_loop_literal_and_literal_recur_literal
+   :CUSTOM_ID: _loop_and_recur
    :END:
 
--  Functional looping construct
+- Functional looping construct
 
-   -  =loop= defines bindings
+  - =loop= defines bindings
 
-   -  =recur= re-executes =loop= with new bindings
+  - =recur= re-executes =loop= with new bindings
 
--  Prefer higher-order library functions instead
+- Prefer higher-order library functions instead
 
 #+BEGIN_SRC clojure
     (loop [i 0]
@@ -327,10 +327,10 @@ test matches.
 
 ** =defn= and =recur=
    :PROPERTIES:
-   :CUSTOM_ID: __literal_defn_literal_and_literal_recur_literal
+   :CUSTOM_ID: _defn_and_recur
    :END:
 
--  Function arguments are implicit =loop= bindings
+- Function arguments are implicit =loop= bindings
 
 #+BEGIN_SRC clojure
     (defn increase [i]
@@ -341,20 +341,20 @@ test matches.
 
 ** =recur= for recursion
    :PROPERTIES:
-   :CUSTOM_ID: __literal_recur_literal_for_recursion
+   :CUSTOM_ID: _recur_for_recursion
    :END:
 
--  =recur= must be in "tail position"
+- =recur= must be in "tail position"
 
-   -  The last expression in a branch
+  - The last expression in a branch
 
--  =recur= must provide values for all bound symbols by position
+- =recur= must provide values for all bound symbols by position
 
-   -  Loop bindings
+  - Loop bindings
 
-   -  defn/fn arguments
+  - defn/fn arguments
 
--  Recursion via =recur= does not consume stack
+- Recursion via =recur= does not consume stack
 
 * Exceptions
   :PROPERTIES:
@@ -366,7 +366,7 @@ test matches.
    :CUSTOM_ID: _exception_handling
    :END:
 
--  =try=/=catch=/=finally= as in Java
+- =try=/=catch=/=finally= as in Java
 
 #+BEGIN_SRC clojure
     (try
@@ -393,11 +393,11 @@ test matches.
    :CUSTOM_ID: _exceptions_with_clojure_data
    :END:
 
--  =ex-info= takes a message and a map
+- =ex-info= takes a message and a map
 
--  =ex-data= gets the map back out
+- =ex-data= gets the map back out
 
-   -  Or =nil= if not created with =ex-info=
+  - Or =nil= if not created with =ex-info=
 
 #+BEGIN_SRC clojure
     (try
@@ -408,7 +408,7 @@ test matches.
 
 ** =with-open=
    :PROPERTIES:
-   :CUSTOM_ID: __literal_with_open_literal
+   :CUSTOM_ID: _with_open
    :END:
 
 #+BEGIN_SRC clojure

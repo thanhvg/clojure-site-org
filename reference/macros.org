@@ -33,11 +33,11 @@ expression:
 Two special variables are available inside defmacro for more advanced
 usages:
 
--  =&form= - the actual form (as data) that is being invoked
+- =&form= - the actual form (as data) that is being invoked
 
--  =&env= - a map of local bindings at the point of macro expansion. The
-   env map is from symbols to objects holding compiler information about
-   that binding.
+- =&env= - a map of local bindings at the point of macro expansion. The
+  env map is from symbols to objects holding compiler information about
+  that binding.
 
 All of the following macros are documented on the
 [[https://clojure.github.io/clojure/][API]] page. Many are also

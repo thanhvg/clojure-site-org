@@ -2,88 +2,86 @@ Clojure compiles all code you load on-the-fly into JVM bytecode, but
 sometimes it is advantageous to compile ahead-of-time (AOT). Some
 reasons to use AOT compilation are:
 
--  To deliver your application without source
+- To deliver your application without source
 
--  To speed up application startup
+- To speed up application startup
 
--  To generate named classes for use by Java
+- To generate named classes for use by Java
 
--  To create an application that does not need runtime bytecode
-   generation and custom classloaders
+- To create an application that does not need runtime bytecode
+  generation and custom classloaders
 
 The Clojure compilation model preserves as much as possible the dynamic
 nature of Clojure, in spite of the code-reloading limitations of Java.
 
--  Source and classfile pathing follows Java classpath conventions.
+- Source and classfile pathing follows Java classpath conventions.
 
--  The target of compile is a namespace
+- The target of compile is a namespace
 
--  Each file, fn and gen-class will produce a .class file
+- Each file, fn and gen-class will produce a .class file
 
--  Each file generates a loader class of the same name with "\_\_init"
-   appended.
+- Each file generates a loader class of the same name with "__init"
+  appended.
 
--  The static initializer for a loader class produces the same effects
-   as does loading its source file
+- The static initializer for a loader class produces the same effects as
+  does loading its source file
 
-   -  You generally shouldn't need to use these classes directly, as
-      use, require and load will choose between them and more recent
-      source
+  - You generally shouldn't need to use these classes directly, as use,
+    require and load will choose between them and more recent source
 
--  The loader class is generated for each file referenced when a
-   namespace is compiled, when its loader .class file is older than its
-   source.
+- The loader class is generated for each file referenced when a
+  namespace is compiled, when its loader .class file is older than its
+  source.
 
--  A stand-alone
-   [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/gen-class][gen-class]]
-   facility is provided to create named classes for direct use as Java
-   classes, with facilities for:
+- A stand-alone
+  [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/gen-class][gen-class]]
+  facility is provided to create named classes for direct use as Java
+  classes, with facilities for:
 
-   -  Naming the generated class
+  - Naming the generated class
 
-   -  Selecting the superclass
+  - Selecting the superclass
 
-   -  Specifying any implemented interfaces
+  - Specifying any implemented interfaces
 
-   -  Specifying constructor signatures
+  - Specifying constructor signatures
 
-   -  Specifying state
+  - Specifying state
 
-   -  Declaring additional methods
+  - Declaring additional methods
 
-   -  Generating static factory methods
+  - Generating static factory methods
 
-   -  Generating main
+  - Generating main
 
-   -  Controlling the mapping to an implementing namespace
+  - Controlling the mapping to an implementing namespace
 
-   -  Exposing inherited protected members
+  - Exposing inherited protected members
 
-   -  Generating more than one named class from a single file, with
-      implementations in one or more namespaces
+  - Generating more than one named class from a single file, with
+    implementations in one or more namespaces
 
--  An optional
-   [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/gen-class][:gen-class]]
-   directive can be used in the
-   [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/ns][ns]]
-   declaration to generate a named class corresponding to a namespace.
-   (:gen-class ...​), when supplied, defaults to :name corresponding to
-   the ns name, :main true, :impl-ns same as ns, and :init-impl-ns true.
-   All options of gen-class are supported.
+- An optional
+  [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/gen-class][:gen-class]]
+  directive can be used in the
+  [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/ns][ns]]
+  declaration to generate a named class corresponding to a namespace.
+  (:gen-class ...​), when supplied, defaults to :name corresponding to
+  the ns name, :main true, :impl-ns same as ns, and :init-impl-ns true.
+  All options of gen-class are supported.
 
--  gen-class and the :gen-class directive are ignored when not
-   compiling.
+- gen-class and the :gen-class directive are ignored when not compiling.
 
--  A stand-alone
-   [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/gen-interface][gen-interface]]
-   facility is provided for generating named interface classes for
-   direct use as Java interfaces, with facilities for:
+- A stand-alone
+  [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/gen-interface][gen-interface]]
+  facility is provided for generating named interface classes for direct
+  use as Java interfaces, with facilities for:
 
-   -  Naming the generated interface
+  - Naming the generated interface
 
-   -  Specifying any superintefaces
+  - Specifying any superintefaces
 
-   -  Declaring the signatures of interface methods
+  - Declaring the signatures of interface methods
 
 * Compiling
   :PROPERTIES:
@@ -96,15 +94,15 @@ function, and supply the namespace name as a symbol. For some namespace
 my.domain.lib, defined in my/domain/lib.clj, in the classpath, the
 following should occur:
 
--  A loader classfile will be produced in =my/domain/lib__init.class=,
-   under =*compile-path*=, which must be in the classpath
+- A loader classfile will be produced in =my/domain/lib__init.class=,
+  under =*compile-path*=, which must be in the classpath
 
--  A set of classfiles will be produced, one per fn in the namespace,
-   with names such as =my/domain/lib$fnname__1234.class=
+- A set of classfiles will be produced, one per fn in the namespace,
+  with names such as =my/domain/lib$fnname__1234.class=
 
--  For each gen-class:
+- For each gen-class:
 
-   -  A stub classfile will be produced with the specified name
+  - A stub classfile will be produced with the specified name
 
 * Compiler options
   :PROPERTIES:
@@ -116,11 +114,11 @@ flags. At runtime these are stored in the dynamic var
 =clojure.core/*compiler-options*=, which is a map with the following
 optional keyword keys:
 
--  =:disable-locals-clearing= (boolean)
+- =:disable-locals-clearing= (boolean)
 
--  =:elide-meta= (vector of keywords)
+- =:elide-meta= (vector of keywords)
 
--  =:direct-linking= (boolean)
+- =:direct-linking= (boolean)
 
 These compiler options can be changed in a dynamic binding around a call
 to the =compile= function to change the compiler behavior.
@@ -128,11 +126,11 @@ to the =compile= function to change the compiler behavior.
 Alternately, compiler options can also be set via the Java system
 properties at startup:
 
--  =-Dclojure.compiler.disable-locals-clearing=true=
+- =-Dclojure.compiler.disable-locals-clearing=true=
 
--  =-Dclojure.compiler.elide-meta="[:doc :file :line :added]"=
+- ="-Dclojure.compiler.elide-meta=[:doc :file :line :added]"=
 
--  =-Dclojure.compiler.direct-linking=true=
+- =-Dclojure.compiler.direct-linking=true=
 
 See below for more info on each of these options.
 

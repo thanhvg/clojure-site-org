@@ -84,11 +84,11 @@ function /prints/ its argument to the standard output but /returns/ nil.
 Therefore, the 2 lines we see under our expression are very different in
 nature:
 
--  =Hello World= is a /side effect/ of evaluating the expression
-   (printing to standard output): the printing was done by our code.
+- =Hello World= is a /side effect/ of evaluating the expression
+  (printing to standard output): the printing was done by our code.
 
--  =nil= is the /result/ of evaluating the expression: the printing was
-   done by the REPL.
+- =nil= is the /result/ of evaluating the expression: the printing was
+  done by the REPL.
 
 * Calling Clojure libs from the REPL
   :PROPERTIES:
@@ -119,7 +119,7 @@ manipulating text. Let's require =clojure.string= and call its
     "CLOJURE"
 #+END_EXAMPLE
 
-=require= also lets use define an /alias/ for the =clojure.string=
+=require= also lets us define an /alias/ for the =clojure.string=
 namespace, by adding an =:as= clause. This enables us to refer to names
 defined in the =clojure.string= namespace more concisely:
 

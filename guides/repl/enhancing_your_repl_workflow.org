@@ -10,7 +10,7 @@ Most Clojure programmers don't use the terminal-based REPL for everyday
 development: instead, they use a REPL integration in their editor, which
 enables them to write expressions directly in their editor buffer and
 have them evaluated in the REPL with one hotkey. See the
-[[editor-integrations][Editor integrations]] section below for more
+[[#editor-integrations][Editor integrations]] section below for more
 details.
 
 #+BEGIN_QUOTE
@@ -19,30 +19,30 @@ details.
 #+END_QUOTE
 
 As mentioned above, one solution could be to use an
-[[editor-integrations][editor integration]]. Note that some editors such
-as *[[https://sekao.net/nightcode/][Nightcode]]* are designed
+[[#editor-integrations][editor integration]]. Note that some editors
+such as *[[https://sekao.net/nightcode/][Nightcode]]* are designed
 specifically to provide a 'batteries-included' experience for Clojure.
 
 However, if setting up an editor is too heavy for your taste, there also
 exist more ergonomic terminal REPL clients:
 
--  *[[https://github.com/bhauman/rebel-readline][rebel-readline]]* is a
-   terminal readline library made by Bruce Hauman. If you have already
-   installed the [[file:xref/../../deps_and_cli.org][Clojure CLI
-   tools]], you can launch it in
-   [[https://github.com/bhauman/rebel-readline#quick-try][one line at
-   the terminal]] without any additional installation steps.
+- *[[https://github.com/bhauman/rebel-readline][rebel-readline]]* is a
+  terminal readline library made by Bruce Hauman. If you have already
+  installed the [[file:xref/../../deps_and_cli.org][Clojure CLI tools]],
+  you can launch it in
+  [[https://github.com/bhauman/rebel-readline#quick-try][one line at the
+  terminal]] without any additional installation steps.
 
--  *[[https://github.com/Unrepl/unravel][Unravel]]* by Paulus Esterhazy
-   is another option, based on the
-   [[https://github.com/Unrepl/unrepl][unrepl]] communication protocol.
+- *[[https://github.com/Unrepl/unravel][Unravel]]* by Paulus Esterhazy
+  is another option, based on the
+  [[https://github.com/Unrepl/unrepl][unrepl]] communication protocol.
 
 #+BEGIN_QUOTE
   */I need to debug a program I'm running from the REPL./*
 #+END_QUOTE
 
 The REPL can definitely help you do that: see the
-[[debugging-tools-and-techniques][Debugging Tools and Techniques]]
+[[#debugging-tools-and-techniques][Debugging Tools and Techniques]]
 section below.
 
 #+BEGIN_QUOTE
@@ -63,7 +63,7 @@ database query, turning on/off email sending, etc.)
 
 Depending on the choices you make when writing your programs,
 interacting with them at the REPL will become more or less practical.
-See the [[writing-repl-friendly-programs][Writing REPL-friendly
+See the [[#writing-repl-friendly-programs][Writing REPL-friendly
 programs]] section below.
 
 #+BEGIN_QUOTE
@@ -78,7 +78,7 @@ purpose.
 #+END_QUOTE
 
 You may get improved visualization features from a specialized Clojure
-editor: see the [[editor-integrations][Editor Integrations]] section
+editor: see the [[#editor-integrations][Editor Integrations]] section
 below.
 
 Having said that, keep in mind that the REPL is a full-feature execution
@@ -86,15 +86,20 @@ environment: in particular, you can use it to launch special-purpose
 visualization tools (including ones that you develop yourself). For
 instance:
 
--  *[[https://github.com/metasoarous/oz][oz]]* is a Clojure library for
-   displaying numerical charts
+- *[[https://vlaaad.github.io/reveal/][Reveal]]* and
+  *[[https://docs.datomic.com/cloud/other-tools/REBL.html][Cognitect
+  REBL]]* are graphical tools for navigating and visualizing Clojure
+  data, supporting two-way interaction with Clojure REPLs.
 
--  *[[https://github.com/eggsyntax/datawalk][datawalk]]* is a Clojure
-   library for interactively exploring complex Clojure data structures
+- *[[https://github.com/metasoarous/oz][oz]]* is a Clojure library for
+  displaying numerical charts
 
--  *[[https://github.com/walmartlabs/system-viz][system-viz]]* is a
-   Clojure library for visualizing the components of a running Clojure
-   system
+- *[[https://github.com/eggsyntax/datawalk][datawalk]]* is a Clojure
+  library for interactively exploring complex Clojure data structures
+
+- *[[https://github.com/walmartlabs/system-viz][system-viz]]* is a
+  Clojure library for visualizing the components of a running Clojure
+  system
 
 #+BEGIN_QUOTE
   */I want to customize my REPL./*
@@ -103,15 +108,15 @@ instance:
 You can usually customize how your REPL reads, evaluates and prints, but
 the method to do it depends on your toolchain. For instance:
 
--  when using a REPL started from
-   [[file:xref/../../../reference/repl_and_main.org][clojure.main]] (as
-   is the case when using the =clj= tool) you can customize the REPL by
-   launching a 'sub-REPL': see
-   [[https://clojure.github.io/clojure/clojure.main-api.html#clojure.main/repl][clojure.main/repl]].
+- when using a REPL started from
+  [[file:xref/../../../reference/repl_and_main.org][clojure.main]] (as
+  is the case when using the =clj= tool) you can customize the REPL by
+  launching a 'sub-REPL': see
+  [[https://clojure.github.io/clojure/clojure.main-api.html#clojure.main/repl][clojure.main/repl]].
 
--  when using [[https://nrepl.org][nREPL]].[fn:1], this can be done by
-   writing custom
-   [[https://nrepl.org/nrepl/design/middleware.html][middleware]].
+- when using [[https://nrepl.org][nREPL]].[fn:1], this can be done by
+  writing custom
+  [[https://nrepl.org/nrepl/design/middleware.html][middleware]].
 
 #+BEGIN_QUOTE
   */I want to use the REPL to connect to a live production system./*
@@ -175,27 +180,26 @@ used in this example is
 Here are some common editor commands provided by REPL integrations. All
 major Clojure editors support a majority of them:
 
--  *Send form before caret to REPL:* evaluate the expression before the
-   cursor in the REPL, in the namespace of the current file. Useful for
-   experimenting in the context of the current namespace.
+- *Send form before caret to REPL:* evaluate the expression before the
+  cursor in the REPL, in the namespace of the current file. Useful for
+  experimenting in the context of the current namespace.
 
--  *Send top-level form to REPL:* evaluate the biggest expression in
-   which the cursor is currently contained -typically a =(defn …​)= or
-   =(def …​)= expression-in the namespace of the current file. Useful
-   for defining or re-defining Vars in a namespace.
+- *Send top-level form to REPL:* evaluate the biggest expression in
+  which the cursor is currently contained -typically a =(defn …​)= or
+  =(def …​)= expression-in the namespace of the current file. Useful for
+  defining or re-defining Vars in a namespace.
 
--  *Load the current file in the REPL.* Useful to avoid
-   [[_working_with_libs][loading libs manually]].
+- *Load the current file in the REPL.* Useful to avoid
+  [[#_working_with_libs][loading libs manually]].
 
--  *Switch the REPL's namespace to current file:* useful to avoid typing
-   =(in-ns '…​)=.
+- *Switch the REPL's namespace to current file:* useful to avoid typing
+  =(in-ns '…​)=.
 
--  *Show evaluation inline:* displays the evaluation of the current
-   expression next to it.
+- *Show evaluation inline:* displays the evaluation of the current
+  expression next to it.
 
--  *Replace expression with its evaluation:* replaces the current
-   expression in the editor with its evaluation (as printed by the
-   REPL).
+- *Replace expression with its evaluation:* replaces the current
+  expression in the editor with its evaluation (as printed by the REPL).
 
 * Debugging tools and techniques
   :PROPERTIES:
@@ -209,7 +213,7 @@ and techniques to leverage the REPL for debugging.
 
 ** Printing in-flight values with =prn=
    :PROPERTIES:
-   :CUSTOM_ID: _printing_in_flight_values_with_literal_prn_literal
+   :CUSTOM_ID: _printing_in_flight_values_with_prn
    :END:
 
 =(prn …​)= expressions can be added in strategic places in your code to
@@ -256,13 +260,13 @@ Some Clojure libraries provide 'enhanced' versions of =prn= that are
 more informative, by also printing information about the wrapped
 expression. For example:
 
--  the *[[https://github.com/clojure/tools.logging][tools.logging]]*
-   logging library provides a
-   [[http://clojure.github.io/tools.logging/#clojure.tools.logging/spy][spy]]
-   macro to log an expression's code along with its value
+- the *[[https://github.com/clojure/tools.logging][tools.logging]]*
+  logging library provides a
+  [[http://clojure.github.io/tools.logging/#clojure.tools.logging/spy][spy]]
+  macro to log an expression's code along with its value
 
--  the *[[https://github.com/dgrnbrg/spyscope][spyscope]]* library lets
-   you to insert these printing calls with very lightweight syntax.
+- the *[[https://github.com/dgrnbrg/spyscope][spyscope]]* library lets
+  you to insert these printing calls with very lightweight syntax.
 
 *** Going further: tracing libraries
     :PROPERTIES:
@@ -271,7 +275,7 @@ expression. For example:
 
 /Tracing/ libraries such as
 *[[https://github.com/clojure/tools.trace][tools.trace]]* and
-*[[http://clojure-emacs.github.io/sayid/][Sayid]]* can help you
+*[[https://github.com/clojure-emacs/sayid][Sayid]]* can help you
 instrument larger portions of your code, for example by automatically
 printing all the function calls in a given namespace, or all
 intermediary values in a given expression.
@@ -365,31 +369,31 @@ the context of an expression.
    :CUSTOM_ID: _community_resources_about_repl_debugging
    :END:
 
--  [[https://www.clojure-toolbox.com/][The Clojure Toolbox]] provides a
-   list a Clojure libraries for debugging.
+- [[https://www.clojure-toolbox.com/][The Clojure Toolbox]] provides a
+  list a Clojure libraries for debugging.
 
--  [[https://cambium.consulting/articles/2018/2/8/the-power-of-clojure-debugging][The
-   Power of Clojure: debugging]] is an article by Cambium Consulting
-   which provides a list of techniques for debugging at the REPL.
+- [[https://cambium.consulting/articles/2018/2/8/the-power-of-clojure-debugging][The
+  Power of Clojure: debugging]] is an article by Cambium Consulting
+  which provides a list of techniques for debugging at the REPL.
 
--  /Clojure From the Ground Up/ by Aphyr contains a
-   [[https://aphyr.com/posts/319-clojure-from-the-ground-up-debugging][chapter
-   about debugging]], presenting techniques for debugging Clojure in
-   particular and a principled approach to debugging in general.
+- /Clojure From the Ground Up/ by Aphyr contains a
+  [[https://aphyr.com/posts/319-clojure-from-the-ground-up-debugging][chapter
+  about debugging]], presenting techniques for debugging Clojure in
+  particular and a principled approach to debugging in general.
 
--  In his article
-   [[http://blog.cognitect.com/blog/2017/6/5/repl-debugging-no-stacktrace-required][REPL
-   Debugging: No Stacktrace Required]], Stuart Halloway demonstrates how
-   the quick feedback loop at the REPL can be used to narrow down the
-   cause of a bug without using error information at all.
+- In his article
+  [[http://blog.cognitect.com/blog/2017/6/5/repl-debugging-no-stacktrace-required][REPL
+  Debugging: No Stacktrace Required]], Stuart Halloway demonstrates how
+  the quick feedback loop at the REPL can be used to narrow down the
+  cause of a bug without using error information at all.
 
--  Eli Bendersky has written some
-   [[https://eli.thegreenplace.net/2017/notes-on-debugging-clojure-code/#id3][Notes
-   on debugging Clojure code]].
+- Eli Bendersky has written some
+  [[https://eli.thegreenplace.net/2017/notes-on-debugging-clojure-code/#id3][Notes
+  on debugging Clojure code]].
 
--  [[https://www.youtube.com/watch?v=FihU5JxmnBg][Debugging with the
-   Scientific Method]] is a conference talk by Stuart Halloway promoting
-   a scientific approach to debugging in general.
+- [[https://www.youtube.com/watch?v=FihU5JxmnBg][Debugging with the
+  Scientific Method]] is a conference talk by Stuart Halloway promoting
+  a scientific approach to debugging in general.
 
 * Writing REPL-friendly programs
   :PROPERTIES:
@@ -493,6 +497,17 @@ of Var =a=, then you will need to re-define =b= each time you re-define
       (count solar-system-planets))
 #+END_SRC
 
+That being said, the problem of derived Vars becoming obsolete might be
+satisfactorily mitigated:
+
+1. either by making sure that Vars are not derived across different
+   files, and by taking care to reload entire files when changes are
+   made;
+
+2. or by using utilities like
+   [[https://github.com/clojure/tools.namespace#clojuretoolsnamespace][clojure.tools.namespace]],
+   which let you keep track of changed files and reload them in order.
+
 */REPL-friendly code can be reloaded./* Make sure that reloading a
 namespace will not alter the behaviour of the running program. If a Var
 needs to be defined exactly once (which should be very rare), consider
@@ -515,21 +530,21 @@ Structure]].
 
 This has motivated the creation of */state management libraries:/*
 
--  *[[https://github.com/stuartsierra/component][Component]]*, which
-   promotes a representation of program state as a managed map of
-   Clojure records called a *system*.
+- *[[https://github.com/stuartsierra/component][Component]]*, which
+  promotes a representation of program state as a managed map of Clojure
+  records called a *system*.
 
--  *[[https://github.com/danielsz/system][System]]* is a library on top
-   of [[https://github.com/stuartsierra/component][Component]] which
-   provides a set of ready-made components.
+- *[[https://github.com/danielsz/system][System]]* is a library on top
+  of [[https://github.com/stuartsierra/component][Component]] which
+  provides a set of ready-made components.
 
--  *[[https://github.com/tolitius/mount][Mount]]* takes a radically
-   different approach as Component, choosing to use Vars and namespaces
-   as the supporting infrastructure for state.[fn:3]
+- *[[https://github.com/tolitius/mount][Mount]]* takes a radically
+  different approach as Component, choosing to use Vars and namespaces
+  as the supporting infrastructure for state.[fn:3]
 
--  *[[https://github.com/weavejester/integrant][Integrant]]* is a more
-   recent library which shares Component's approach while addressing
-   some of its perceived limitations.
+- *[[https://github.com/weavejester/integrant][Integrant]]* is a more
+  recent library which shares Component's approach while addressing some
+  of its perceived limitations.
 
 [fn:1] At the time of writing (March 2018), [[https://nrepl.org][nREPL]]
        is the most popular toolchain for REPL-editor integration

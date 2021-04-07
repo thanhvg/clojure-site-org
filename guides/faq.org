@@ -6,7 +6,7 @@ Clojure community forums.
   :CUSTOM_ID: _reader_and_syntax
   :END:
 
-*[[why_keywords][What's the advantage of representing text tokens as
+*[[#why_keywords][What's the advantage of representing text tokens as
 keywords (instead of as strings)?]]*
 
 Keywords are cached and interned. This means that a keyword is reused
@@ -16,8 +16,31 @@ Additionally, keywords are invokable to look themselves up in a map and
 thus this enables the common pattern of extracting a particular field
 from a collection of maps possible.
 
-*[[unreadable_keywords][Why is it possible to create keywords that can't
-be read by the reader?]]*
+*[[#keyword_number][Is :1 a valid keyword?]]*
+
+The [[file:xref/../../reference/reader.org][reader]] page defines
+keywords as "like symbols" and symbols "begin with a non-numeric
+character" so the original intent was that =:1= would be invalid. In
+fact, the only reason it is readable at all is due to a
+[[https://clojure.atlassian.net/browse/CLJ-1252][bug]] in the keyword
+regex. This bug was fixed in a 1.6 alpha but we quickly discovered that
+these keywords were in use in many actual projects. To avoid breaking
+existing working code, the change was rolled back and this form will
+continue to be supported. (There are still some
+[[https://clojure.atlassian.net/browse/CLJ-1286][open]]
+[[https://clojure.atlassian.net/browse/CLJ-1527][issues]] to clarify
+this in code and/or docs.)
+
+Note that namespaced keywords with names starting with numbers have
+never been readable or valid, ie =:foo/1=. However, auto-resolved
+keywords like =::1= can be read but not round-tripped from print to
+read.
+
+In general, it's best to avoid using keywords that start with a number
+unless it is in a narrow and controlled scope.
+
+*[[#unreadable_keywords][Why is it possible to create keywords that
+can't be read by the reader?]]*
 
 The
 [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/keyword][=keyword=]]
@@ -38,7 +61,7 @@ read back into a keyword (due to spaces or other non-allowed
 characters). If this is important to you, you should validate the
 keyword inputs first, before creating the keyword.
 
-*[[reader_macros][Why does Clojure not have user-extensible reader
+*[[#reader_macros][Why does Clojure not have user-extensible reader
 macros?]]*
 
 The reader takes text (Clojure source) and returns Clojure data, which
@@ -57,10 +80,13 @@ macros). Clojure gives back some of the power of reader macros with
 tagged literals, allowing you to create generically readable /data/,
 that is still extensible.
 
-*[[underscore][What does an \_ mean in a let binding or parameter?]]*
+Also see the [[file:xref/../../about/history.org][History of Clojure]]
+paper section about this (search for "reader macros").
 
-\_ has no special meaning in Clojure as a symbol. However, it is a
-convention to use \_ (or a leading \_) to denote a binding that will not
+*[[#underscore][What does an _ mean in a let binding or parameter?]]*
+
+_ has no special meaning in Clojure as a symbol. However, it is a
+convention to use _ (or a leading _) to denote a binding that will not
 be used in the expression. A common case for this is skipping unneeded
 values in [[file:destructuring.xml#_sequential_destructuring][sequential
 destructuring]]:
@@ -71,7 +97,21 @@ destructuring]]:
         y))
 #+END_SRC
 
-*[[anon_vector][Why doesn't the anonymous function =#([%1])= work to
+*[[#qmark_bang][What does a ? or ! mean in a function name?]]*
+
+=?= and =!= have no special meaning in Clojure as part of a function
+name. However, it is a convention to use a trailing =?= to denote a
+predicate function and a trailing =!= to denote a function with
+side-effects. More specifically, a trailing =?= indicates that a
+predicate strictly returns a boolean result (=true= or =false=). A
+trailing =!= was originally intended to indicate that a function has
+side-effects that would make it unsafe to use inside a
+[[file:xref/../../reference/refs.org][ref transaction]] (in the Software
+Transactional Memory sense). In the wild, the use of =!= is less
+consistent and is sometimes used in a broader way to indicate any sort
+of side-effecting behavior.
+
+*[[#anon_vector][Why doesn't the anonymous function =#([%1])= work to
 construct a vector?]]*
 
 =#()= always expands to include parens around the expression you give
@@ -84,7 +124,7 @@ just =vector=, which is the function being described.
   :CUSTOM_ID: _collections_sequences_and_transducers
   :END:
 
-*[[conj][Why does =conj= add to the front of a list, but the back of a
+*[[#conj][Why does =conj= add to the front of a list, but the back of a
 vector?]]*
 
 Most Clojure data structure operations, including =conj= (conjoin), are
@@ -101,22 +141,22 @@ then the appropriate function to use is =cons=, which will always add to
 the front. Note however that this will produce a sequence, not an
 instance of the original collection type.
 
-*[[seqs_vs_colls][I keep forgetting that after calling sequence
+*[[#seqs_vs_colls][I keep forgetting that after calling sequence
 functions on vectors/sets, the return value is no longer a vector or a
 set.]]*
 
 Generally you should divide the Clojure core functions into these two
 categories:
 
--  Data structure functions - take a data structure and return a
-   modified versions of that data structure (conj, disj, assoc, dissoc,
-   etc). These functions always take the data structure /first/.
+- Data structure functions - take a data structure and return a modified
+  versions of that data structure (conj, disj, assoc, dissoc, etc).
+  These functions always take the data structure /first/.
 
--  Sequence functions - take a "seqable" and return a seqable.
-   [Generally we try to avoid committing to the return values actually
-   being an instance of ISeq - this allows for performance optimizations
-   in some cases.] Examples are map, filter, remove, etc. All of these
-   functions take the seqable /last/.
+- Sequence functions - take a "seqable" and return a seqable. [Generally
+  we try to avoid committing to the return values actually being an
+  instance of ISeq - this allows for performance optimizations in some
+  cases.] Examples are map, filter, remove, etc. All of these functions
+  take the seqable /last/.
 
 It sounds like you are using the latter but expecting the semantics of
 the former (which is a common issue for new Clojurists!). If you want to
@@ -144,10 +184,10 @@ as needed (with chunking under the hood for greater performance).
 Neither of these is right or wrong, but they are both useful in
 different circumstances.
 
-*[[arg_order][What are the rules of thumb for arg order in core
+*[[#arg_order][What are the rules of thumb for arg order in core
 functions?]]*
 
-Primary collection operands come first. That way one can write =→= and
+Primary collection operands come first. That way one can write =->= and
 its ilk, and their position is independent of whether or not they have
 variable arity parameters. There is a tradition of this in OO languages
 and Common Lisp (=slot-value=, =aref=, =elt=).
@@ -186,7 +226,7 @@ sequence functions are variadic, it is usually in their sources.
 [[https://groups.google.com/d/msg/clojure/iyyNyWs53dc/Q_8BtjRthqgJ][comments
 by Rich Hickey]]./
 
-*[[transducers_vs_seqs][What are good use cases for transducers?]]*
+*[[#transducers_vs_seqs][What are good use cases for transducers?]]*
 
 When performing a series of transformations, sequences will create an
 intermediate (cached) sequence between each transformation. Transducers
@@ -195,64 +235,81 @@ pass over the input. These are different models, which are both useful.
 
 Performance benefits of transducers:
 
--  Source collection iteration - when used on reducible inputs
-   (collections and other things), avoid creating an unnecessary input
-   collection sequence - helps memory and time.
+- Source collection iteration - when used on reducible inputs
+  (collections and other things), avoid creating an unnecessary input
+  collection sequence - helps memory and time.
 
--  Intermediate sequences and cached values - as the transformation
-   happens in a single pass, you remove all intermediate sequence and
-   cached value creation - again, helps memory and time. The combination
-   of the prior item and this one will start to win big as the size of
-   the input collection or number of transformations goes up (but for
-   small numbers of either, chunked sequences can be surprisingly fast
-   and will compete).
+- Intermediate sequences and cached values - as the transformation
+  happens in a single pass, you remove all intermediate sequence and
+  cached value creation - again, helps memory and time. The combination
+  of the prior item and this one will start to win big as the size of
+  the input collection or number of transformations goes up (but for
+  small numbers of either, chunked sequences can be surprisingly fast
+  and will compete).
 
 Design / usage benefits of transducers:
 
--  Transformation composition - some use cases will have a cleaner
-   design if they separate transformation composition from
-   transformation application. Transducers support this.
+- Transformation composition - some use cases will have a cleaner design
+  if they separate transformation composition from transformation
+  application. Transducers support this.
 
--  Eagerness - transducers are great for cases where eagerly processing
-   a transformation (and potentially encountering any errors) is more
-   important than laziness
+- Eagerness - transducers are great for cases where eagerly processing a
+  transformation (and potentially encountering any errors) is more
+  important than laziness
 
--  Resource control - because you have more control over when the input
-   collection is traversed, you also know when processing is complete.
-   It's thus easier to release or clean up input resources because you
-   know when that happens.
+- Resource control - because you have more control over when the input
+  collection is traversed, you also know when processing is complete.
+  It's thus easier to release or clean up input resources because you
+  know when that happens.
 
 Performance benefits of sequences:
 
--  Laziness - if you will only need some of the outputs (for example a
-   user is deciding how many to use), then lazy sequences can often be
-   more efficient in deferring processing. In particular, sequences can
-   be lazy with intermediate results, but transducers use a pull model
-   that will eagerly produce all intermediate values.
+- Laziness - if you will only need some of the outputs (for example a
+  user is deciding how many to use), then lazy sequences can often be
+  more efficient in deferring processing. In particular, sequences can
+  be lazy with intermediate results, but transducers use a pull model
+  that will eagerly produce all intermediate values.
 
--  Infinite streams - because transducers are typically eagerly
-   consumed, they don't match well with infinite streams of values
+- Infinite streams - because transducers are typically eagerly consumed,
+  they don't match well with infinite streams of values
 
 Design benefits of sequences:
 
--  Consumer control - returning a seq from an API lets you combine input
-   + transformation into something that gives the consumer control.
-   Transducers don't work as well for this (but will work better for
-   cases where input and transformation are separated).
+- Consumer control - returning a seq from an API lets you combine input
+  + transformation into something that gives the consumer control.
+  Transducers don't work as well for this (but will work better for
+  cases where input and transformation are separated).
+
+* Core functions
+  :PROPERTIES:
+  :CUSTOM_ID: _core_functions
+  :END:
+
+*[[#def_minus][Why =defn-= but no =def-=?]]*
+
+At one point, metadata was more cumbersome to use than now (the syntax
+for a private defn was =#^{:private true}=), and =defn-= seemed worth
+creating as an "easy" version. The metadata support improved and became
+"stackable" which allowed easier composition of independent metadata.
+Rather than create private variants of all the def forms, it is simply
+preferred to use =^:private= metadata when needed on =def= or other def
+forms..
 
 * Spec
   :PROPERTIES:
   :CUSTOM_ID: _spec
   :END:
 
-*[[spec_alpha][Why is spec alpha?]]*
+*[[#spec_alpha][Why is spec alpha?]]*
 
 spec is in alpha to indicate that the API may still change. spec was
 broken out of Clojure core so that spec can be updated independently
 from the main Clojure version. At some point spec's API will be
-considered stable and at that point the alpha will be removed.
+considered stable and at that point the alpha will be removed. The next
+version of spec is being developed at
+[[https://github.com/clojure/spec-alpha2][alpha.spec]].
 
-*[[spec_location][Where should I put my specs?]]*
+*[[#spec_location][Where should I put my specs?]]*
 
 There is no single right answer to this question. For data specs, it is
 often useful to put them in their own namespace, which may or may not
@@ -267,7 +324,7 @@ optionally be required when needed (for testing or validation). In the
 latter case, Clojure core has followed the pattern of using
 foo.bar.specs to hold function specs for the functions in foo.bar.
 
-*[[regex_nesting][How do nested regex ops work?]]*
+*[[#regex_nesting][How do nested regex ops work?]]*
 
 Regex ops (cat, alt, *, +, ?, etc) always describe the elements in a
 sequential collection. They are not, by themselves, specs. When used in
@@ -277,7 +334,7 @@ form a single regex spec over the same sequential collection.
 To validate a nested collection, use =s/spec= to wrap the inner regex,
 forcing a spec boundary between regex ops.
 
-*[[instrument_ret][Why doesn't =instrument= check return values?]]*
+*[[#instrument_ret][Why doesn't =instrument= check return values?]]*
 
 Instrument is intended to verify that a function is being invoked
 according to its args spec. That is, is the function being called
@@ -288,47 +345,66 @@ and this should be checked with the =check= function which will actually
 invoke the function with generated args and verify the ret and fn specs
 on each invocation.
 
-*[[skip_macros][Is there a way to skip checking macro specs?]]*
+*[[#skip_macros][Is there a way to skip checking macro specs?]]*
 
 Yes, set the Java system property =-Dclojure.spec.skip-macros=true= and
 no macro specs will be checked during macroexpansion.
+
+*[[#exclusive_keys][How do I write a map that only allows certain
+keys?]]*
+
+Spec's general philosophy is one of "open" specs where maps can contain
+additional keys beyond what is specified as required or optional in an
+s/keys spec. One way to accomplish a contrained key set is to =s/and= an
+additional constraint:
+
+#+BEGIN_SRC clojure
+    (s/def ::auth
+      (s/and
+        (s/keys :req [::user ::password])
+        #(every? #{::user ::password} (keys %))))
+#+END_SRC
+
+*[[#spec_doc][Can I add docs or metadata for specs?]]*
+
+Currently, no. This is under consideration for the next version of spec.
 
 * State and Concurrency
   :PROPERTIES:
   :CUSTOM_ID: _state_and_concurrency
   :END:
 
-*[[concurrency_features][What are the trade-offs between reducers,
+*[[#concurrency_features][What are the trade-offs between reducers,
 core.async, futures, and pmap?]]*
 
 Each of these really addresses a different use case.
 
--  Reducers are best for fine-grained data parallelism when computing a
-   transformation over existing in-memory data (in a map or vector).
-   Generally it's best when you have thousands of small data items to
-   compute over and many cores to do the work. Anything described as
-   "embarrassingly parallel".
+- Reducers are best for fine-grained data parallelism when computing a
+  transformation over existing in-memory data (in a map or vector).
+  Generally it's best when you have thousands of small data items to
+  compute over and many cores to do the work. Anything described as
+  "embarrassingly parallel".
 
--  Futures are best for pushing work onto a background thread and
-   picking it up later (or for doing I/O waits in parallel). It's better
-   for big chunky tasks (go fetch a bunch of data in the background).
+- Futures are best for pushing work onto a background thread and picking
+  it up later (or for doing I/O waits in parallel). It's better for big
+  chunky tasks (go fetch a bunch of data in the background).
 
--  core.async is primarily used to organize the subsystems or internal
-   structure of your application. It has channels (queues) to convey
-   values from one "subprocess" (go block) to another. So you're really
-   getting concurrency and architectural benefits in how you break up
-   your program. The killer feature you can really only get in
-   core.async is the ability to wait on I/O events from multiple
-   channels for the first response on any of them (via alt/alts).
-   Promises can also be used to convey single values between independent
-   threads/subprocesses but they are single delivery only.
+- core.async is primarily used to organize the subsystems or internal
+  structure of your application. It has channels (queues) to convey
+  values from one "subprocess" (go block) to another. So you're really
+  getting concurrency and architectural benefits in how you break up
+  your program. The killer feature you can really only get in core.async
+  is the ability to wait on I/O events from multiple channels for the
+  first response on any of them (via alt/alts). Promises can also be
+  used to convey single values between independent threads/subprocesses
+  but they are single delivery only.
 
--  Tools like pmap, java.util queues and executors, and libraries like
-   claypoole are doing coarse-level "task" concurrency. There is some
-   overlap with core.async here which has a very useful
-   transducer-friendly pipeline functionality.
+- Tools like pmap, java.util queues and executors, and libraries like
+  claypoole are doing coarse-level "task" concurrency. There is some
+  overlap with core.async here which has a very useful
+  transducer-friendly pipeline functionality.
 
-*[[agent_shutdown][Why does Clojure "hang" for 1 minute when my program
+*[[#agent_shutdown][Why does Clojure "hang" for 1 minute when my program
 ends?]]*
 
 This is most commonly asked in the context of programs that use
@@ -346,7 +422,7 @@ thread pool with a 60 second timeout. In the scenario above, the program
 will wait until the background threads have completed their work and the
 threads expire before it can exit.
 
-*[[write_skew][Why the Clojure STM does not guarantee serializability
+*[[#write_skew][Why the Clojure STM does not guarantee serializability
 but only snapshot isolation?]]*
 
 If reads were included by default, then STM would be slower (as more
@@ -360,7 +436,7 @@ it is not.
   :CUSTOM_ID: _namespaces
   :END:
 
-*[[ns_file][Do namespaces map 1-to-1 with files?]]*
+*[[#ns_file][Do namespaces map 1-to-1 with files?]]*
 
 No (although that is typical). One namespace can be split across
 multiple files by using =load= to load secondary files and =in-ns= in
@@ -368,7 +444,7 @@ those files to retain the namespace (clojure.core is defined in this
 way). Also, it is possible to declare multiple namespaces in a single
 file (although this is very unusual).
 
-*[[ns_as_fn][Do namespaces work like regular functions? Looking at the
+*[[#ns_as_fn][Do namespaces work like regular functions? Looking at the
 syntax, it seems ns could be returning a function that makes a
 namespace, and then if you just stick parens around the contents of the
 file, that would be a regular S expression too. Does that imply you can
@@ -376,16 +452,16 @@ put more than one in a file?]]*
 
 ns is a macro that does a number of things:
 
--  creates a new internal Namespace object (if it does not yet exist)
+- creates a new internal Namespace object (if it does not yet exist)
 
--  makes that namespace the new current namespace (=*ns*=)
+- makes that namespace the new current namespace (=*ns*=)
 
--  auto-refers all vars from clojure.core and imports all classes from
-   java.lang
+- auto-refers all vars from clojure.core and imports all classes from
+  java.lang
 
--  requires/refers other namespaces and vars as specified
+- requires/refers other namespaces and vars as specified
 
--  (and other optional things)
+- (and other optional things)
 
 ns does not return a function or anything invokable as you suggest.
 
@@ -400,7 +476,7 @@ desired in AOT).
   :CUSTOM_ID: _compiler
   :END:
 
-*[[direct_linking_repl][How does direct linking affect the REPL
+*[[#direct_linking_repl][How does direct linking affect the REPL
 experience?]]*
 
 Anything that has been direct linked will not see redefinitions to vars.
@@ -412,7 +488,7 @@ typically a problem.
 For parts of your own app, you may wish to only enable direct linking
 when you build and deploy for production, rather than using it when you
 developing at the REPL. Or you may need to mark parts of your app with
-\^:redef if you want to always allow redefinition or \^:dynamic for
+^:redef if you want to always allow redefinition or ^:dynamic for
 dynamic vars.
 
 * Java and Interop
@@ -420,18 +496,18 @@ dynamic vars.
   :CUSTOM_ID: _java_and_interop
   :END:
 
-*[[inner][How do you refer to a nested or inner class?]]*
+*[[#inner][How do you refer to a nested or inner class?]]*
 
 Use a $ to separate outer from inner class name. For example:
 =java.util.Map$Entry= is the Entry inner class inside Map.
 
-*[[primitive_type][How do you refer to the class representing a
+*[[#primitive_type][How do you refer to the class representing a
 primitive?]]*
 
 Primitive types can be found as the static TYPE field on the boxed
 class, for example: =Integer/TYPE=.
 
-*[[varargs][How do you invoke a Java method with a vararg signature?]]*
+*[[#varargs][How do you invoke a Java method with a vararg signature?]]*
 
 Java treats a trailing varargs parameter as an array and it can be
 invoked from Clojure by passing an explicit array.
@@ -451,9 +527,13 @@ Examples:
 
     ;; Passing at least an empty array is required if there are no varargs
     (.put o 1 1 (double-array []))
+
+    ;; into-array can be used to create an empty typed array
+    ;; Invoke getMethod(String name, Class... parameterTypes) on a Class instance
+    (.getMethod String "getBytes" (into-array Class []))
 #+END_SRC
 
-*[[illegal_access][Why do I get an illegal access warning?]]*
+*[[#illegal_access][Why do I get an illegal access warning?]]*
 
 Java 9 added a module system, allowing code to be partitioned into
 modules where code outside a module cannot invoke code inside the module
@@ -486,26 +566,26 @@ yielding:
 #+END_EXAMPLE
 
 The first thing to note here is that this is a warning. Java 9 through
-Java 12 will all permit the call to be made and the code will continue
-to work.
+all current releases will permit the call to be made and the code will
+continue to work.
 
 There are several potential workarounds:
 
--  Perhaps the best is to provide type hints to the exported types so
-   the call is no longer reflective:\\
+- Perhaps the best is to provide type hints to the exported types so the
+  call is no longer reflective:\\
 
 #+BEGIN_EXAMPLE
     (.createXMLStreamReader ^javax.xml.stream.XMLInputFactory fac (java.io.StringReader. ""))
 #+END_EXAMPLE
 
--  As of Clojure 1.10, turn off illegal access with
-   =--illegal-access=deny=. The Java reflection system will then provide
-   the necessary feedback to Clojure to detect that calling through the
-   inaccessible class is not an option. Clojure will find the public
-   invocation path instead and no warning will be issued.
+- As of Clojure 1.10, turn off illegal access with
+  =--illegal-access=deny=. The Java reflection system will then provide
+  the necessary feedback to Clojure to detect that calling through the
+  inaccessible class is not an option. Clojure will find the public
+  invocation path instead and no warning will be issued.
 
--  Use JVM module system flags (=--add-exports= etc ) to forcibly export
-   the internal packages to avoid the warning. This is not recommended.
+- Use JVM module system flags (=--add-exports= etc ) to forcibly export
+  the internal packages to avoid the warning. This is not recommended.
 
 If it is difficult to tell from the warning where the reflection is
 occurring, it may help to add the flag:
@@ -519,7 +599,7 @@ occurring, it may help to add the flag:
   :CUSTOM_ID: _design_and_use
   :END:
 
-*[[encapsulation][How do you achieve encapsulation with Clojure?]]*
+*[[#encapsulation][How do you achieve encapsulation with Clojure?]]*
 
 Because of its focus on immutable data, there is generally not a high
 value placed on data encapsulation. Because data is immutable, there is
@@ -540,14 +620,14 @@ part of the implementation.
   :CUSTOM_ID: _deps_and_cli
   :END:
 
-*[[clj_alpha][Are these scripts and tools.deps.alpha done?]]*
+*[[#clj_alpha][Are clj and tools.deps.alpha done?]]*
 
 No. There are lots of known gaps and ideas still to implement. But it is
 useful now. :)
 
-*[[clj_replace][Is clj a replacement for lein and boot?]]*
+*[[#clj_replace][Is clj a replacement for lein and boot?]]*
 
-No. The clojure scripts are focused on a) building classpaths and b)
+No. The clojure tools are focused on a) building classpaths and b)
 launching clojure programs. They do not (and will not) create artifacts,
 deploy artifacts, etc.
 
@@ -556,13 +636,13 @@ dependency resolution and classpath construction. clj/clojure wraps
 these into a command-line form that can be used to run Clojure programs.
 You can compose these pieces to do many other things.
 
-*[[clj_dynamic][Do these scripts allow you to dynamically add
+*[[#clj_dynamic][Do these tools allow you to dynamically add
 dependencies to a running repl?]]*
 
 No. Other tools exist to do this now or could be added on top of the
 existing functionality but this was not part of the initial goal.
 
-*[[clj_standalone][How can I create a single-file Clojure script,
+*[[#clj_standalone][How can I create a single-file Clojure script,
 ideally self-invokable via a
 [[https://en.wikipedia.org/wiki/Shebang_(Unix)][shebang line]]?]]*
 
@@ -588,7 +668,7 @@ Monroe, substituting whatever deps you need in place of =funcool/tubax=:
   :CUSTOM_ID: _contributing
   :END:
 
-*[[ca][Why does Clojure require that contributors first sign a
+*[[#ca][Why does Clojure require that contributors first sign a
 contributor agreement (CA)?]]*
 
 See [[http://clojure.org/contributing]]
@@ -607,7 +687,7 @@ will always be available under an open-source license approved by either
 the [[http://www.fsf.org/][Free Software Foundation]] or the
 [[http://opensource.org/][Open Source Initiative]].
 
-*[[echosign_bug][Why does my CA email confirmation say "Clojure CA
+*[[#echosign_bug][Why does my CA email confirmation say "Clojure CA
 (between <my-company> and Rich Hickey) is Signed and Filed!"]]*
 
 This is a quirk of Adobe EchoSign specific to users whose email account
@@ -617,7 +697,7 @@ subject line rather than the individual name that was signed on the
 form. Don't worry! This has no effect - the agreement is as signed and
 attached in the email.
 
-*[[prs][Other projects hosted on GitHub accept pull requests. Why not
+*[[#prs][Other projects hosted on GitHub accept pull requests. Why not
 Clojure?]]*
 
 Rich Hickey prefers to evaluate patches attached to JIRA tickets. This
@@ -633,12 +713,12 @@ to Oct 2012 Clojure Google group message from Rich Hickey on this topic.
   :CUSTOM_ID: _future_ideas
   :END:
 
-*[[native][Will there be a native version of Clojure in the future?]]*
+*[[#native][Will there be a native version of Clojure in the future?]]*
 
 Frequently people ask for a "native" version of Clojure, ie one that
 does not rely on the JVM. ClojureScript self-hosting is one current path
 but probably only useful for a subset of use cases. The
-[[[https://www.graalvm.org/]]](GraalVM) project includes standalone
+[[https://www.graalvm.org/][GraalVM]] project includes standalone
 execution using the SubstrateVM. Native images produced with Graal start
 extremely fast but may have fewer opportunities to optimize performance
 than the full JVM.

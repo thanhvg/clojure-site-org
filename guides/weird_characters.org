@@ -16,8 +16,8 @@ author.
 Lists are sequential heterogeneous collections implemented as a linked
 list.
 
--  [[file:xref/../../reference/data_structures.xml#Lists][Clojure
-   Documentation: Lists]]
+- [[file:xref/../../reference/data_structures.xml#Lists][Clojure
+  Documentation: Lists]]
 
 A list of three values:
 
@@ -41,8 +41,8 @@ values:
     13.7
 #+END_SRC
 
--  [[file:xref/../../reference/data_structures.xml#Vectors][Clojure
-   Documentation: Vectors]]
+- [[file:xref/../../reference/data_structures.xml#Vectors][Clojure
+  Documentation: Vectors]]
 
 * ={ …​ }= - Map
   :PROPERTIES:
@@ -57,8 +57,8 @@ values:
     (:a :b)
 #+END_SRC
 
--  [[file:xref/../../reference/data_structures.xml#Maps][Clojure
-   Documentation: Maps]]
+- [[file:xref/../../reference/data_structures.xml#Maps][Clojure
+  Documentation: Maps]]
 
 * =#= - Dispatch character
   :PROPERTIES:
@@ -79,7 +79,7 @@ syntax quote.
 
 * =#{ …​ }= - Set
   :PROPERTIES:
-  :CUSTOM_ID: __literal_literal_set
+  :CUSTOM_ID: _set
   :END:
 
 See [[file:xref/../weird_characters.xml#dispatch][=#=]] for additional
@@ -105,12 +105,12 @@ to a set, they are simply dropped if the value is already present.
     Duplicate key: 1
 #+END_SRC
 
--  [[file:xref/../../reference/data_structures.xml#sets][Clojure
-   Documentation: Sets]]
+- [[file:xref/../../reference/data_structures.xml#sets][Clojure
+  Documentation: Sets]]
 
 * =#_= - Discard
   :PROPERTIES:
-  :CUSTOM_ID: __literal_literal_discard
+  :CUSTOM_ID: _discard
   :END:
 
 See [[file:xref/../weird_characters.xml#dispatch][=#=]] for additional
@@ -144,15 +144,15 @@ the reader (This is a more complete removal than the =comment= macro
 which yields =nil=).". This can prove useful for debugging situations or
 for multiline comments.
 
--  [[file:xref/../../reference/reader.org][Clojure Documentation -
-   Reader]]
+- [[file:xref/../../reference/reader.org][Clojure Documentation -
+  Reader]]
 
--  [[https://github.com/edn-format/edn#tagged-elements][edn Tagged
-   Elements]]
+- [[https://github.com/edn-format/edn#tagged-elements][edn Tagged
+  Elements]]
 
 * =#"…​"= - Regular Expression
   :PROPERTIES:
-  :CUSTOM_ID: __literal_literal_regular_expression
+  :CUSTOM_ID: _regular_expression
   :END:
 
 See [[file:xref/../weird_characters.xml#dispatch][=#=]] for additional
@@ -169,15 +169,15 @@ This form is compiled at /read time/ into a host-specific regex
 machinery, but it is not available in edn. Note that when using regexes
 in Clojure, Java string escaping is not required
 
--  [[file:xref/../../reference/other_functions.xml#regex][Clojure
-   Documentation: Regex Support]]
+- [[file:xref/../../reference/other_functions.xml#regex][Clojure
+  Documentation: Regex Support]]
 
--  [[http://docs.oracle.com/javase/7/docs/api/java/util/regex/Pattern.html][Java
-   Regex]]
+- [[http://docs.oracle.com/javase/7/docs/api/java/util/regex/Pattern.html][Java
+  Regex]]
 
 * =#(…​)= - Anonymous function
   :PROPERTIES:
-  :CUSTOM_ID: __literal_literal_anonymous_function
+  :CUSTOM_ID: _anonymous_function
   :END:
 
 See [[file:xref/../weird_characters.xml#dispatch][=#=]] for additional
@@ -206,7 +206,7 @@ arity.
 
 * =#'= - Var quote
   :PROPERTIES:
-  :CUSTOM_ID: __literal_literal_var_quote
+  :CUSTOM_ID: _var_quote
   :END:
 
 =#'= is the var quote which expands into a call to the =var= function:
@@ -231,12 +231,12 @@ value it represents. See the use of =meta= in the metadata
 
 Note that var quote is not available in edn.
 
--  [[file:xref/../../reference/special_forms.xml#var][Clojure Official
-   Documentation: Special Forms]]
+- [[file:xref/../../reference/special_forms.xml#var][Clojure Official
+  Documentation: Special Forms]]
 
 * =##= - Symbolic values
   :PROPERTIES:
-  :CUSTOM_ID: __literal_literal_symbolic_values
+  :CUSTOM_ID: _symbolic_values
   :END:
 
 Clojure can read and print the symbolic values =##Inf=, =##-Inf=, and
@@ -266,7 +266,7 @@ directly):
 #+BEGIN_SRC clojure
     user=> (type #inst "2014-05-19T19:12:37.925-00:00")
     java.util.Date ;; this is host dependent
-    (read-string "#inst \"2014-05-19T19:12:37.925-00:00\"")
+    user=> (read-string "#inst \"2014-05-19T19:12:37.925-00:00\"")
     #inst "2014-05-19T19:12:37.925-00:00"
 #+END_SRC
 
@@ -280,16 +280,15 @@ recursively, so if you have a nested data-structure, use
 
 Note that while =#inst= and =#uuid= are available in edn, =#js= is not.
 
--  [[https://github.com/edn-format/edn#tagged-elements][edn Tagged
-   Elements]]
+- [[https://github.com/edn-format/edn#tagged-elements][edn Tagged
+  Elements]]
 
 * =%=, =%n=, =%&= - Anonymous function arguments
   :PROPERTIES:
-  :CUSTOM_ID: __literal_literal_literal_n_literal_literal_literal_anonymous_function_arguments
+  :CUSTOM_ID: _n_anonymous_function_arguments
   :END:
 
-=%= is an argument in an anonymous function =(…​)= as in
-=</emphasis>(* % %)=.
+=%= is an argument in an anonymous function =#(...)= as in =#(* % %)=.
 
 When an anonymous function is expanded, it becomes an =fn= form and =%=
 args are replaced with gensym'ed names (here we use arg1, etc for
@@ -305,9 +304,13 @@ positions (1-based). Anonymous function arity is determined based on the
 highest number =%= argument.
 
 #+BEGIN_SRC clojure
+    user=> (#(println %1 %2) "Hello " "Clojure")
+    Hello Clojure ; takes 2 args
     user=> (macroexpand `#(println %1 %2))
     (fn* [arg1 arg2] (clojure.core/println arg1 arg2)) ; takes 2 args
 
+    user=> (#(println %4) "Hello " "Clojure " ", Thank " "You!!")
+    You!! ; takes 4 args, doesn't use first 3 args
     user=> (macroexpand `#(println %4))
     (fn* [arg1 arg2 arg3 arg4] (clojure.core/println arg4)) ; takes 4 args doesn't use 3
 #+END_SRC
@@ -327,6 +330,8 @@ function to represent the "rest" of the arguments (after the highest
 named anonymous argument).
 
 #+BEGIN_SRC clojure
+    user=> (#(println %&) "Hello " "Clojure " ", Thank " "You!!")
+    (Hello Clojure , Thank You!! ) ; takes n args
     user=> (macroexpand '#(println %&))
     (fn* [& rest__11#] (println rest__11#))
 #+END_SRC
@@ -335,7 +340,7 @@ Anonymous functions and =%= are not part of edn.
 
 * =@= - Deref
   :PROPERTIES:
-  :CUSTOM_ID: __literal_literal_deref
+  :CUSTOM_ID: _deref
   :END:
 
 =@= expands into a call to the =deref= function, so these two forms are
@@ -361,7 +366,7 @@ Note that =@= is not available in edn.
 
 * =^= (and =#^=) - Metadata
   :PROPERTIES:
-  :CUSTOM_ID: __literal_literal_and_literal_literal_metadata
+  :CUSTOM_ID: _and_metadata
   :END:
 
 =^= is the metadata marker. Metadata is a map of values (with shorthand
@@ -425,15 +430,15 @@ you will see in most Clojure, but occasionally you will encounter the
 
 Note that metadata is available in edn, but type hints are not.
 
--  [[file:xref/../../reference/metadata.org][Clojure Official
-   Documentation]]
+- [[file:xref/../../reference/metadata.org][Clojure Official
+  Documentation]]
 
--  [[http://en.wikibooks.org/wiki/Learning_Clojure/Meta_Data][Learning
-   Clojure: Meta Data]]
+- [[http://en.wikibooks.org/wiki/Learning_Clojure/Meta_Data][Learning
+  Clojure: Meta Data]]
 
 * ='= - Quote
   :PROPERTIES:
-  :CUSTOM_ID: __literal_literal_quote
+  :CUSTOM_ID: _quote
   :END:
 
 Quoting is used to indicate that the next form should be read but not
@@ -454,12 +459,12 @@ form.
     user=>
 #+END_SRC
 
--  [[file:xref/../../reference/special_forms.xml#quote][Clojure Special
-   Forms]]
+- [[file:xref/../../reference/special_forms.xml#quote][Clojure Special
+  Forms]]
 
 * =;= - Comment
   :PROPERTIES:
-  :CUSTOM_ID: __literal_literal_comment
+  :CUSTOM_ID: _comment
   :END:
 
 =;= starts a line comment and ignores all input from its starting point
@@ -483,7 +488,7 @@ emphasis, but these are all the same to Clojure
 
 * =:= - Keyword
   :PROPERTIES:
-  :CUSTOM_ID: __literal_literal_keyword
+  :CUSTOM_ID: _keyword
   :END:
 
 =:= is the indicator for a keyword. Keywords are often used as keys in
@@ -519,8 +524,8 @@ in a map:
     3
 #+END_SRC
 
--  [[file:xref/../../reference/data_structures.xml#Keywords][Data
-   Structures - Keywords]]
+- [[file:xref/../../reference/data_structures.xml#Keywords][Data
+  Structures - Keywords]]
 
 * =::= - Auto-resolved keyword
   :PROPERTIES:
@@ -548,11 +553,11 @@ qualified name.
 
 Note that =::= is not available in edn.
 
--  [[file:xref/../../reference/reader.org][Reader]]
+- [[file:xref/../../reference/reader.org][Reader]]
 
 * =#:= and =#::= - Namespace Map Syntax
   :PROPERTIES:
-  :CUSTOM_ID: __literal_literal_and_literal_literal_namespace_map_syntax
+  :CUSTOM_ID: _and_namespace_map_syntax
   :END:
 
 Namespace map syntax was added in Clojure 1.9 and is used to specify a
@@ -622,11 +627,11 @@ is read the same as:
                          :rebel.ship/model "YT-1300f light freighter"}}
 #+END_SRC
 
--  [[file:xref/../../reference/reader.xml#map_namespace_syntax][Reader]]
+- [[file:xref/../../reference/reader.xml#map_namespace_syntax][Reader]]
 
 * =/= - Namespace separator
   :PROPERTIES:
-  :CUSTOM_ID: __literal_literal_namespace_separator
+  :CUSTOM_ID: _namespace_separator
   :END:
 
 =/= can be the division function =clojure.core//=, but can also act as a
@@ -634,11 +639,11 @@ separator in a symbol name to separate a symbol's name and namespace
 qualifier, e.g. =my-namespace/utils=. Namespace qualifiers can thus
 prevent naming collisions for simple names.
 
--  [[file:xref/../../reference/reader.org][Reader]]
+- [[file:xref/../../reference/reader.org][Reader]]
 
 * =\= - Character literal
   :PROPERTIES:
-  :CUSTOM_ID: __literal_literal_character_literal
+  :CUSTOM_ID: _character_literal
   :END:
 
 =\= indicates a literal character as in:
@@ -657,7 +662,7 @@ For example, =\u03A9= is the literal for Ω.
 
 * =$= - Inner class reference
   :PROPERTIES:
-  :CUSTOM_ID: __literal_literal_inner_class_reference
+  :CUSTOM_ID: _inner_class_reference
   :END:
 
 Used to reference inner classes and interfaces in Java. Separates the
@@ -675,22 +680,21 @@ container class name and the inner class name.
 =EventNotifier= is an inner interface of the =BaseXClient= class which
 is an imported Java class
 
--  [[http://blog.jayfields.com/2011/01/clojure-using-java-inner-classes.html][Clojure:
-   Using Java Inner Classes]]
+- [[http://blog.jayfields.com/2011/01/clojure-using-java-inner-classes.html][Clojure:
+  Using Java Inner Classes]]
 
--  [[file:xref/../../reference/java_interop.org][Official
-   Documentation]]
+- [[file:xref/../../reference/java_interop.org][Official Documentation]]
 
 * =->=, =->>=, =some->=, =cond->=, =as->= etc. - Threading macros
   :PROPERTIES:
-  :CUSTOM_ID: __literal_literal_literal_literal_literal_some_literal_literal_cond_literal_literal_as_literal_etc_threading_macros
+  :CUSTOM_ID: _some_cond_as_etc_threading_macros
   :END:
 
 These are threading macros. Please refer to
 [[file:xref/../threading_macros.org][Official Clojure Documentation]]
 
--  [[http://blog.fogus.me/2009/09/04/understanding-the-clojure-macro/][Understanding
-   the Clojure -> macro]]
+- [[http://blog.fogus.me/2009/09/04/understanding-the-clojure-macro/][Understanding
+  the Clojure -> macro]]
 
 * =`= - Syntax quote
   :PROPERTIES:
@@ -745,14 +749,14 @@ See [[file:xref/../weird_characters.xml#unquote_splicing][=~@=]] and
 [[file:xref/../weird_characters.xml#unquote][=~=]] for additional syntax
 allowed only within syntax quote.
 
--  [[http://www.braveclojure.com/writing-macros/][Clojure for the Brave
-   and True - Writing Macros]]
+- [[http://www.braveclojure.com/writing-macros/][Clojure for the Brave
+  and True - Writing Macros]]
 
--  [[http://aphyr.com/posts/305-clojure-from-the-ground-up-macros][Clojure
-   from the ground up: macros]]
+- [[http://aphyr.com/posts/305-clojure-from-the-ground-up-macros][Clojure
+  from the ground up: macros]]
 
--  [[file:xref/../../reference/macros.org][Clojure Official
-   Documentation]]
+- [[file:xref/../../reference/macros.org][Clojure Official
+  Documentation]]
 
 * =~= - Unquote
   :PROPERTIES:
@@ -762,10 +766,9 @@ allowed only within syntax quote.
 See [[file:xref/../weird_characters.xml#syntax_quote][=`=]] for
 additional information.
 
-=~= is unquote. That is within a syntax quoted
-[[file:xref/../weird_characters.xml#syntax_quote][=`=]] form =~= will
-/unquote/ the associated symbol, i.e. evaluate it in the current
-context:
+=~= is unquote. Syntax quote, like quote, means that evaluation is not
+occurring within the syntax quoted form. Unquoting turns off quoting and
+evaluates an expression inside the syntax quoted expression.
 
 #+BEGIN_SRC clojure
     user=> (def five 5) ; create a named var with the value 5
@@ -776,18 +779,20 @@ context:
     user/five
     user=> `~five ; within a syntax quoted block, ~ will turn evaluation back on just for the next form
     5
+    user=> `[inc ~(+ 1 five)]
+    [clojure.core/inc 6]
 #+END_SRC
 
 Syntax quoting and unquote are essential tools for writing macros, which
 are functions invoked during compilation that take code and return code.
 
--  [[http://www.braveclojure.com/writing-macros/][Clojure for the Brave
-   and True - Writing Macros]]
+- [[http://www.braveclojure.com/writing-macros/][Clojure for the Brave
+  and True - Writing Macros]]
 
--  [[http://aphyr.com/posts/305-clojure-from-the-ground-up-macros][Clojure
-   from the ground up: macros]]
+- [[http://aphyr.com/posts/305-clojure-from-the-ground-up-macros][Clojure
+  from the ground up: macros]]
 
--  [[file:xref/../../macros.org][Clojure Official Documentation]]
+- [[file:xref/../../macros.org][Clojure Official Documentation]]
 
 * =~@= - Unquote splicing
   :PROPERTIES:
@@ -815,13 +820,13 @@ into the quoted result.
 
 Again, this is a powerful tool for writing macros.
 
--  [[http://www.braveclojure.com/writing-macros/][Clojure for the Brave
-   and True - Writing Macros]]
+- [[http://www.braveclojure.com/writing-macros/][Clojure for the Brave
+  and True - Writing Macros]]
 
--  [[http://aphyr.com/posts/305-clojure-from-the-ground-up-macros][Clojure
-   from the ground up: macros]]
+- [[http://aphyr.com/posts/305-clojure-from-the-ground-up-macros][Clojure
+  from the ground up: macros]]
 
--  [[file:xref/../../macros.org][Clojure Official Documentation]]
+- [[file:xref/../../macros.org][Clojure Official Documentation]]
 
 * =<symbol>#= - Gensym
   :PROPERTIES:
@@ -872,12 +877,12 @@ If we expand this macro, we can see the =gensym= 'd name:
     (let* [x__681__auto__ 1] x__681__auto__)
 #+END_SRC
 
--  [[http://clojuredocs.org/clojure_core/clojure.core/gensym][ClojureDocs
-   - gensym]]
+- [[http://clojuredocs.org/clojure_core/clojure.core/gensym][ClojureDocs -
+  gensym]]
 
 * =#?= - Reader conditional
   :PROPERTIES:
-  :CUSTOM_ID: __literal_literal_reader_conditional
+  :CUSTOM_ID: _reader_conditional
   :END:
 
 Reader conditionals are designed to allow different dialects of Clojure
@@ -891,11 +896,11 @@ traditional =cond=. The syntax for usage is =#?= and looks like this:
        :default (fallthrough expression))
 #+END_SRC
 
--  [[file:xref/../reader_conditionals.org][Reader conditionals]]
+- [[file:xref/../reader_conditionals.org][Reader conditionals]]
 
 * =#?@= - Splicing Reader conditional
   :PROPERTIES:
-  :CUSTOM_ID: __literal_literal_splicing_reader_conditional
+  :CUSTOM_ID: _splicing_reader_conditional
   :END:
 
 The syntax for a splicing reader conditional is =#?@=. It is used to
@@ -915,11 +920,11 @@ as this:
       (list 5 6 7 8))
 #+END_SRC
 
--  [[file:xref/../reader_conditionals.org][Reader conditonals]]
+- [[file:xref/../reader_conditionals.org][Reader conditonals]]
 
 * =*var-name*= - "Earmuffs"
   :PROPERTIES:
-  :CUSTOM_ID: __literal_var_name_literal_earmuffs
+  :CUSTOM_ID: _var_name_earmuffs
   :END:
 
 Earmuffs (a pair of asterisk bookending var names) is a naming
@@ -932,15 +937,15 @@ convention, not a rule.
 Core Clojure examples include =*out*= and =*in*= which represent the
 standard in and out streams for Clojure.
 
--  [[http://stackoverflow.com/questions/1986961/how-is-the-var-name-naming-convention-used-in-clojure][How
-   is the var-name naming-convention used in clojure?]]
+- [[http://stackoverflow.com/questions/1986961/how-is-the-var-name-naming-convention-used-in-clojure][How
+  is the var-name naming-convention used in clojure?]]
 
--  [[http://clojure.github.io/clojure/clojure.core-api.html#clojure.core/*out*][Clojure
-   API Docs]]
+- [[http://clojure.github.io/clojure/clojure.core-api.html#clojure.core/*out*][Clojure
+  API Docs]]
 
 * =>!!=, =<!!=, =>!=, and =<!= - core.async channel macros
   :PROPERTIES:
-  :CUSTOM_ID: __literal_literal_literal_literal_literal_literal_and_literal_literal_core_async_channel_macros
+  :CUSTOM_ID: _and_core_async_channel_macros
   :END:
 
 These symbols are channel operations in
@@ -954,11 +959,11 @@ If you imagine, for the sake of argument, a channel is a bit like a
 queue that things can put stuff on and take stuff off, then these
 symbols support that simple API.
 
--  =>!!= and =<!!= are /blocking put/ and /take/ respectively
+- =>!!= and =<!!= are /blocking put/ and /take/ respectively
 
--  =>!= and =<!= are, simply /put/ and /take/
+- =>!= and =<!= are, simply /put/ and /take/
 
-THe difference being the blocking version operate outside =go= blocks
+The difference being the blocking version operate outside =go= blocks
 and block the thread they operate on.
 
 #+BEGIN_SRC clojure
@@ -985,16 +990,16 @@ resources pausing *execution* of code without blocking threads. This
 makes asynchronously executed code appear to be synchronous, removing
 the pain of managing asynchronous code from the code base.
 
--  [[https://github.com/clojure/core.async/blob/master/examples/walkthrough.clj][core.async
-   Code Walkthrough]]
+- [[https://github.com/clojure/core.async/blob/master/examples/walkthrough.clj][core.async
+  Code Walkthrough]]
 
--  [[https://github.com/clojure/core.async/wiki][core.async Wiki]]
+- [[https://github.com/clojure/core.async/wiki][core.async Wiki]]
 
--  [[file:xref/../core_async_go.org][Go Block Best Practices]]
+- [[file:xref/../core_async_go.org][Go Block Best Practices]]
 
 * =<symbol>?= - Predicate Suffix
   :PROPERTIES:
-  :CUSTOM_ID: __literal_symbol_literal_predicate_suffix
+  :CUSTOM_ID: _symbol_predicate_suffix
   :END:
 
 Putting =?= at the end of a symbol is a naming convention common across
@@ -1010,9 +1015,9 @@ manipulation:
 
 At a glance, how would you know if the function =empty= in this case,
 
--  Returned =true= if the passed in buffer was empty, or,
+- Returned =true= if the passed in buffer was empty, or,
 
--  Cleared the buffer
+- Cleared the buffer
 
 While the author could have renamed =empty= to =is-empty=, the richness
 of symbol naming in Clojure allows us to express intent more
@@ -1026,27 +1031,19 @@ symbolically.
 
 This is simply a recommended convention, not a requirement.
 
--  [[https://github.com/bbatsov/clojure-style-guide#naming][Clojure
-   Style Guide]]
+- [[https://github.com/bbatsov/clojure-style-guide#naming][Clojure Style
+  Guide]]
 
 * =<symbol>!= - Unsafe Operations
   :PROPERTIES:
-  :CUSTOM_ID: __literal_symbol_literal_unsafe_operations
+  :CUSTOM_ID: _symbol_unsafe_operations
   :END:
 
 [[https://github.com/bbatsov/clojure-style-guide#changing-state-fns-with-exclamation-mark][The
 Clojure style guide has this to say]]:
 
-#+BEGIN_HTML
-  <div class="informalexample">
-#+END_HTML
-
 The names of functions/macros that are not safe in STM transactions
 should end with an exclamation mark (e.g =reset!=).
-
-#+BEGIN_HTML
-  </div>
-#+END_HTML
 
 You'll most commonly see this appended to function names whose purpose
 is to mutate state, e.g. connecting to a data store, updating an atom or
@@ -1065,12 +1062,12 @@ This is simply a recommended convention and not a requirement.
 
 Note that the exclamation mark is often pronounced as bang.
 
--  [[https://github.com/bbatsov/clojure-style-guide#naming][Clojure
-   Style Guide]]
+- [[https://github.com/bbatsov/clojure-style-guide#naming][Clojure Style
+  Guide]]
 
 * =_= - Unused argument
   :PROPERTIES:
-  :CUSTOM_ID: __literal_literal_unused_argument
+  :CUSTOM_ID: _unused_argument
   :END:
 
 When you see the underscore character used as function arguments or in a
@@ -1099,7 +1096,7 @@ the others.
 
 * =,= - Whitespace character
   :PROPERTIES:
-  :CUSTOM_ID: __literal_literal_whitespace_character
+  :CUSTOM_ID: _whitespace_character
   :END:
 
 In Clojure, =,= is treated as whitespace, exactly the same as spaces,
@@ -1111,42 +1108,9 @@ collections, but are often used to enhance readability:
     {:a 1, :b 2, :c 3}
 #+END_SRC
 
-* =#== Reader eval
-  :PROPERTIES:
-  :CUSTOM_ID: __literal_literal_reader_eval
-  :END:
-
-=#== allows the reader to evaluate an arbitrary form during read time:
-
-#+BEGIN_SRC clojure
-    user=> (read-string "#=(+ 3 4)")
-    ;;=> 7
-#+END_SRC
-
-Note that the read-time evaluation can also cause side-effects:
-
-#+BEGIN_SRC clojure
-    user=> (read-string "#=(println :foo)")
-    :foo
-    nil
-#+END_SRC
-
-Consequently, =read-string= is not safe to call with unverified user
-input. For a safe alternative, see
-[[https://clojure.github.io/clojure/clojure.edn-api.html#clojure.edn/read-string][=clojure.edn/read-string=]].
-
-Note that =#== is not an officially supported feature of the reader, so
-you shouldn't rely on its presence in future versions of Clojure.
-
-#+BEGIN_HTML
-  <div class="informalexample">
-#+END_HTML
-
 Many thanks to everyone who has contributed ideas and [the copious
 amounts of] spelling corrections (crikey I'm bad at speelingz - so
-thanks Michael R. Mayne, lobsang\_ludd). I've tried to call out people
+thanks Michael R. Mayne, lobsang_ludd). I've tried to call out people
 who have specifically asked for things. Sorry if I've missed you.
 
-#+BEGIN_HTML
-  </div>
-#+END_HTML
+

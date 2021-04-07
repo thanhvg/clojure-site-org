@@ -221,19 +221,19 @@ not take an *rf*.
 The inner function is defined with 3 arities used for different
 purposes:
 
--  *Init* (arity 0) - should call the init arity on the nested transform
-   *rf*, which will eventually call out to the transducing process.
+- *Init* (arity 0) - should call the init arity on the nested transform
+  *rf*, which will eventually call out to the transducing process.
 
--  *Step* (arity 2) - this is a standard reduction function but it is
-   expected to call the *rf* step arity 0 or more times as appropriate
-   in the transducer. For example, filter will choose (based on the
-   predicate) whether to call *rf* or not. map will always call it
-   exactly once. cat may call it many times depending on the inputs.
+- *Step* (arity 2) - this is a standard reduction function but it is
+  expected to call the *rf* step arity 0 or more times as appropriate in
+  the transducer. For example, filter will choose (based on the
+  predicate) whether to call *rf* or not. map will always call it
+  exactly once. cat may call it many times depending on the inputs.
 
--  *Completion* (arity 1) - some processes will not end, but for those
-   that do (like *transduce*), the completion arity is used to produce a
-   final value and/or flush state. This arity must call the *rf*
-   completion arity exactly once.
+- *Completion* (arity 1) - some processes will not end, but for those
+  that do (like *transduce*), the completion arity is used to produce a
+  final value and/or flush state. This arity must call the *rf*
+  completion arity exactly once.
 
 An example use of *completion* is *partition-all*, which must flush any
 remaining elements at the end of the input. The
@@ -248,15 +248,15 @@ function by adding a default completion arity.
 
 Clojure has a mechanism for specifying early termination of a reduce:
 
--  [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/reduced][reduced]]
-   - takes a value and returns a /reduced/ value indicating reduction
-   should stop
+- [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/reduced][reduced]] -
+  takes a value and returns a /reduced/ value indicating reduction
+  should stop
 
--  [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/reduced?][reduced?]]
-   - returns true if the value was created with /reduced/
+- [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/reduced?][reduced?]] -
+  returns true if the value was created with /reduced/
 
--  [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/deref][deref]]
-   or @ can be used to retrieve the value inside a /reduced/
+- [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/deref][deref]]
+  or @ can be used to retrieve the value inside a /reduced/
 
 A process that uses transducers must check for and stop when the step
 function returns a reduced value (more on that in Creating Transducible
@@ -317,15 +317,15 @@ must choose what to do with the outputs produced by each step.
 If you have a new context for applying transducers, there are a few
 general rules to be aware of:
 
--  If a step function returns a /reduced/ value, the transducible
-   process must not supply any more inputs to the step function. The
-   reduced value must be unwrapped with deref before completion.
+- If a step function returns a /reduced/ value, the transducible process
+  must not supply any more inputs to the step function. The reduced
+  value must be unwrapped with deref before completion.
 
--  A completing process must call the completion operation on the final
-   accumulated value exactly once.
+- A completing process must call the completion operation on the final
+  accumulated value exactly once.
 
--  A transducing process must encapsulate references to the function
-   returned by invoking a transducer - these may be stateful and unsafe
-   for use across threads.
+- A transducing process must encapsulate references to the function
+  returned by invoking a transducer - these may be stateful and unsafe
+  for use across threads.
 
 

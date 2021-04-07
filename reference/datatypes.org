@@ -9,7 +9,7 @@ many implementations of these abstractions. The abstractions are
 specified by host interfaces, and the implementations by host classes.
 While this was sufficient for bootstrapping the language, it left
 Clojure without similar abstraction and low-level implementation
-facilities. The [[file:protocols.org][protocols]] and [[#][datatypes]]
+facilities. The [[file:protocols.org][protocols]] and [[##][datatypes]]
 features add powerful and flexible mechanisms for abstraction and data
 structure definition with no compromises vs the facilities of the host
 platform.
@@ -56,84 +56,84 @@ need not be AOT compiled, and can be re-evaluated in the course of a
 single session. They are similar to defstruct in generating data
 structures with named fields, but differ from defstruct in that:
 
--  They generate a unique class, with fields corresponding to the given
-   names.
+- They generate a unique class, with fields corresponding to the given
+  names.
 
--  the resulting class has a proper type, unlike conventions for
-   encoding type for structs in metadata
+- the resulting class has a proper type, unlike conventions for encoding
+  type for structs in metadata
 
--  because they generate a named class, it has an accessible constructor
+- because they generate a named class, it has an accessible constructor
 
--  fields can have type hints, and can be primitive
+- fields can have type hints, and can be primitive
 
-   -  note that currently a type hint of a non-primitive type will not
-      be used to constrain the field type nor the constructor arg, but
-      will be used to optimize its use in the class methods
+  - note that currently a type hint of a non-primitive type will not be
+    used to constrain the field type nor the constructor arg, but will
+    be used to optimize its use in the class methods
 
-   -  constraining the field type and constructor arg is planned
+  - constraining the field type and constructor arg is planned
 
--  a deftype/defrecord can implement one or more protocols and/or
-   interfaces
+- a deftype/defrecord can implement one or more protocols and/or
+  interfaces
 
--  deftype/defrecord can be written with a special reader syntax
-   #my.thing[1 2 3] where:
+- deftype/defrecord can be written with a special reader syntax
+  #my.thing[1 2 3] where:
 
-   -  each element in the vector form is passed to the
-      deftype/defrecord's constructor un-evaluated
+  - each element in the vector form is passed to the deftype/defrecord's
+    constructor un-evaluated
 
-   -  the deftype/defrecord name must be fully qualified
+  - the deftype/defrecord name must be fully qualified
 
-   -  only available in Clojure versions later than 1.3
+  - only available in Clojure versions later than 1.3
 
--  when a deftype/defrecord Foo is defined a corresponding function
-   =->Foo= is defined that passes its arguments to the constructor
-   (versions 1.3 and later only)
+- when a deftype/defrecord Foo is defined a corresponding function
+  =->Foo= is defined that passes its arguments to the constructor
+  (versions 1.3 and later only)
 
 [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/deftype][deftype]]
 and
 [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/defrecord][defrecord]]
 differ in the following ways:
 
--  deftype provides no functionality not specified by the user, other
-   than a constructor
+- deftype provides no functionality not specified by the user, other
+  than a constructor
 
--  defrecord provides a complete implementation of a persistent map,
-   including:
+- defrecord provides a complete implementation of a persistent map,
+  including:
 
-   -  value-based equality and hashCode
+  - value-based equality and hashCode
 
-   -  metadata support
+  - metadata support
 
-   -  associative support
+  - associative support
 
-   -  keyword accessors for fields
+  - keyword accessors for fields
 
-   -  extensible fields (you can assoc keys not supplied with the
-      defrecord definition)
+  - extensible fields (you can assoc keys not supplied with the
+    defrecord definition)
 
-   -  etc
+  - etc
 
--  deftype supports mutable fields, defrecord does not
+- deftype supports mutable fields, defrecord does not
 
--  defrecord supports an additional reader form of #my.record{:a 1, :b
-   2} taking a map that initializes a defrecord according to:
+- defrecord supports an additional reader form of #my.record{:a 1, :b 2}
+  taking a map that initializes a defrecord according to:
 
-   -  the defrecord name must be fully qualified
+  - the defrecord name must be fully qualified
 
-   -  the elements in the map are un-evaluated
+  - the elements in the map are un-evaluated
 
-   -  existing defrecord fields take the keyed values
+  - existing defrecord fields take the keyed values
 
-   -  defrecord fields without keyed values in the literal map are
-      initialized to nil
+  - defrecord fields without keyed values in the literal map are
+    initialized to nil
 
-   -  additional keyed values are allowed and added to the defrecord
+  - additional keyed values are allowed and added to the defrecord
 
-   -  only available in Clojure versions later than 1.3
+  - only available in Clojure versions later than 1.3
 
--  when a defrecord Bar is defined a corresponding function =map->Bar=
-   is defined that takes a map and initializes a new record instance
-   with its contents (versions 1.3 and later only)
+- when a defrecord Bar is defined a corresponding function =map->Bar= is
+  defined that takes a map and initializes a new record instance with
+  its contents (versions 1.3 and later only)
 
 * Why have both deftype and defrecord?
   :PROPERTIES:
@@ -183,26 +183,25 @@ Java programs, they are not primarily interop constructs. That is, they
 make no effort to completely mimic or adapt to all of the OO mechanisms
 of the host. In particular, they reflect the following opinions:
 
--  Concrete derivation is bad
+- Concrete derivation is bad
 
-   -  you cannot derive datatypes from concrete classes, only interfaces
+  - you cannot derive datatypes from concrete classes, only interfaces
 
--  You should always program to protocols or interfaces
+- You should always program to protocols or interfaces
 
-   -  datatypes cannot expose methods not in their protocols or
-      interfaces
+  - datatypes cannot expose methods not in their protocols or interfaces
 
--  Immutability should be the default
+- Immutability should be the default
 
-   -  and is the only option for records
+  - and is the only option for records
 
--  Encapsulation of information is folly
+- Encapsulation of information is folly
 
-   -  fields are public, use protocols/interfaces to avoid dependencies
+  - fields are public, use protocols/interfaces to avoid dependencies
 
--  Tying polymorphism to inheritance is bad
+- Tying polymorphism to inheritance is bad
 
-   -  protocols free you from that
+  - protocols free you from that
 
 If you use datatypes and protocols you will have a clean,
 interface-based API to offer your Java consumers. If you are dealing
@@ -222,21 +221,20 @@ While deftype and defrecord define named types,
 defines both an anonymous type and creates an instance of that type. The
 use case is where you need a one-off implementation of one or more
 protocols or interfaces and would like to take advantage of the local
-context. In this respect it is use case similar to proxy, or anonymous
+context. In this respect its use case is similar to proxy, or anonymous
 inner classes in Java.
 
 The method bodies of reify are lexical closures, and can refer to the
 surrounding local scope. *reify* differs from *proxy* in that:
 
--  Only protocols or interfaces are supported, no concrete superclass.
+- Only protocols or interfaces are supported, no concrete superclass.
 
--  The method bodies are true methods of the resulting class, not
-   external fns.
+- The method bodies are true methods of the resulting class, not
+  external fns.
 
--  Invocation of methods on the instance is direct, not using map
-   lookup.
+- Invocation of methods on the instance is direct, not using map lookup.
 
--  No support for dynamic swapping of methods in the method map.
+- No support for dynamic swapping of methods in the method map.
 
 The result is better performance than proxy, both in construction and
 invocation. *reify* is preferable to proxy in all cases where its
@@ -251,11 +249,11 @@ Types created with deftype, defrecord, and definterface, can emit
 classes that include Java annotations for Java interop. Annotations are
 described as meta on:
 
--  Type name (deftype/record/interface) - class annotations
+- Type name (deftype/record/interface) - class annotations
 
--  Field names (deftype/record) - field annotations
+- Field names (deftype/record) - field annotations
 
--  Method names (deftype/record) - method annotations
+- Method names (deftype/record) - method annotations
 
 Example:
 

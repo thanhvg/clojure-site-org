@@ -74,7 +74,7 @@ A parallel array can be realized into a Clojure vector using pvec
 * Reflection Utilities
 ([[https://clojure.github.io/clojure/clojure.reflect-api.html][clojure.reflect]])
   :PROPERTIES:
-  :CUSTOM_ID: _reflection_utilities_link_xl_href_https_clojure_github_io_clojure_clojure_reflect_api_html_clojure_reflect_link
+  :CUSTOM_ID: _reflection_utilities_clojure_reflect
   :END:
 
 Provides functions and protocols useful for gathering and building host
@@ -83,7 +83,7 @@ type reflection information as Clojure data.
 * REPL Utilities
 ([[https://clojure.github.io/clojure/clojure.repl-api.html][clojure.repl]])
   :PROPERTIES:
-  :CUSTOM_ID: _repl_utilities_link_xl_href_https_clojure_github_io_clojure_clojure_repl_api_html_clojure_repl_link
+  :CUSTOM_ID: _repl_utilities_clojure_repl
   :END:
 
 Utilities meant to be used interactively at the REPL.
@@ -91,7 +91,7 @@ Utilities meant to be used interactively at the REPL.
 * Sets and Relational Algebra
 ([[https://clojure.github.io/clojure/clojure.set-api.html][clojure.set]])
   :PROPERTIES:
-  :CUSTOM_ID: _sets_and_relational_algebra_link_xl_href_https_clojure_github_io_clojure_clojure_set_api_html_clojure_set_link
+  :CUSTOM_ID: _sets_and_relational_algebra_clojure_set
   :END:
 
 Functions useful for manipulating, building, and querying mathematical
@@ -100,7 +100,7 @@ sets using relational algebra.
 * String Handling
 ([[https://clojure.github.io/clojure/clojure.string-api.html][clojure.string]])
   :PROPERTIES:
-  :CUSTOM_ID: _string_handling_link_xl_href_https_clojure_github_io_clojure_clojure_string_api_html_clojure_string_link
+  :CUSTOM_ID: _string_handling_clojure_string
   :END:
 
 Functions for manipulating strings.
@@ -108,7 +108,7 @@ Functions for manipulating strings.
 * Unit Testing
 ([[https://clojure.github.io/clojure/clojure.test-api.html][clojure.test]])
   :PROPERTIES:
-  :CUSTOM_ID: _unit_testing_link_xl_href_https_clojure_github_io_clojure_clojure_test_api_html_clojure_test_link
+  :CUSTOM_ID: _unit_testing_clojure_test
   :END:
 
 A Clojure unit testing framework.
@@ -116,7 +116,7 @@ A Clojure unit testing framework.
 * Walking Data Structures
 ([[https://clojure.github.io/clojure/clojure.walk-api.html][clojure.walk]])
   :PROPERTIES:
-  :CUSTOM_ID: _walking_data_structures_link_xl_href_https_clojure_github_io_clojure_clojure_walk_api_html_clojure_walk_link
+  :CUSTOM_ID: _walking_data_structures_clojure_walk
   :END:
 
 Utilities for traversing and manipulating nested data structures.
@@ -124,7 +124,7 @@ Utilities for traversing and manipulating nested data structures.
 * XML
 ([[https://clojure.github.io/clojure/clojure.xml-api.html][clojure.xml]])
   :PROPERTIES:
-  :CUSTOM_ID: _xml_link_xl_href_https_clojure_github_io_clojure_clojure_xml_api_html_clojure_xml_link
+  :CUSTOM_ID: _xml_clojure_xml
   :END:
 
 Utilities for reading and writing XML data.
@@ -132,7 +132,7 @@ Utilities for reading and writing XML data.
 * Zippers - Functional Tree Editing
 ([[https://clojure.github.io/clojure/clojure.zip-api.html][clojure.zip]])
   :PROPERTIES:
-  :CUSTOM_ID: _zippers_functional_tree_editing_link_xl_href_https_clojure_github_io_clojure_clojure_zip_api_html_clojure_zip_link
+  :CUSTOM_ID: _zippers_functional_tree_editing_clojure_zip
   :END:
 
 Clojure includes purely functional, generic tree walking and editing,

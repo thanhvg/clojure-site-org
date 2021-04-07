@@ -46,7 +46,7 @@ these functions take collections but operate on their seqs.
 
 ** (/first/ coll)
    :PROPERTIES:
-   :CUSTOM_ID: __emphasis_first_emphasis_coll
+   :CUSTOM_ID: _first_coll
    :END:
 
 Returns the first item in the collection. Calls seq on its argument. If
@@ -54,7 +54,7 @@ coll is nil, returns nil.
 
 ** (/rest/ coll)
    :PROPERTIES:
-   :CUSTOM_ID: __emphasis_rest_emphasis_coll
+   :CUSTOM_ID: _rest_coll
    :END:
 
 Returns a sequence of the items after the first. Calls seq on its
@@ -63,7 +63,7 @@ which *seq* returns nil.
 
 ** (/cons/ item seq)
    :PROPERTIES:
-   :CUSTOM_ID: __emphasis_cons_emphasis_item_seq
+   :CUSTOM_ID: _cons_item_seq
    :END:
 
 Returns a new seq where item is the first element and seq is the rest.

@@ -25,44 +25,43 @@ Any metadata on the /symbol/ will be evaluated, and become metadata on
 the var itself. There are several metadata keys that have special
 interpretation:
 
--  =:private=
+- =:private=
 
-   a boolean indicating the access control for the var. If this key is
-   not present, the default access is public (e.g. as if
-   =:private false=).
+  a boolean indicating the access control for the var. If this key is
+  not present, the default access is public (e.g. as if
+  =:private false=).
 
--  =:doc=
+- =:doc=
 
-   a string containing short (1-3 line) documentation for the var
-   contents
+  a string containing short (1-3 line) documentation for the var
+  contents
 
--  =:test=
+- =:test=
 
-   a fn of no args that uses =assert= to check various operations. The
-   var itself will be accessible during evaluation of a literal fn in
-   the metadata map.
+  a fn of no args that uses =assert= to check various operations. The
+  var itself will be accessible during evaluation of a literal fn in the
+  metadata map.
 
--  =:tag=
+- =:tag=
 
-   a symbol naming a class or a Class object that indicates the Java
-   type of the object in the var, or its return value if the object is a
-   fn.
+  a symbol naming a class or a Class object that indicates the Java type
+  of the object in the var, or its return value if the object is a fn.
 
 In addition the compiler will place the following metadata keys on the
 var:
 
--  =:file= string
+- =:file= string
 
--  =:line= int
+- =:line= int
 
--  =:name= simple symbol
+- =:name= simple symbol
 
--  =:ns= namespace in which var is interned
+- =:ns= namespace in which var is interned
 
--  =:macro= =true= if var names a macro
+- =:macro= =true= if var names a macro
 
--  =:arglists= a list of vector(s) of argument forms, as were supplied
-   to =defn=
+- =:arglists= a list of vector(s) of argument forms, as were supplied to
+  =defn=
 
 The var metadata can be used for application-specific purposes as well.
 Consider using namespace-qualified keys (e.g. =:myns/foo=) to avoid
@@ -151,7 +150,7 @@ that type in subsequent references to the /binding/. The simplest
     -> 1
 #+END_SRC
 
-See [[binding-forms][Binding Forms]] for more information about binding
+See [[#binding-forms][Binding Forms]] for more information about binding
 forms.
 
 *Locals created with =let= are not variables. Once created their values
@@ -187,7 +186,7 @@ value)/ is returned. The reader macro =#'x= expands to =(var x)=.
 
 * (=fn= /name/? ([/params/* ] /expr/*)+)
   :PROPERTIES:
-  :CUSTOM_ID: __literal_fn_literal_emphasis_name_emphasis_emphasis_params_emphasis_emphasis_expr_emphasis
+  :CUSTOM_ID: _fn_name_params_expr
   :END:
 
 /params/ ⇒ /positional-param/* , or /positional-param/* & /rest-param/\\
@@ -203,8 +202,9 @@ implement one or more invoke methods, and thus be overloaded on arity.
 One and only one overload can itself be variadic, by specifying the
 ampersand followed by a single /rest-param/. Such a variadic entry
 point, when called with arguments that exceed the positional params,
-will find them in a seq contained in the rest param. If the supplied
-args do not exceed the positional params, the rest param will be nil.
+collects them in a seq which is bound to, or destructured by, the rest
+param. If the supplied args do not exceed the positional params, the
+rest param will be =nil=.
 
 The first form defines a fn with a single invoke method. The second
 defines a fn with one or more overloaded invoke methods. The arities of
@@ -235,7 +235,7 @@ which expands into something such as the above.
 
 A fn (overload) defines a recursion point at the top of the function,
 with arity equal to the number of /param/s /including the rest param, if
-present/. See [[recur][=recur=]].
+present/. See [[#recur][=recur=]].
 
 fns implement the Java =Callable=, =Runnable= and =Comparator=
 interfaces.
@@ -248,12 +248,12 @@ The syntax for function definitions becomes the following:
 
 * (=fn= /name/? [/param/* ] /condition-map/? /expr/*)
   :PROPERTIES:
-  :CUSTOM_ID: __literal_fn_literal_emphasis_name_emphasis_emphasis_param_emphasis_emphasis_condition_map_emphasis_emphasis_expr_emphasis
+  :CUSTOM_ID: _fn_name_param_condition_map_expr
   :END:
 
 * (=fn= name? ([/param/* ] /condition-map/? /expr/*)+)
   :PROPERTIES:
-  :CUSTOM_ID: __literal_fn_literal_name_emphasis_param_emphasis_emphasis_condition_map_emphasis_emphasis_expr_emphasis
+  :CUSTOM_ID: _fn_name_param_condition_map_expr_2
   :END:
 
 The syntax extension also applies to =defn= and other macros which
@@ -288,7 +288,7 @@ Example:
         (* x x))
 #+END_SRC
 
-See [[binding-forms][Binding Forms]] for more information about binding
+See [[#binding-forms][Binding Forms]] for more information about binding
 forms.
 
 * (=loop= [/binding/* ] /expr/*)
@@ -298,7 +298,7 @@ forms.
 
 =loop= is exactly like =let=, except that it establishes a recursion
 point at the top of the loop, with arity equal to the number of
-bindings. See [[recur][=recur=]].
+bindings. See [[#recur][=recur=]].
 
 * (=recur= /expr/*)
   :PROPERTIES:
@@ -308,7 +308,7 @@ bindings. See [[recur][=recur=]].
 Evaluates the expressions /expr/s in order, then, in parallel, rebinds
 the bindings of the recursion point to the values of the /expr/s. If the
 recursion point was a =fn= method, then it rebinds the params. If the
-recursion point was a [[loop][=loop=]], then it rebinds the =loop=
+recursion point was a [[#loop][=loop=]], then it rebinds the =loop=
 bindings. Execution then jumps back to the recursion point. The =recur=
 expression must match the arity of the recursion point exactly. In
 particular, if the recursion point was the top of a variadic fn method,
@@ -388,36 +388,37 @@ The special forms [[file:java_interop.xml#dot][dot ('.')]],
   :CUSTOM_ID: binding-forms
   :END:
 
-Clojure supports abstract structural binding, often called
-destructuring, in let binding lists, fn parameter lists, and any macro
-that expands into a =let= or =fn=. A /binding-form/ can be a data
-structure literal containing symbols that get bound to the respective
-parts of the /init-expr/. The binding is abstract in that a vector
-literal can bind to anything that is sequential, while a map literal can
-bind to anything that is associative.
+The simplest /binding-form/ in Clojure is a symbol. However, Clojure
+also supports abstract structural binding called destructuring in =let=
+binding lists, =fn= parameter lists, and by extension any macro that
+expands into a =let= or =fn=. Destructuring is a way to create a set of
+bindings to values within a collection by using an analogous collection
+as a binding form. A vector form specifies bindings by position in a
+sequential collection, a map form by key in an associative collection.
+Destructuring forms can appear anywhere /binding-form/s can, and thus
+nest, yielding code that is clearer than using collection accessors.
 
-All binding symbols that don't match their respective part due to an
-absence of data (too few elements in a sequential structure, no key in
-an associative structure, etc) are bound to nil.
+/Binding-form/s that don't match their respective part due to an absence
+of data (i.e. too few elements in a sequential structure, no key in an
+associative structure, etc) bind to =nil=.
 
-** Vector binding destructuring
+** Sequential destructuring
    :PROPERTIES:
-   :CUSTOM_ID: _vector_binding_destructuring
+   :CUSTOM_ID: sequential-destructuring
    :END:
 
-Vector /binding-expr/s allow you to bind names to parts of /sequential/
-things (not just vectors), like vectors, lists, seqs, strings, arrays,
-and anything that supports
+Vector /binding_form/s sequentially bind values in collections like
+vectors, lists, seqs, strings, arrays, and anything that supports
 [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/nth][=nth=]].
-The basic sequential form is a vector of /binding-form/s, which will be
-bound to successive elements from the /init-expr/, looked up via =nth=.
-In addition, and optionally, =&= followed by a /binding-form/ will cause
-that /binding-form/ to be bound to the remainder of the sequence, i.e.
-that part not yet bound, looked up via
+The sequential destructuring form is a vector of /binding-form/s, which
+will be bound to successive elements from the /init-expr/, looked up via
+=nth=. In addition, and optionally, a /binding-form/ following a =&=
+will be bound to the remainder of the sequence, i.e. that part not yet
+bound, and looked up via
 [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/nthnext][=nthnext=]].
 
-Finally, also optional, =:as= followed by a symbol will cause that
-symbol to be bound to the entire /init-expr/:
+Finally, also optionally, =:as= followed by a symbol binds that symbol
+to the entire /init-expr/:
 
 #+BEGIN_SRC clojure
     (let [[a b c & d :as e] [1 2 3 4 5 6 7]]
@@ -426,7 +427,7 @@ symbol to be bound to the entire /init-expr/:
     ->[1 2 3 (4 5 6 7) [1 2 3 4 5 6 7]]
 #+END_SRC
 
-These forms can be nested:
+These forms can nest:
 
 #+BEGIN_SRC clojure
     (let [[[x1 y1][x2 y2]] [[1 2] [3 4]]]
@@ -435,29 +436,24 @@ These forms can be nested:
     ->[1 2 3 4]
 #+END_SRC
 
-Strings work too:
+In all of the sequential cases the /binding-form/s in the destructure
+binding will match the places in the target data structure where the
+desired values reside.
 
-#+BEGIN_SRC clojure
-    (let [[a b & c :as str] "asdjhhfdas"]
-      [a b c str])
-
-    ->[\a \s (\d \j \h \h \f \d \a \s) "asdjhhfdas"]
-#+END_SRC
-
-** Map binding destructuring
+** Associative destructuring
    :PROPERTIES:
-   :CUSTOM_ID: _map_binding_destructuring
+   :CUSTOM_ID: associative-destructuring
    :END:
 
-Map /binding-form/s allow you to bind names to parts of associative
-things, like maps, vectors, strings, and arrays (the latter three have
-integer keys). It consists of a map of /binding-form-key/ pairs, each
-symbol being bound to the value in the /init-expr/ at the key. In
-addition, and optionally, an =:as= key in the binding form followed by a
-symbol will cause that symbol to be bound to the entire /init-expr/.
-Also optionally, an =:or= key in the binding form followed by another
-map may be used to supply default values for some or all of the keys if
-they are not found in the /init-expr/:
+Map /binding-form/s create bindings by looking up values in collections
+like maps, sets, vectors, strings, and arrays (the latter three have
+integer keys). It consists of a map of /binding-form→key/ pairs, each
+/binding-form/ bound to the value in the /init-expr/ at the key
+provided. In addition, and optionally, an =:as= key in the binding form
+followed by a symbol binds that symbol to the entire /init-expr/. Also
+optionally, an =:or= key in the binding form followed by another map may
+be used to supply default values for some or all of the keys if they are
+not found in the /init-expr/:
 
 #+BEGIN_SRC clojure
     (let [{a :a, b :b, c :c, :as m :or {a 2 b 3}}  {:a 5 :c 6}]
@@ -466,8 +462,9 @@ they are not found in the /init-expr/:
     ->[5 3 6 {:c 6, :a 5}]
 #+END_SRC
 
-It is often the case that you will want to bind same-named symbols to
-the map keys. The =:keys= directive allows you to avoid the redundancy:
+It is often the case that you will want to bind symbols with the same
+name as the corresponding map keys. The =:keys= directive addresses the
+redundancy often found in the binding /binding-form→key/ pairs:
 
 #+BEGIN_SRC clojure
     (let [{fred :fred ethel :ethel lucy :lucy} m] ...
@@ -490,9 +487,9 @@ destructuring form:
     -> 3
 #+END_SRC
 
-In the case of using prefixed keys, the bound symbol name will be the
-same as the right-hand side of the prefixed key. You can also use
-auto-resolved keyword forms in the =:keys= directive:
+In the case of using prefixed keys, the bound symbol name is the same as
+the right-hand side of the prefixed key. You can also use auto-resolved
+keyword forms in the =:keys= directive:
 
 #+BEGIN_SRC clojure
     (let [m {::x 42}
@@ -510,19 +507,19 @@ Clojure 1.9 adds support for directly destructuring many keys (or
 symbols) that share the same namespace using the following destructuring
 key forms:
 
--  =:ns/keys= - /ns/ specifies the default namespace for the key to look
-   up in the input
+- =:ns/keys= - /ns/ specifies the default namespace for the key to look
+  up in the input
 
-   -  keys elements should not specify a namespace
+  - keys elements should not specify a namespace
 
-   -  keys elements also define new local symbols, as with =:keys=
+  - keys elements also define new local symbols, as with =:keys=
 
--  =:ns/syms= - /ns/ specifies the default namespace for the symbol to
-   look up in the input
+- =:ns/syms= - /ns/ specifies the default namespace for the symbol to
+  look up in the input
 
-   -  syms elements should not specify a namespace
+  - syms elements should not specify a namespace
 
-   -  syms elements also define new local symbols, as with =:syms=
+  - syms elements also define new local symbols, as with =:syms=
 
 #+BEGIN_SRC clojure
     (let [m #:domain{:a 1, :b 2}
@@ -532,9 +529,51 @@ key forms:
     -> [1 2]
 #+END_SRC
 
+** Keyword Arguments
+   :PROPERTIES:
+   :CUSTOM_ID: keyword-arguments
+   :END:
+
+Keyword arguments are optional trailing variadic arguments of the form
+=akey aval bkey bval…​= that can be accessed in the function body via
+associative destructuring. Also, introduced in Clojure 1.11, a function
+specified to take kwargs may be passed a single map instead of or in
+addition to (and following) the key/value pairs. When a lone map is
+passed, it is used outright for destructuring, else a trailing map is
+added to the map built from the preceding key/values via =conj=. To
+define a function that accepts keyword arguments you supply a map
+destructuring form in the /rest-param/ declaration position. For
+example, a function that takes a sequence and optional keyword arguments
+and returns a vector containing the values is defined as:
+
+#+BEGIN_SRC clojure
+    (defn destr [& {:keys [a b] :as opts}]
+      [a b opts])
+
+    (destr :a 1)
+    ->[1 nil {:a 1}]
+
+    (destr {:a 1 :b 2})
+    ->[1 2 {:a 1 :b 2}]
+#+END_SRC
+
+The map /binding-form/ to the right of the =&= in =destr= is an
+associative destructuring /binding-form/
+[[#associative-destructuring][detailed above]].
+
+The two declarations of =foo= below are equivalent, demonstrating
+associative destructuring's interpretation of seqs:
+
+#+BEGIN_SRC clojure
+    (defn foo [& {:keys [quux]}] ...)
+
+    (defn foo [& opts]
+      (let [{:keys [quux]} opts] ...))
+#+END_SRC
+
 ** Nested destructuring
    :PROPERTIES:
-   :CUSTOM_ID: _nested_destructuring
+   :CUSTOM_ID: nested-destructuring
    :END:
 
 Since binding forms can be nested within one another arbitrarily, you

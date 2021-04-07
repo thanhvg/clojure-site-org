@@ -1,29 +1,29 @@
 Clojure has a rich set of data structures. They share a set of
 properties:
 
--  They are immutable
+- They are immutable
 
--  They are read-able
+- They are read-able
 
--  They support proper value equality semantics in their implementation
-   of equals
+- They support proper value equality semantics in their implementation
+  of equals
 
--  They provide good hash values
+- They provide good hash values
 
--  In addition, the collections:
+- In addition, the collections:
 
-   -  Are manipulated via interfaces.
+  - Are manipulated via interfaces.
 
-   -  Support sequencing
+  - Support sequencing
 
-   -  Support persistent manipulation.
+  - Support persistent manipulation.
 
-   -  Support metadata
+  - Support metadata
 
-   -  Implement java.lang.Iterable
+  - Implement java.lang.Iterable
 
-   -  Implement the non-optional (read-only) portion of
-      java.util.Collection or java.util.Map
+  - Implement the non-optional (read-only) portion of
+    java.util.Collection or java.util.Map
 
 * nil
   :PROPERTIES:

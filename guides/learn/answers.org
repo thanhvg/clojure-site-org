@@ -3,7 +3,7 @@ the [[file:syntax.org][Learn Clojure]] guide.
 
 * [[file:syntax.xml#_test_your_knowledge][Syntax]]
   :PROPERTIES:
-  :CUSTOM_ID: __link_xl_href_syntax_xml_test_your_knowledge_syntax_link
+  :CUSTOM_ID: _syntax
   :END:
 
 1. Using the REPL, compute the sum of 7654 and 1234.
@@ -45,7 +45,7 @@ the [[file:syntax.org][Learn Clojure]] guide.
 
 * [[file:functions.xml#_test_your_knowledge][Functions]]
   :PROPERTIES:
-  :CUSTOM_ID: __link_xl_href_functions_xml_test_your_knowledge_functions_link
+  :CUSTOM_ID: _functions
   :END:
 
 1.  Define a function =greet= that takes no arguments and prints
@@ -72,8 +72,8 @@ the [[file:syntax.org][Learn Clojure]] guide.
 
     #+BEGIN_SRC clojure
         (defn greeting
-          ([] (greeting "Hello" "World!")
-          ([x] (greeting "Hello" x)
+          ([] (greeting "Hello" "World"))
+          ([x] (greeting "Hello" x))
           ([x y] (str x ", " y "!")))
     #+END_SRC
 
@@ -145,7 +145,7 @@ the [[file:syntax.org][Learn Clojure]] guide.
 
     #+BEGIN_SRC clojure
         (defn one-less-arg [f x]
-          (fn [& args (apply f x args)))
+          (fn [& args] (apply f x args)))
     #+END_SRC
 
 13. Define a function =two-fns=:

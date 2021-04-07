@@ -69,8 +69,8 @@ the REPL.
    :CUSTOM_ID: _boot
    :END:
 
-If you have installed [[http://boot-clj.com/][Boot]], you can use it to
-launch a REPL:
+If you have installed [[https://boot-clj.github.io/][Boot]], you can use
+it to launch a REPL:
 
 #+BEGIN_EXAMPLE
     boot repl

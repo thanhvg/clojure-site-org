@@ -69,7 +69,7 @@ A custom comparator can also be used with =sorted-set-by=.
 
 ** =into=
    :PROPERTIES:
-   :CUSTOM_ID: __literal_into_literal
+   :CUSTOM_ID: _into
    :END:
 
 =into= is used for putting one collection into another.

@@ -1,22 +1,22 @@
 Systems that utilize runtime polymorphism are easier to change and
 extend. Clojure supports polymorphism in several ways:
 
--  Most core infrastructure data structures in the Clojure runtime are
-   defined by Java interfaces.
+- Most core infrastructure data structures in the Clojure runtime are
+  defined by Java interfaces.
 
--  Clojure supports the generation of implementations of Java interfaces
-   in Clojure using
-   [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/proxy][proxy]]
-   ([[file:jvm_hosted.org][see JVM Hosted]]).
+- Clojure supports the generation of implementations of Java interfaces
+  in Clojure using
+  [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/proxy][proxy]]
+  ([[file:jvm_hosted.org][see JVM Hosted]]).
 
--  The Clojure language supports polymorphism along both class and
-   custom hierarchies with
-   [[file:xref/../../reference/multimethods.org][multimethod]]s.
+- The Clojure language supports polymorphism along both class and custom
+  hierarchies with
+  [[file:xref/../../reference/multimethods.org][multimethod]]s.
 
--  The Clojure language also supports a faster form of polymorphism with
-   [[file:xref/../../reference/protocols.org][protocols]] (but limited
-   only to class polymorphism to take advantage of the JVMs existing
-   capabilities for invocation).
+- The Clojure language also supports a faster form of polymorphism with
+  [[file:xref/../../reference/protocols.org][protocols]] (but limited
+  only to class polymorphism to take advantage of the JVMs existing
+  capabilities for invocation).
 
 Clojure multimethods are a simple yet powerful mechanism for runtime
 polymorphism that is free of the trappings of OO, types and inheritance.

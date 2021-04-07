@@ -39,7 +39,7 @@ Calling get with an invalid index returns =nil=:
 
 ** =count=
    :PROPERTIES:
-   :CUSTOM_ID: __literal_count_literal
+   :CUSTOM_ID: _count
    :END:
 
 All Clojure collections can be counted:

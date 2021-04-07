@@ -2,7 +2,7 @@ Boolean and comparison functions:
 [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/=][=]]
 [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/==][==]]
 [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/identical?][identical?]]
-[[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/not=][not=]]
+[[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/not=]]
 [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/not][not]]
 [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/true?][true?]]
 [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/false?][false?]]

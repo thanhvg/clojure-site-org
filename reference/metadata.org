@@ -16,7 +16,7 @@ of the sequence so that both objects can share the same sequence.
 
 * (/meta/ obj)
   :PROPERTIES:
-  :CUSTOM_ID: __emphasis_meta_emphasis_obj
+  :CUSTOM_ID: _meta_obj
   :END:
 
 Returns the metadata of obj, returns nil if there is no metadata.
@@ -35,7 +35,7 @@ Returns the metadata of obj, returns nil if there is no metadata.
 
 * (/with-meta/ obj map)
   :PROPERTIES:
-  :CUSTOM_ID: __emphasis_with_meta_emphasis_obj_map
+  :CUSTOM_ID: _with_meta_obj_map
   :END:
 
 Returns an object of the same type and value as obj, with map as its
@@ -49,7 +49,7 @@ metadata.
 
 * /*print-meta*/
   :PROPERTIES:
-  :CUSTOM_ID: __emphasis_print_meta_emphasis
+  :CUSTOM_ID: _print_meta
   :END:
 
 If set to logical true, when printing an object, its metadata will also
@@ -63,13 +63,13 @@ be printed in a form that can be read back by the reader.
     ;; ^{:hi true} [1 2 3]
 #+END_SRC
 
-* (/vary-meta/ obj map)
+* (/vary-meta/ obj f & args)
   :PROPERTIES:
-  :CUSTOM_ID: __emphasis_vary_meta_emphasis_obj_map
+  :CUSTOM_ID: _vary_meta_obj_f_args
   :END:
 
 Returns an object of the same type and value as obj, with
-=(apply f (meta obj) f & args)= as its metadata.
+=(apply f (meta obj) args)= as its metadata.
 
 #+BEGIN_SRC clojure
     (def m ^:hi [1 2 3])
@@ -79,7 +79,7 @@ Returns an object of the same type and value as obj, with
 
 * (/alter-meta!/ ref f & args) and (/reset-meta!/ ref map)
   :PROPERTIES:
-  :CUSTOM_ID: __emphasis_alter_meta_emphasis_ref_f_args_and_emphasis_reset_meta_emphasis_ref_map
+  :CUSTOM_ID: _alter_meta_ref_f_args_and_reset_meta_ref_map
   :END:
 
 Modify or reset the metadata respectively for a
@@ -94,14 +94,14 @@ In addition to with-meta, there are a number of reader macros
 ([[file:reader.xml#macrochars][The Reader: Macro Characters]]) for
 applying metadata to the expression following it at read-time:
 
--  =^{:doc "How it works!"}= - adds the metadata map to the metadata of
-   the next value read
+- =^{:doc "How it works!"}= - adds the metadata map to the metadata of
+  the next value read
 
--  =^:dynamic= - like =^{:dynamic true}=
+- =^:dynamic= - like =^{:dynamic true}=
 
--  =^String= - like =^{:tag java.lang.String}=
+- =^String= - like =^{:tag java.lang.String}=
 
--  =^"java.lang.String"= - like =^{:tag java.lang.String}=
+- =^"java.lang.String"= - like =^{:tag java.lang.String}=
 
 The =:tag= key is used to hint an objects type to the Clojure compiler.
 See [[file:java_interop.xml#typehints][Java Interop: Type Hints]] for
