@@ -1,10 +1,8 @@
 While [[file:vars.org][Vars]] ensure safe use of mutable storage locations via thread /isolation/,
 transactional references (Refs) ensure safe /shared/ use of mutable storage
-locations via a
-[[https://en.wikipedia.org/wiki/Software_transactional_memory][software
-transactional memory]] (STM) system. Refs are bound to a single storage location
-for their lifetime, and only allow mutation of that location to occur within a
-transaction.
+locations via a [[https://en.wikipedia.org/wiki/Software_transactional_memory][software transactional memory]] (STM) system. Refs are bound to a
+single storage location for their lifetime, and only allow mutation of that
+location to occur within a transaction.
 
 Clojure transactions should be easy to understand if you've ever used database
 transactions - they ensure that all actions on Refs are atomic, consistent, and

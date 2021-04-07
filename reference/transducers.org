@@ -106,8 +106,8 @@ which is analogous to the standard reduce function:
 
 *transduce* will immediately (not lazily) reduce over *coll* with the transducer
 *xform* applied to the reducing function *f*, using init as the initial value if
-supplied or (f) otherwise. f supplies the knowledge of how to accumulate the
-result, which occurs in the (potentially stateful) context of the reduce.
+*supplied or (f) otherwise. f supplies the knowledge of how to accumulate the
+*result, which occurs in the (potentially stateful) context of the reduce.
 
 #+BEGIN_SRC clojure
     (def xf (comp (filter odd?) (map inc)))

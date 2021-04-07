@@ -147,3 +147,4 @@ a footnote definition, try to fill the first paragraph within."
 ;; (get-buffer-create "/home/thanh/git/clojure-site-org/reference/namespaces.org")
 (my/process-file "/home/thanh/git/clojure-site-org/reference/namespaces.org")
 (my/process-file "/home/thanh/git/clojure-site-org/guides/spec.org")
+(my/process-file "/home/thanh/git/clojure-site-org/reference/refs.org")
