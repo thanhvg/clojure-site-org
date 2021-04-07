@@ -3,14 +3,13 @@
   :CUSTOM_ID: _first_class_functions
   :END:
 
-In functional programming, functions are first class citizens. This
-means functions can be treated as values. They can be assigned as
-values, passed into functions, and returned from functions.
+In functional programming, functions are first class citizens. This means
+functions can be treated as values. They can be assigned as values, passed into
+functions, and returned from functions.
 
-It's common to see function definitions in Clojure using =defn= like
-=(defn foo …​)=. However, this is just syntactic sugar for
-=(def foo (fn …​))= =fn= returns a function object. =defn= returns a var
-which points to a function object.
+It's common to see function definitions in Clojure using =defn= like =(defn foo …​)=.
+However, this is just syntactic sugar for =(def foo (fn …​))= =fn= returns a function
+object. =defn= returns a var which points to a function object.
 
 * Higher Order Functions
   :PROPERTIES:
@@ -25,9 +24,9 @@ A higher order function is a function that either:
 
 This is an important concept in functional programming in any language.
 
-Higher order functions allow us to /compose/ functions. This means we
-can write small functions and combine them to create larger functions.
-Like putting a bunch of small LEGO bricks together to build a house.
+Higher order functions allow us to /compose/ functions. This means we can write
+small functions and combine them to create larger functions. Like putting a
+bunch of small LEGO bricks together to build a house.
 
 Let's move away from theory a bit and look at an example.
 
@@ -51,8 +50,8 @@ Let's look at two functions
 #+END_SRC
 
 These functions share a common pattern. They only differ in name and the
-function used in the computation of =a= and =b=. In general, the pattern
-looks like this.
+function used in the computation of =a= and =b=. In general, the pattern looks like
+this.
 
 #+BEGIN_SRC clojure
     (defn double-<f>
@@ -60,8 +59,7 @@ looks like this.
         (* 2 (f a b)))
 #+END_SRC
 
-We can generalize our =double-= function by passing =f= in as an
-argument.
+We can generalize our =double-= function by passing =f= in as an argument.
 
 #+BEGIN_SRC clojure
     (defn double-op
@@ -69,19 +67,18 @@ argument.
         (* 2 (f a b)))
 #+END_SRC
 
-We can use this to express the concept of doubling the result of an
-operation rather than having to write functions that perform specific
-doubled operations individually.
+We can use this to express the concept of doubling the result of an operation
+rather than having to write functions that perform specific doubled operations
+individually.
 
 * Function Literals
   :PROPERTIES:
   :CUSTOM_ID: _function_literals
   :END:
 
-An anonymous function is a function without a name. In Clojure these can
-be defined in two ways, =fn= and the literal =#(…​)=. Creating a
-function with =defn= immediately binds it to a name, =fn= just creates a
-function.
+An anonymous function is a function without a name. In Clojure these can be
+defined in two ways, =fn= and the literal =#(…​)=. Creating a function with =defn=
+immediately binds it to a name, =fn= just creates a function.
 
 Let's have an example with a few music bands:
 
@@ -97,9 +94,9 @@ Let's have an example with a few music bands:
     ])
 #+END_SRC
 
-We want to retrieve only rock bands. This is a one-off operation, we're
-not going to use it anywhere else in our code. We can save ourselves
-some keystrokes by using an anonymous function.
+We want to retrieve only rock bands. This is a one-off operation, we're not
+going to use it anywhere else in our code. We can save ourselves some keystrokes
+by using an anonymous function.
 
 #+BEGIN_SRC clojure
     (def rock-bands
@@ -108,34 +105,31 @@ some keystrokes by using an anonymous function.
             bands))
 #+END_SRC
 
-Even more concisely, using the function literal, we can define
-=rock-bands= like so.
+Even more concisely, using the function literal, we can define =rock-bands= like
+so.
 
 #+BEGIN_SRC clojure
     (def rock-bands (filter #(= :rock (:genre %)) bands))
 #+END_SRC
 
-The function literal supports multiple arguments via =%=, =%n=, and
-=%&=.
+The function literal supports multiple arguments via =%=, =%n=, and =%&=.
 
 #+BEGIN_SRC clojure
     #(println %1 %2 %3)
 #+END_SRC
 
-If you're writing an anonymous function, the literal syntax is nice
-because it's so compact. However, beyond a few arguments, the syntax can
-become difficult to read. In that case, using =fn= may be more
-appropriate.
+If you're writing an anonymous function, the literal syntax is nice because it's
+so compact. However, beyond a few arguments, the syntax can become difficult to
+read. In that case, using =fn= may be more appropriate.
 
 ** Functions Returning Functions and Closures
    :PROPERTIES:
    :CUSTOM_ID: _functions_returning_functions_and_closures
    :END:
 
-Our first function will be called =adder=. It will take a number, =x=,
-as its only argument and return a function. The function returned by
-=adder= will also take a single number, =a=, as its argument and return
-=x + a=.
+Our first function will be called =adder=. It will take a number, =x=, as its only
+argument and return a function. The function returned by =adder= will also take a
+single number, =a=, as its argument and return =x + a=.
 
 #+BEGIN_SRC clojure
     (defn adder [x]
@@ -147,18 +141,17 @@ as its only argument and return a function. The function returned by
     ;; => 105
 #+END_SRC
 
-The returned function form =adder= is a closure. This means, it can
-access all of the variables that were in scope when the function was
-created. =add-five= has access to =x= even though it is outside of the
-=adder= function definition.
+The returned function form =adder= is a closure. This means, it can access all of
+the variables that were in scope when the function was created. =add-five= has
+access to =x= even though it is outside of the =adder= function definition.
 
 ** Filter
    :PROPERTIES:
    :CUSTOM_ID: _filter
    :END:
 
-Filtering is a common operation in computer programming. Take this set
-of animals
+Filtering is a common operation in computer programming. Take this set of
+animals
 
 #+BEGIN_SRC clojure
     (def pets [
@@ -170,8 +163,8 @@ of animals
     ])
 #+END_SRC
 
-We want to filter out the non-dog animals because we're writing
-enterprise grade software. First, let's look at a normal for loop.
+We want to filter out the non-dog animals because we're writing enterprise grade
+software. First, let's look at a normal for loop.
 
 #+BEGIN_SRC clojure
     (defn loop-dogs [pets]
@@ -185,17 +178,17 @@ enterprise grade software. First, let's look at a normal for loop.
                 dogs)))
 #+END_SRC
 
-This code works fine, but it's bulky and confusing. We can simplify this
-using =filter=, a higher order function.
+This code works fine, but it's bulky and confusing. We can simplify this using
+=filter=, a higher order function.
 
 #+BEGIN_SRC clojure
     (defn filter-dogs [pets]
         (filter #(= :dog (:type %)) pets))
 #+END_SRC
 
-The solution using =filter= is much clearer and allows us to show intent
-rather than just give commands. We can break this into even smaller
-pieces by breaking the filtering function out into a separate =var=.
+The solution using =filter= is much clearer and allows us to show intent rather
+than just give commands. We can break this into even smaller pieces by breaking
+the filtering function out into a separate =var=.
 
 #+BEGIN_SRC clojure
     (defn dog? [pet] (= :dog (:type pet)))

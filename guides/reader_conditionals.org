@@ -3,22 +3,21 @@
   :CUSTOM_ID: _introduction
   :END:
 
-Reader conditionals were added in Clojure 1.7. They are designed to
-allow different dialects of Clojure to share common code that is mostly
-platform independent, but contains some platform dependent code. If you
-are writing code across multiple platforms that is mostly independent
-you should separate =.clj= and =.cljs= files instead.
+Reader conditionals were added in Clojure 1.7. They are designed to allow
+different dialects of Clojure to share common code that is mostly platform
+independent, but contains some platform dependent code. If you are writing code
+across multiple platforms that is mostly independent you should separate =.clj=
+and =.cljs= files instead.
 
-Reader conditionals are integrated into the Clojure reader, and don't
-require any extra tooling. To use reader conditionals, all you need is
-for your file to have a =.cljc= extension. Reader conditionals are
-expressions, and can be manipulated like ordinary Clojure expressions.
-For more technical details, see the reference page on
-[[file:xref/../../reference/reader.org][the reader]].
+Reader conditionals are integrated into the Clojure reader, and don't require
+any extra tooling. To use reader conditionals, all you need is for your file to
+have a =.cljc= extension. Reader conditionals are expressions, and can be
+manipulated like ordinary Clojure expressions. For more technical details, see
+the reference page on [[file:xref/../../reference/reader.org][the reader]].
 
-There are two types of reader conditionals, standard and splicing. The
-standard reader conditional behaves similarly to a traditional =cond=.
-The syntax for usage is =#?= and looks like:
+There are two types of reader conditionals, standard and splicing. The standard
+reader conditional behaves similarly to a traditional =cond=. The syntax for usage
+is =#?= and looks like:
 
 #+BEGIN_SRC clojure
     #?(:clj  (Clojure expression)
@@ -27,15 +26,14 @@ The syntax for usage is =#?= and looks like:
        :default (fallthrough expression))
 #+END_SRC
 
-The platform tags =:clj=, etc are a fixed set of tags hard-coded into
-each platform. The =:default= tag is a well-known tag to catch and
-provide an expression if no platform tag matches. If no tags match and
-=:default= is not provided, the reader conditional will read nothing
-(not nil, but as if nothing was read from the stream at all).
+The platform tags =:clj=, etc are a fixed set of tags hard-coded into each
+platform. The =:default= tag is a well-known tag to catch and provide an
+expression if no platform tag matches. If no tags match and =:default= is not
+provided, the reader conditional will read nothing (not nil, but as if nothing
+was read from the stream at all).
 
-The syntax for a splicing reader conditional is =#?@=. It is used to
-splice lists into the containing form. So the Clojure reader would read
-this:
+The syntax for a splicing reader conditional is =#?@=. It is used to splice lists
+into the containing form. So the Clojure reader would read this:
 
 #+BEGIN_SRC clojure
     (defn build-list []
@@ -50,9 +48,9 @@ as this:
       (list 5 6 7 8))
 #+END_SRC
 
-One important thing to note is that in Clojure a splicing conditional
-reader cannot be used to splice in multiple top level forms. In concrete
-terms, this means you can't do this:
+One important thing to note is that in Clojure a splicing conditional reader
+cannot be used to splice in multiple top level forms. In concrete terms, this
+means you can't do this:
 
 #+BEGIN_SRC clojure
     ;; Don't do this!, will throw an error
@@ -77,19 +75,17 @@ or use a =do= to wrap all of the top level functions:
             (defn clj-fn2 [] :cde)))
 #+END_SRC
 
-Let's go through some examples of places you might want to use these new
-reader conditionals.
+Let's go through some examples of places you might want to use these new reader
+conditionals.
 
 * Host interop
   :PROPERTIES:
   :CUSTOM_ID: _host_interop
   :END:
 
-Host interop is one of the biggest pain points solved by reader
-conditionals. You may have a Clojure file that is almost pure Clojure,
-but needs to call out to the host environment for one function.
-[[https://github.com/lymingtonprecision/route-ccrs/blob/c579aea05504736f2cfbd31c3c755f7e25fdad77/src/route_ccrs/manufacturing_methods.cljc#L8-L10][This]]
-is a classic example:
+Host interop is one of the biggest pain points solved by reader conditionals.
+You may have a Clojure file that is almost pure Clojure, but needs to call out
+to the host environment for one function. [[https://github.com/lymingtonprecision/route-ccrs/blob/c579aea05504736f2cfbd31c3c755f7e25fdad77/src/route_ccrs/manufacturing_methods.cljc#L8-L10][This]] is a classic example:
 
 #+BEGIN_SRC clojure
     (defn str->int [s]
@@ -102,16 +98,12 @@ is a classic example:
   :CUSTOM_ID: _namespaces
   :END:
 
-Namespaces are the other big pain point for sharing code between Clojure
-and ClojureScript. ClojureScript has different syntax for
-[[https://clojurescript.org/about/differences#_macros][requiring
-macros]] than Clojure. To use macros that work in both Clojure and
-ClojureScript in a =.cljc= file, you'll need reader conditionals in the
-namespace declaration.
+Namespaces are the other big pain point for sharing code between Clojure and
+ClojureScript. ClojureScript has different syntax for [[https://clojurescript.org/about/differences#_macros][requiring macros]] than
+Clojure. To use macros that work in both Clojure and ClojureScript in a =.cljc=
+file, you'll need reader conditionals in the namespace declaration.
 
-Here is an example from a
-[[https://github.com/lymingtonprecision/route-ccrs/blob/c579aea05504736f2cfbd31c3c755f7e25fdad77/test/route_ccrs/schema/ids/part_no_test.cljc][test]]
-in [[https://github.com/lymingtonprecision/route-ccrs][route-ccrs]]
+Here is an example from a [[https://github.com/lymingtonprecision/route-ccrs/blob/c579aea05504736f2cfbd31c3c755f7e25fdad77/test/route_ccrs/schema/ids/part_no_test.cljc][test]] in [[https://github.com/lymingtonprecision/route-ccrs][route-ccrs]]
 
 #+BEGIN_SRC clojure
     (ns route-ccrs.schema.ids.part-no-test
@@ -124,11 +116,11 @@ in [[https://github.com/lymingtonprecision/route-ccrs][route-ccrs]]
                 [schema.core :as schema :refer [check]]))
 #+END_SRC
 
-Here is another example, we want to be able to use the =rethinkdb.query=
-namespace in Clojure and ClojureScript. However we can't load the
-required =rethinkdb.net= in ClojureScript as it uses Java sockets to
-communicate with the database. Instead we use a reader conditional so
-the namespace is only required when read by Clojure programs.
+Here is another example, we want to be able to use the =rethinkdb.query= namespace
+in Clojure and ClojureScript. However we can't load the required =rethinkdb.net=
+in ClojureScript as it uses Java sockets to communicate with the database.
+Instead we use a reader conditional so the namespace is only required when read
+by Clojure programs.
 
 #+BEGIN_SRC clojure
     (ns rethinkdb.query
@@ -147,12 +139,10 @@ the namespace is only required when read by Clojure programs.
   :CUSTOM_ID: _exception_handling
   :END:
 
-Exception handling is another area that benefits from reader
-conditionals. ClojureScript supports =(catch :default)= to catch
-everything, however you will often still want to handle host specific
-exceptions. Here's an
-[[https://github.com/runexec/lemon-disc/blob/c24c6638f1d476a0f5470387e52a2b702117c4a9/src/lemon_disc/core.cljc#L65-L72][example]]
-from [[https://github.com/runexec/lemon-disc][lemon-disc]].
+Exception handling is another area that benefits from reader conditionals.
+ClojureScript supports =(catch :default)= to catch everything, however you will
+often still want to handle host specific exceptions. Here's an [[https://github.com/runexec/lemon-disc/blob/c24c6638f1d476a0f5470387e52a2b702117c4a9/src/lemon_disc/core.cljc#L65-L72][example]] from
+[[https://github.com/runexec/lemon-disc][lemon-disc]].
 
 #+BEGIN_SRC clojure
     (defn message-container-test [f]
@@ -170,12 +160,11 @@ from [[https://github.com/runexec/lemon-disc][lemon-disc]].
   :CUSTOM_ID: _splicing
   :END:
 
-The splicing reader conditional is not as widely used as the standard
-one. For an example on its usage, let's look at the
-[[https://github.com/clojure/clojure-clr/blob/544e9354e121e10a656702222d47c8398468fb02/Clojure/Clojure.Tests/clojure/test_clojure/reader.cljc#L672-L677][tests]]
-for reader conditionals in the ClojureCLR reader. What might not be
-obvious at first glance is that the vectors inside the splicing reader
-conditional are being wrapped by a surrounding vector.
+The splicing reader conditional is not as widely used as the standard one. For
+an example on its usage, let's look at the [[https://github.com/clojure/clojure-clr/blob/544e9354e121e10a656702222d47c8398468fb02/Clojure/Clojure.Tests/clojure/test_clojure/reader.cljc#L672-L677][tests]] for reader conditionals in the
+ClojureCLR reader. What might not be obvious at first glance is that the vectors
+inside the splicing reader conditional are being wrapped by a surrounding
+vector.
 
 #+BEGIN_SRC clojure
     (deftest reader-conditionals
@@ -193,33 +182,28 @@ conditional are being wrapped by a surrounding vector.
   :CUSTOM_ID: _file_organisation
   :END:
 
-There isn't a clear community consensus yet around where to put =.cljc=
-files. Two options are to have a single =src= directory with =.clj=,
-=.cljs=, and =.cljc= files, or to have separate =src/clj=, =src/cljc=,
-and =src/cljs= directories.
+There isn't a clear community consensus yet around where to put =.cljc= files. Two
+options are to have a single =src= directory with =.clj=, =.cljs=, and =.cljc= files, or
+to have separate =src/clj=, =src/cljc=, and =src/cljs= directories.
 
 * cljx
   :PROPERTIES:
   :CUSTOM_ID: _cljx
   :END:
 
-Before reader conditionals were introduced, the same goal of sharing
-code between platforms was solved by a Leiningen plugin called
-[[https://github.com/lynaghk/cljx][cljx]]. cljx processes files with the
-=.cljx= extension and outputs multiple platform specific files to a
+Before reader conditionals were introduced, the same goal of sharing code
+between platforms was solved by a Leiningen plugin called [[https://github.com/lynaghk/cljx][cljx]]. cljx processes
+files with the =.cljx= extension and outputs multiple platform specific files to a
 generated sources directory. These were then read as normal Clojure or
-ClojureScript files by the Clojure
-[[file:xref/../../reference/reader.org][reader]]. This worked well, but
-required another piece of tooling to run. cljx was deprecated on June 13
-2015 in favour of reader conditionals.
+ClojureScript files by the Clojure [[file:xref/../../reference/reader.org][reader]]. This worked well, but required
+another piece of tooling to run. cljx was deprecated on June 13 2015 in favour
+of reader conditionals.
 
-Sente previously used cljx for sharing code between Clojure and
-ClojureScript. I've rewritten the
-[[https://github.com/ptaoussanis/sente/blob/v1.4.1/src/taoensso/sente.cljx][main]]
-namespace to use reader conditionals. Notice that we've used the
-splicing reader conditional to splice the vector into the parent
-=:require=. Notice also that some of the requires are duplicated between
-=:clj= and =:cljs=.
+Sente previously used cljx for sharing code between Clojure and ClojureScript.
+I've rewritten the [[https://github.com/ptaoussanis/sente/blob/v1.4.1/src/taoensso/sente.cljx][main]] namespace to use reader conditionals. Notice that we've
+used the splicing reader conditional to splice the vector into the parent
+=:require=. Notice also that some of the requires are duplicated between =:clj= and
+=:cljs=.
 
 #+BEGIN_SRC clojure
     (ns taoensso.sente

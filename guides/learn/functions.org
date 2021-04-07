@@ -3,10 +3,10 @@
   :CUSTOM_ID: _creating_functions
   :END:
 
-Clojure is a functional language. Functions are first-class and can be
-passed-to or returned-from other functions. Most Clojure code consists
-primarily of pure functions (no side effects), so invoking with the same
-inputs yields the same output.
+Clojure is a functional language. Functions are first-class and can be passed-to
+or returned-from other functions. Most Clojure code consists primarily of pure
+functions (no side effects), so invoking with the same inputs yields the same
+output.
 
 =defn= defines a named function:
 
@@ -16,11 +16,11 @@ inputs yields the same output.
     (defn greet  [name]  (str "Hello, " name) )
 #+END_SRC
 
-This function has a single parameter =name=, however you may include any
-number of parameters in the params vector.
+This function has a single parameter =name=, however you may include any number of
+parameters in the params vector.
 
-Invoke a function with the name of the function in "function position"
-(the first element of a list):
+Invoke a function with the name of the function in "function position" (the
+first element of a list):
 
 #+BEGIN_EXAMPLE
     user=> (greet "students")
@@ -32,13 +32,13 @@ Invoke a function with the name of the function in "function position"
    :CUSTOM_ID: _multi_arity_functions
    :END:
 
-Functions can be defined to take different numbers of parameters
-(different "arity"). Different arities must all be defined in the same
-=defn= - using =defn= more than once will replace the previous function.
+Functions can be defined to take different numbers of parameters (different
+"arity"). Different arities must all be defined in the same =defn= - using =defn=
+more than once will replace the previous function.
 
-Each arity is a list =([param*] body*)=. One arity can invoke another.
-The body can contain any number of expressions and the return value is
-the result of the last expression.
+Each arity is a list =([param*] body*)=. One arity can invoke another. The body
+can contain any number of expressions and the return value is the result of the
+last expression.
 
 #+BEGIN_SRC clojure
     (defn messenger
@@ -47,9 +47,8 @@ the result of the last expression.
 #+END_SRC
 
 This function declares two arities (0 parameters and 1 parameter). The
-0-parameter arity calls the 1-parameter arity with a default value to
-print. We invoke these functions by passing the appropriate number of
-arguments:
+0-parameter arity calls the 1-parameter arity with a default value to print. We
+invoke these functions by passing the appropriate number of arguments:
 
 #+BEGIN_EXAMPLE
     user=> (messenger)
@@ -66,10 +65,9 @@ arguments:
    :CUSTOM_ID: _variadic_functions
    :END:
 
-Functions may also define a variable number of parameters - this is
-known as a "variadic" function. The variable parameters must occur at
-the end of the parameter list. They will be collected in a sequence for
-use by the function.
+Functions may also define a variable number of parameters - this is known as a
+"variadic" function. The variable parameters must occur at the end of the
+parameter list. They will be collected in a sequence for use by the function.
 
 The beginning of the variable parameters is marked with =&=.
 
@@ -78,17 +76,17 @@ The beginning of the variable parameters is marked with =&=.
       (println greeting who))
 #+END_SRC
 
-This function takes a parameter =greeting= and a variable number of
-parameters (0 or more) that will be collected in a list named =who=. We
-can see this by invoking it with 3 arguments:
+This function takes a parameter =greeting= and a variable number of parameters (0
+or more) that will be collected in a list named =who=. We can see this by invoking
+it with 3 arguments:
 
 #+BEGIN_EXAMPLE
     user=> (hello "Hello" "world" "class")
     Hello (world class)
 #+END_EXAMPLE
 
-You can see that when =println= prints =who=, it is printed as a list of
-two elements that were collected.
+You can see that when =println= prints =who=, it is printed as a list of two
+elements that were collected.
 
 ** Anonymous Functions
    :PROPERTIES:
@@ -103,9 +101,9 @@ An anonymous function can be created with =fn=:
     (fn  [message]  (println message) )
 #+END_SRC
 
-Because the anonymous function has no name, it cannot be referred to
-later. Rather, the anonymous function is typically created at the point
-it is passed to another function.
+Because the anonymous function has no name, it cannot be referred to later.
+Rather, the anonymous function is typically created at the point it is passed to
+another function.
 
 Or it's possible to immediately invoke it (this is not a common usage):
 
@@ -117,23 +115,21 @@ Or it's possible to immediately invoke it (this is not a common usage):
     ;; Hello world!
 #+END_SRC
 
-Here we defined the anonymous function in the function position of a
-larger expression that immediately invokes the expression with the
-argument.
+Here we defined the anonymous function in the function position of a larger
+expression that immediately invokes the expression with the argument.
 
-Many languages have both statements, which imperatively do something and
-do not return a value, and expressions which do. Clojure has *only*
-expressions that return a value. We'll see later that this includes even
-flow control expressions like =if=.
+Many languages have both statements, which imperatively do something and do not
+return a value, and expressions which do. Clojure has *only* expressions that
+return a value. We'll see later that this includes even flow control expressions
+like =if=.
 
 ** =defn= vs =fn=
    :PROPERTIES:
    :CUSTOM_ID: _defn_vs_fn
    :END:
 
-It might be useful to think of =defn= as a contraction of =def= and
-=fn=. The =fn= defines the function and the =def= binds it to a name.
-These are equivalent:
+It might be useful to think of =defn= as a contraction of =def= and =fn=. The =fn=
+defines the function and the =def= binds it to a name. These are equivalent:
 
 #+BEGIN_SRC clojure
     (defn greet [name] (str "Hello, " name))
@@ -146,9 +142,9 @@ These are equivalent:
    :CUSTOM_ID: _anonymous_function_syntax
    :END:
 
-There is a shorter form for the =fn= anonymous function syntax
-implemented in the Clojure reader: =#()=. This syntax omits the
-parameter list and names parameters based on their position.
+There is a shorter form for the =fn= anonymous function syntax implemented in the
+Clojure reader: =#()=. This syntax omits the parameter list and names parameters
+based on their position.
 
 - =%= is used for a single parameter
 
@@ -156,8 +152,8 @@ parameter list and names parameters based on their position.
 
 - =%&= is used for any remaining (variadic) parameters
 
-Nested anonymous functions would create an ambiguity as the parameters
-are not named, so nesting is not allowed.
+Nested anonymous functions would create an ambiguity as the parameters are not
+named, so nesting is not allowed.
 
 #+BEGIN_SRC clojure
     ;; Equivalent to: (fn [x] (+ 6 x))
@@ -175,8 +171,8 @@ are not named, so nesting is not allowed.
    :CUSTOM_ID: _gotcha
    :END:
 
-One common need is an anonymous function that takes an element and wraps
-it in a vector. You might try writing that as:
+One common need is an anonymous function that takes an element and wraps it in a
+vector. You might try writing that as:
 
 #+BEGIN_SRC clojure
     ;; DO NOT DO THIS
@@ -189,8 +185,8 @@ This anonymous function expands to the equivalent:
     (fn [x] ([x]))
 #+END_SRC
 
-This form will wrap in a vector *and* try to invoke the vector with no
-arguments (the extra pair of parentheses). Instead:
+This form will wrap in a vector *and* try to invoke the vector with no arguments
+(the extra pair of parentheses). Instead:
 
 #+BEGIN_SRC clojure
     ;; Instead do this:
@@ -213,9 +209,9 @@ arguments (the extra pair of parentheses). Instead:
    :CUSTOM_ID: _apply
    :END:
 
-The =apply= function invokes a function with 0 or more fixed arguments,
-and draws the rest of the needed arguments from a final sequence. The
-final argument *must* be a sequence.
+The =apply= function invokes a function with 0 or more fixed arguments, and draws
+the rest of the needed arguments from a final sequence. The final argument *must*
+be a sequence.
 
 #+BEGIN_SRC clojure
     (apply f '(1 2 3 4))    ;; same as  (f 1 2 3 4)
@@ -224,9 +220,9 @@ final argument *must* be a sequence.
     (apply f 1 2 3 '(4))    ;; same as  (f 1 2 3 4)
 #+END_SRC
 
-All 4 of these calls are equivalent to =(f 1 2 3 4)=. =apply= is useful
-when arguments are handed to you as a sequence but you must invoke the
-function with the values in the sequence.
+All 4 of these calls are equivalent to =(f 1 2 3 4)=. =apply= is useful when
+arguments are handed to you as a sequence but you must invoke the function with
+the values in the sequence.
 
 For example, you can use =apply= to avoid writing this:
 
@@ -252,10 +248,9 @@ Instead you can simply write:
    :CUSTOM_ID: _let
    :END:
 
-=let= binds symbols to values in a "lexical scope". A lexical scope
-creates a new context for names, nested inside the surrounding context.
-Names defined in a =let= take precedence over the names in the outer
-context.
+=let= binds symbols to values in a "lexical scope". A lexical scope creates a new
+context for names, nested inside the surrounding context. Names defined in a =let=
+take precedence over the names in the outer context.
 
 #+BEGIN_SRC clojure
     ;;      bindings     name is defined here
@@ -263,8 +258,8 @@ context.
     (let  [name value]  (code that uses name))
 #+END_SRC
 
-Each =let= can define 0 or more bindings and can have 0 or more
-expressions in the body.
+Each =let= can define 0 or more bindings and can have 0 or more expressions in the
+body.
 
 #+BEGIN_SRC clojure
     (let [x 1
@@ -272,10 +267,10 @@ expressions in the body.
       (+ x y))
 #+END_SRC
 
-This =let= expression creates two local bindings for =x= and =y=. The
-expression =(+ x y)= is in the lexical scope of the =let= and resolves x
-to 1 and y to 2. Outside the =let= expression, x and y will have no
-continued meaning, unless they were already bound to a value.
+This =let= expression creates two local bindings for =x= and =y=. The expression =(+ x
+y)= is in the lexical scope of the =let= and resolves x to 1 and y to 2. Outside
+the =let= expression, x and y will have no continued meaning, unless they were
+already bound to a value.
 
 #+BEGIN_SRC clojure
     (defn messenger [msg]
@@ -287,22 +282,21 @@ continued meaning, unless they were already bound to a value.
     ) ;; end of function
 #+END_SRC
 
-The messenger function takes a =msg= argument. Here the =defn= is also
-creating lexical scope for =msg= - it only has meaning within the
-=messenger= function.
+The messenger function takes a =msg= argument. Here the =defn= is also creating
+lexical scope for =msg= - it only has meaning within the =messenger= function.
 
-Within that function scope, the =let= creates a new scope to define =a=,
-=b=, and =c=. If we tried to use =a= after the let expression, the
-compiler would report an error.
+Within that function scope, the =let= creates a new scope to define =a=, =b=, and =c=.
+If we tried to use =a= after the let expression, the compiler would report an
+error.
 
 ** Closures
    :PROPERTIES:
    :CUSTOM_ID: _closures
    :END:
 
-The =fn= special form creates a "closure". It "closes over" the
-surrounding lexical scope (like =msg=, =a=, =b=, or =c= above) and
-captures their values beyond the lexical scope.
+The =fn= special form creates a "closure". It "closes over" the surrounding
+lexical scope (like =msg=, =a=, =b=, or =c= above) and captures their values beyond the
+lexical scope.
 
 #+BEGIN_SRC clojure
     (defn messenger-builder [greeting]
@@ -326,8 +320,7 @@ captures their values beyond the lexical scope.
    :CUSTOM_ID: _invoking_java_code
    :END:
 
-Below is a summary of calling conventions for calling into Java from
-Clojure:
+Below is a summary of calling conventions for calling into Java from Clojure:
 
 | Task              | Java                  | Clojure              |    |
 |-------------------+-----------------------+----------------------+----|
@@ -364,8 +357,7 @@ Clojure:
 /[[file:answers.xml#_functions][Check your answers]]/
 
 1) Define a function =greet= that takes no arguments and prints "Hello".
-Replace the == with the implementation:
-=(defn greet [] </emphasis></emphasis>)=
+Replace the == with the implementation: =(defn greet [] </emphasis></emphasis>)=
 
 2) Redefine =greet= using =def=, first with the =fn= special form and
 then with the =#()= reader macro.
@@ -405,9 +397,8 @@ returns it, unchanged.
     (defn do-nothing [x] ___)
 #+END_SRC
 
-In Clojure, this is the =identity= function. By itself, identity is not
-very useful, but it is sometimes necessary when working with
-higher-order functions.
+In Clojure, this is the =identity= function. By itself, identity is not very
+useful, but it is sometimes necessary when working with higher-order functions.
 
 #+BEGIN_SRC clojure
     (source identity)
@@ -421,8 +412,8 @@ ignores all of them, and returns the number =100=.
 #+END_SRC
 
 6) Define a function =make-thingy= which takes a single argument =x=. It
-should return another function, which takes any number of arguments and
-always returns x.
+should return another function, which takes any number of arguments and always
+returns x.
 
 #+BEGIN_SRC clojure
     (defn make-thingy [x] ___)
@@ -449,9 +440,9 @@ it three times, without any arguments.
 #+END_SRC
 
 8) Define a function =opposite= which takes a single argument =f=. It
-should return another function which takes any number of arguments,
-applies =f= on them, and then calls =not= on the result. The =not=
-function in Clojure does logical negation.
+should return another function which takes any number of arguments, applies =f= on
+them, and then calls =not= on the result. The =not= function in Clojure does logical
+negation.
 
 #+BEGIN_SRC clojure
     (defn opposite [f]
@@ -473,9 +464,8 @@ In Clojure, this is the complement function.
 #+END_SRC
 
 9) Define a function =triplicate2= which takes another function and any
-number of arguments, then calls that function three times on those
-arguments. Re-use the function you defined in the earlier triplicate
-exercise.
+number of arguments, then calls that function three times on those arguments.
+Re-use the function you defined in the earlier triplicate exercise.
 
 #+BEGIN_SRC clojure
     (defn triplicate2 [f & args]
@@ -483,8 +473,7 @@ exercise.
 #+END_SRC
 
 10) Using the
-[[http://docs.oracle.com/javase/8/docs/api/java/lang/Math.html][java.lang.Math]]
-class (=Math/pow=, =Math/cos=, =Math/sin=, =Math/PI=), demonstrate the
+[[http://docs.oracle.com/javase/8/docs/api/java/lang/Math.html][java.lang.Math]] class (=Math/pow=, =Math/cos=, =Math/sin=, =Math/PI=), demonstrate the
 following mathematical facts:
 
 - The cosine of pi is -1
@@ -494,10 +483,8 @@ following mathematical facts:
 11) Define a function that takes an HTTP URL as a string, fetches that
 URL from the web, and returns the content as a string.
 
-Hint: Using the
-[[http://docs.oracle.com/javase/8/docs/api/java/net/URL.html][java.net.URL]]
-class and its =openStream= method. Then use the Clojure =slurp= function
-to get the content as a string.
+Hint: Using the [[http://docs.oracle.com/javase/8/docs/api/java/net/URL.html][java.net.URL]] class and its =openStream= method. Then use the
+Clojure =slurp= function to get the content as a string.
 
 #+BEGIN_SRC clojure
     (defn http-get [url]
@@ -506,8 +493,8 @@ to get the content as a string.
     (assert (.contains (http-get "https://www.w3.org") "html"))
 #+END_SRC
 
-In fact, the Clojure =slurp= function interprets its argument as a URL
-first before trying it as a file name. Write a simplified http-get:
+In fact, the Clojure =slurp= function interprets its argument as a URL first
+before trying it as a file name. Write a simplified http-get:
 
 #+BEGIN_SRC clojure
     (defn http-get [url]
@@ -520,8 +507,7 @@ first before trying it as a file name. Write a simplified http-get:
 
 - =x=, a value
 
-and returns another function which calls =f= on =x= plus any additional
-arguments.\\
+and returns another function which calls =f= on =x= plus any additional arguments.\\
 
 #+BEGIN_SRC clojure
     (defn one-less-arg [f x]
@@ -531,8 +517,8 @@ arguments.\\
 In Clojure, the =partial= function is a more general version of this.
 
 13) Define a function =two-fns= which takes two functions as arguments,
-=f= and =g=. It returns another function which takes one argument, calls
-=g= on it, then calls =f= on the result, and returns that.
+=f= and =g=. It returns another function which takes one argument, calls =g= on it,
+then calls =f= on the result, and returns that.
 
 That is, your function returns the composition of =f= and =g=.
 

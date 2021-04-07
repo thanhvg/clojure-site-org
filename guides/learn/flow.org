@@ -19,9 +19,9 @@ In Java, expressions return values, whereas statements do not.
     obj.someMethod(x > 10 ? "greater" : "less or equal");
 #+END_SRC
 
-In Clojure, however, everything is an expression! /Everything/ returns a
-value, and a block of multiple expressions returns the last value.
-Expressions that exclusively perform side-effects return =nil=.
+In Clojure, however, everything is an expression! /Everything/ returns a value,
+and a block of multiple expressions returns the last value. Expressions that
+exclusively perform side-effects return =nil=.
 
 * Flow Control Expressions
   :PROPERTIES:
@@ -30,26 +30,22 @@ Expressions that exclusively perform side-effects return =nil=.
 
 Accordingly, flow control operators are expressions, too!
 
-Flow control operators are composable, so we can use them anywhere. This
-leads to less duplicate code, as well as fewer intermediate variables.
+Flow control operators are composable, so we can use them anywhere. This leads
+to less duplicate code, as well as fewer intermediate variables.
 
-Flow control operators are also extensible via macros, which allow the
-compiler to be extended by user code. We won't be discussing macros
-today, but you can read more about them at
-[[file:xref/../../../reference/macros.org][Macros]],
-[[https://aphyr.com/posts/305-clojure-from-the-ground-up-macros][Clojure
-from the Ground Up]], or
-[[http://www.braveclojure.com/writing-macros/][Clojure for the Brave and
-True]], among many other places.
+Flow control operators are also extensible via macros, which allow the compiler
+to be extended by user code. We won't be discussing macros today, but you can
+read more about them at [[file:xref/../../../reference/macros.org][Macros]], [[https://aphyr.com/posts/305-clojure-from-the-ground-up-macros][Clojure from the Ground Up]], or [[http://www.braveclojure.com/writing-macros/][Clojure for the
+Brave and True]], among many other places.
 
 ** =if=
    :PROPERTIES:
    :CUSTOM_ID: _if
    :END:
 
-=if= is the most important conditional expression - it consists of a
-condition, a "then", and an "else". =if= will only evaluate the branch
-selected by the conditional.
+=if= is the most important conditional expression - it consists of a condition, a
+"then", and an "else". =if= will only evaluate the branch selected by the
+conditional.
 
 #+BEGIN_EXAMPLE
     user=> (str "2 is " (if (even? 2) "even" "odd"))
@@ -64,8 +60,8 @@ selected by the conditional.
    :CUSTOM_ID: _truth
    :END:
 
-In Clojure, all values are logically true or false. The only "false"
-values are =false= and =nil= - all other values are logically true.
+In Clojure, all values are logically true or false. The only "false" values are
+=false= and =nil= - all other values are logically true.
 
 #+BEGIN_EXAMPLE
     user=> (if true :truthy :falsey)
@@ -87,11 +83,10 @@ values are =false= and =nil= - all other values are logically true.
    :CUSTOM_ID: _if_and_do
    :END:
 
-The =if= only takes a single expression for the "then" and "else". Use
-=do= to create larger blocks that are a single expression.
+The =if= only takes a single expression for the "then" and "else". Use =do= to
+create larger blocks that are a single expression.
 
-Note that the only reason to do this is if your bodies have side
-effects! (Why?)
+Note that the only reason to do this is if your bodies have side effects! (Why?)
 
 #+BEGIN_SRC clojure
     (if (even? 5)
@@ -106,10 +101,9 @@ effects! (Why?)
    :CUSTOM_ID: _when
    :END:
 
-=when= is an =if= with only a =then= branch. It checks a condition and
-then evaluates any number of statements as a body (so no =do= is
-required). The value of the last expression is returned. If the
-condition is false, nil is returned.
+=when= is an =if= with only a =then= branch. It checks a condition and then evaluates
+any number of statements as a body (so no =do= is required). The value of the last
+expression is returned. If the condition is false, nil is returned.
 
 =when= communicates to a reader that there is no "else" branch.
 
@@ -123,9 +117,8 @@ condition is false, nil is returned.
    :CUSTOM_ID: _cond
    :END:
 
-=cond= is a series of tests and expressions. Each test is evaluated in
-order and the expression is evaluated and returned for the first true
-test.
+=cond= is a series of tests and expressions. Each test is evaluated in order and
+the expression is evaluated and returned for the first true test.
 
 #+BEGIN_SRC clojure
     (let [x 5]
@@ -139,9 +132,9 @@ test.
    :CUSTOM_ID: _cond_and_else
    :END:
 
-If no test is satisfied, nil is returned. A common idiom is to use a
-final test of =:else=. Keywords (like =:else=) always evaluate to true
-so this will always be selected as a default.
+If no test is satisfied, nil is returned. A common idiom is to use a final test
+of =:else=. Keywords (like =:else=) always evaluate to true so this will always be
+selected as a default.
 
 #+BEGIN_SRC clojure
     (let [x 11]
@@ -156,9 +149,9 @@ so this will always be selected as a default.
    :CUSTOM_ID: _case
    :END:
 
-=case= compares an argument to a series of values to find a match. This
-is done in constant (not linear) time! However, each value must be a
-compile-time literal (numbers, strings, keywords, etc).
+=case= compares an argument to a series of values to find a match. This is done in
+constant (not linear) time! However, each value must be a compile-time literal
+(numbers, strings, keywords, etc).
 
 Unlike =cond=, =case= will throw an exception if no value matches.
 
@@ -181,8 +174,8 @@ Unlike =cond=, =case= will throw an exception if no value matches.
    :CUSTOM_ID: _case_with_else_expression
    :END:
 
-=case= can have a final trailing expression that will be evaluated if no
-test matches.
+=case= can have a final trailing expression that will be evaluated if no test
+matches.
 
 #+BEGIN_EXAMPLE
     user=> (defn foo [x]

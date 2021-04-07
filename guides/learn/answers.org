@@ -1,5 +1,5 @@
-This page contains solutions to the "Test your knowledge" sections of
-the [[file:syntax.org][Learn Clojure]] guide.
+This page contains solutions to the "Test your knowledge" sections of the [[file:syntax.org][Learn
+Clojure]] guide.
 
 * [[file:syntax.xml#_test_your_knowledge][Syntax]]
   :PROPERTIES:
@@ -13,16 +13,16 @@ the [[file:syntax.org][Learn Clojure]] guide.
        8888
    #+END_SRC
 
-2. Rewrite the following algebraic expression as a Clojure expression:
-   =( 7 + 3 * 4 + 5 ) / 10=.
+2. Rewrite the following algebraic expression as a Clojure expression: =( 7 + 3 *
+   4 + 5 ) / 10=.
 
    #+BEGIN_SRC clojure
        (/ (+ 7 (* 3 4) 5) 10)
    #+END_SRC
 
-3. Using REPL documentation functions, find the documentation for the
-   rem and mod functions. Compare the results of the provided
-   expressions based on the documentation.
+3. Using REPL documentation functions, find the documentation for the rem and
+   mod functions. Compare the results of the provided expressions based on the
+   documentation.
 
    #+BEGIN_SRC clojure
        user=> (doc rem)
@@ -38,8 +38,8 @@ the [[file:syntax.org][Learn Clojure]] guide.
        nil
    #+END_SRC
 
-4. Using find-doc, find the function that prints the stack trace of the
-   most recent REPL exception.
+4. Using find-doc, find the function that prints the stack trace of the most
+   recent REPL exception.
 
    =pst=
 
@@ -48,8 +48,7 @@ the [[file:syntax.org][Learn Clojure]] guide.
   :CUSTOM_ID: _functions
   :END:
 
-1.  Define a function =greet= that takes no arguments and prints
-    "Hello".
+1.  Define a function =greet= that takes no arguments and prints "Hello".
 
     #+BEGIN_SRC clojure
         (defn greet []

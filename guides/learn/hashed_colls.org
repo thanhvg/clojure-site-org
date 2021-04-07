@@ -1,16 +1,15 @@
-As described in the previous section, there are four key Clojure
-collection types: vectors, lists, sets, and maps. Of those four
-collection types, sets and maps are hashed collections, designed for
-efficient lookup of elements.
+As described in the previous section, there are four key Clojure collection
+types: vectors, lists, sets, and maps. Of those four collection types, sets and
+maps are hashed collections, designed for efficient lookup of elements.
 
 * Sets
   :PROPERTIES:
   :CUSTOM_ID: _sets
   :END:
 
-Sets are like mathematical sets - unordered and with no duplicates. Sets
-are ideal for efficiently checking whether a collection contains an
-element, or to remove any arbitrary element.
+Sets are like mathematical sets - unordered and with no duplicates. Sets are
+ideal for efficiently checking whether a collection contains an element, or to
+remove any arbitrary element.
 
 #+BEGIN_SRC clojure
     (def players #{"Alice", "Bob", "Kelly"})
@@ -33,8 +32,7 @@ As with vectors and lists, =conj= is used to add elements.
    :CUSTOM_ID: _removing_from_a_set
    :END:
 
-The =disj= ("disjoin") function is used to remove one or more elements
-from a set.
+The =disj= ("disjoin") function is used to remove one or more elements from a set.
 
 #+BEGIN_EXAMPLE
     user=> (disj players "Bob" "Sal")
@@ -56,9 +54,9 @@ from a set.
    :CUSTOM_ID: _sorted_sets
    :END:
 
-Sorted sets are sorted according to a comparator function which can
-compare two elements. By default, Clojure's =compare= function is used,
-which sorts in "natural" order for numbers, strings, etc.
+Sorted sets are sorted according to a comparator function which can compare two
+elements. By default, Clojure's =compare= function is used, which sorts in
+"natural" order for numbers, strings, etc.
 
 #+BEGIN_EXAMPLE
     user=> (conj (sorted-set) "Bravo" "Charlie" "Sigma" "Alpha")
@@ -88,18 +86,16 @@ A custom comparator can also be used with =sorted-set-by=.
   :CUSTOM_ID: _maps
   :END:
 
-Maps are commonly used for two purposes - to manage an association of
-keys to values and to represent domain application data. The first use
-case is often referred to as dictionaries or hash maps in other
-languages.
+Maps are commonly used for two purposes - to manage an association of keys to
+values and to represent domain application data. The first use case is often
+referred to as dictionaries or hash maps in other languages.
 
 ** Creating a literal map
    :PROPERTIES:
    :CUSTOM_ID: _creating_a_literal_map
    :END:
 
-Maps are represented as alternating keys and values surrounded by ={=
-and =}=.
+Maps are represented as alternating keys and values surrounded by ={= and =}=.
 
 #+BEGIN_SRC clojure
     (def scores {"Fred"  1400
@@ -107,10 +103,9 @@ and =}=.
                  "Angela" 1024})
 #+END_SRC
 
-When Clojure prints a map at the REPL, it will put `,'s between each
-key/value pair. These are purely used for readability - commas are
-treated as whitespace in Clojure. Feel free to use them in cases where
-they help you!
+When Clojure prints a map at the REPL, it will put `,'s between each key/value
+pair. These are purely used for readability - commas are treated as whitespace
+in Clojure. Feel free to use them in cases where they help you!
 
 #+BEGIN_SRC clojure
     ;; same as the last one!
@@ -122,8 +117,7 @@ they help you!
    :CUSTOM_ID: _adding_new_key_value_pairs
    :END:
 
-New values are added to maps with the =assoc= (short for "associate")
-function:
+New values are added to maps with the =assoc= (short for "associate") function:
 
 #+BEGIN_EXAMPLE
     user=> (assoc scores "Sally" 0)
@@ -155,16 +149,16 @@ The complementary operation for removing key-value pairs is =dissoc=
    :CUSTOM_ID: _looking_up_by_key
    :END:
 
-There are several ways to look up a value in a map. The most obvious is
-the function =get=:
+There are several ways to look up a value in a map. The most obvious is the
+function =get=:
 
 #+BEGIN_EXAMPLE
     user=> (get scores "Angela")
     1024
 #+END_EXAMPLE
 
-When the map in question is being treated as a constant lookup table,
-its common to invoke the map itself, treating it as a function:
+When the map in question is being treated as a constant lookup table, its common
+to invoke the map itself, treating it as a function:
 
 #+BEGIN_EXAMPLE
     user=> (def directions {:north 0
@@ -194,8 +188,8 @@ non-nil:
    :CUSTOM_ID: _looking_up_with_a_default
    :END:
 
-If you want to do a lookup and fall back to a default value when the key
-is not found, specify the default as an extra parameter:
+If you want to do a lookup and fall back to a default value when the key is not
+found, specify the default as an extra parameter:
 
 #+BEGIN_EXAMPLE
     user=> (get scores "Sam" 0)
@@ -205,8 +199,8 @@ is not found, specify the default as an extra parameter:
     -1
 #+END_EXAMPLE
 
-Using a default is also helpful to distinguish between a missing key and
-an existing key with a =nil= value.
+Using a default is also helpful to distinguish between a missing key and an
+existing key with a =nil= value.
 
 ** Checking contains
    :PROPERTIES:
@@ -224,8 +218,8 @@ contains an entry.
     ["Fred" 1400]
 #+END_EXAMPLE
 
-The =contains?= function is a predicate for checking containment. The
-=find= function finds the key/value entry in a map, not just the value.
+The =contains?= function is a predicate for checking containment. The =find=
+function finds the key/value entry in a map, not just the value.
 
 ** Keys or values
    :PROPERTIES:
@@ -242,17 +236,17 @@ You can also get just the keys or just the values in a map:
     (1400 1240 1024)
 #+END_EXAMPLE
 
-While maps are unordered, there is a guarantee that keys, vals, and
-other functions that walk in "sequence" order will always walk a
-particular map instance entries in the same order.
+While maps are unordered, there is a guarantee that keys, vals, and other
+functions that walk in "sequence" order will always walk a particular map
+instance entries in the same order.
 
 ** Building a map
    :PROPERTIES:
    :CUSTOM_ID: _building_a_map
    :END:
 
-The =zipmap= function can be used to "zip" together two sequences (the
-keys and vals) into a map:
+The =zipmap= function can be used to "zip" together two sequences (the keys and
+vals) into a map:
 
 #+BEGIN_EXAMPLE
     user=> (def players #{"Alice" "Bob" "Kelly"})
@@ -262,9 +256,8 @@ keys and vals) into a map:
     {"Kelly" 0, "Bob" 0, "Alice" 0}
 #+END_EXAMPLE
 
-There are a variety of other ways to build up a map using Clojure's
-sequence functions (which we have not yet discussed). Come back to these
-later!
+There are a variety of other ways to build up a map using Clojure's sequence
+functions (which we have not yet discussed). Come back to these later!
 
 #+BEGIN_SRC clojure
     ;; with map and into
@@ -282,8 +275,7 @@ later!
    :CUSTOM_ID: _combining_maps
    :END:
 
-The =merge= function can be used to combine multiple maps into a single
-map:
+The =merge= function can be used to combine multiple maps into a single map:
 
 #+BEGIN_EXAMPLE
     user=> (def new-scores {"Angela" 300 "Jeff" 900})
@@ -295,9 +287,8 @@ map:
 
 We merged two maps here but you can pass more as well.
 
-If both maps contain the same key, the rightmost one wins. Alternately,
-you can use =merge-with= to supply a function to invoke when there is a
-conflict:
+If both maps contain the same key, the rightmost one wins. Alternately, you can
+use =merge-with= to supply a function to invoke when there is a conflict:
 
 #+BEGIN_EXAMPLE
     user=> (def new-scores {"Fred" 550 "Angela" 900 "Sam" 1000})
@@ -307,17 +298,16 @@ conflict:
     {"Sam" 1000, "Fred" 1950, "Bob" 1240, "Angela" 1924}
 #+END_EXAMPLE
 
-In the case of a conflict, the function is called on both values to get
-the new value.
+In the case of a conflict, the function is called on both values to get the new
+value.
 
 ** Sorted maps
    :PROPERTIES:
    :CUSTOM_ID: _sorted_maps
    :END:
 
-Similar to sorted sets, sorted maps maintain the keys in sorted order
-based on a comparator, using =compare= as the default comparator
-function.
+Similar to sorted sets, sorted maps maintain the keys in sorted order based on a
+comparator, using =compare= as the default comparator function.
 
 #+BEGIN_EXAMPLE
     user=> (def sm (sorted-map
@@ -339,8 +329,8 @@ function.
   :CUSTOM_ID: _representing_application_domain_information
   :END:
 
-When we need to represent many domain information with the same set of
-fields known in advance, you can use a map with keyword keys.
+When we need to represent many domain information with the same set of fields
+known in advance, you can use a map with keyword keys.
 
 #+BEGIN_SRC clojure
     (def person
@@ -355,8 +345,8 @@ fields known in advance, you can use a map with keyword keys.
    :CUSTOM_ID: _field_accessors
    :END:
 
-Since this is a map, the ways we've already discussed for looking up a
-value by key also work:
+Since this is a map, the ways we've already discussed for looking up a value by
+key also work:
 
 #+BEGIN_EXAMPLE
     user=> (get person :occupation)
@@ -366,10 +356,10 @@ value by key also work:
     "Programmer"
 #+END_EXAMPLE
 
-But really, the most common way to get field values for this use is by
-invoking the keyword. Just like with maps and sets, keywords are also
-functions. When a keyword is invoked, it looks itself up in the
-associative data structure that it was passed.
+But really, the most common way to get field values for this use is by invoking
+the keyword. Just like with maps and sets, keywords are also functions. When a
+keyword is invoked, it looks itself up in the associative data structure that it
+was passed.
 
 #+BEGIN_EXAMPLE
     user=> (:occupation person)
@@ -422,8 +412,7 @@ It is common to see entities nested within other entities:
                  :state "IL"}})
 #+END_SRC
 
-You can use =get-in= to access fields at any level inside nested
-entities:
+You can use =get-in= to access fields at any level inside nested entities:
 
 #+BEGIN_EXAMPLE
     user=> (get-in company [:address :city])
@@ -446,13 +435,13 @@ You can also use =assoc-in= or =update-in= to modify nested entities:
    :CUSTOM_ID: _records
    :END:
 
-An alternative to using maps is to create a "record". Records are
-designed specifically for this use case and generally have better
-performance. In addition, they have a named "type" which can be used for
-polymorphic behavior (more on that later).
+An alternative to using maps is to create a "record". Records are designed
+specifically for this use case and generally have better performance. In
+addition, they have a named "type" which can be used for polymorphic behavior
+(more on that later).
 
-Records are defined with the list of field names for record instances.
-These will be treated as keyword keys in each record instance.
+Records are defined with the list of field names for record instances. These
+will be treated as keyword keys in each record instance.
 
 #+BEGIN_SRC clojure
     ;; Define a record structure
@@ -469,8 +458,8 @@ These will be treated as keyword keys in each record instance.
                   :occupation "Programmer"}))
 #+END_SRC
 
-Records are used almost exactly the same as maps, with the caveat that
-they cannot be invoked as a function like maps.
+Records are used almost exactly the same as maps, with the caveat that they
+cannot be invoked as a function like maps.
 
 #+BEGIN_EXAMPLE
     user=> (:occupation kelly)

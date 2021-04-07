@@ -3,12 +3,10 @@
   :CUSTOM_ID: _what_is_destructuring
   :END:
 
-Destructuring is a way to concisely bind names to the values inside a
-data structure. Destructuring allows us to write more concise and
-readable code.
+Destructuring is a way to concisely bind names to the values inside a data
+structure. Destructuring allows us to write more concise and readable code.
 
-Consider the following example of extracting and naming values in a
-vector.
+Consider the following example of extracting and naming values in a vector.
 
 #+BEGIN_SRC clojure
     (def my-line [[5 10] [10 20]])
@@ -23,10 +21,9 @@ vector.
     ;= "Line from ( 5 , 10 ) to ( 10 , 20 )"
 #+END_SRC
 
-This is perfectly valid, but the code extracting and naming the values
-in the vector obscures our intent. Destructuring allows us to more
-concisely extract and name important parts of complex data structures to
-make our code cleaner.
+This is perfectly valid, but the code extracting and naming the values in the
+vector obscures our intent. Destructuring allows us to more concisely extract
+and name important parts of complex data structures to make our code cleaner.
 
 #+BEGIN_SRC clojure
     ;= Using the same vector as above
@@ -37,36 +34,33 @@ make our code cleaner.
     ;= "Line from ( 5 , 10 ) to ( 10 , 20 )"
 #+END_SRC
 
-Rather than explicitly binding each variable, we describe the bindings
-based on their sequential order. That's a pretty weird statement,
-"describe the bindings," so let's look at it again.
+Rather than explicitly binding each variable, we describe the bindings based on
+their sequential order. That's a pretty weird statement, "describe the
+bindings," so let's look at it again.
 
-We have a data structure =my-line= that looks like this,
-=[[5 10] [10 20]]=. In our destructuring form we will create a vector
-containing two elements, =p1= and =p2=, each of which are vectors
-themselves. This will bind the vector =[5 10]= to the symbol =p1= and
-the vector =[10 20]= to the symbol =p2=. Since we want to work with the
-elements of =p1= and =p2= rather than the structures themselves, we
-destructure =p1= and =p2= within the same let statement. The vector =p1=
-looks like this, =[5 10]=, so to destructure it, we create a vector
-containing two elements, =x1= and =y1=. This binds =5= to the symbol
-=x1= and =10= to the symbol =y1=. The same is repeated for =p2= binding
-=10= to =x2= and =20= to =y2=. At this point, we now have everything we
-need to work with our data.
+We have a data structure =my-line= that looks like this, =[[5 10] [10 20]]=. In our
+destructuring form we will create a vector containing two elements, =p1= and =p2=,
+each of which are vectors themselves. This will bind the vector =[5 10]= to the
+symbol =p1= and the vector =[10 20]= to the symbol =p2=. Since we want to work with
+the elements of =p1= and =p2= rather than the structures themselves, we destructure
+=p1= and =p2= within the same let statement. The vector =p1= looks like this, =[5 10]=,
+so to destructure it, we create a vector containing two elements, =x1= and =y1=.
+This binds =5= to the symbol =x1= and =10= to the symbol =y1=. The same is repeated for
+=p2= binding =10= to =x2= and =20= to =y2=. At this point, we now have everything we need
+to work with our data.
 
 * Sequential Destructuring
   :PROPERTIES:
   :CUSTOM_ID: _sequential_destructuring
   :END:
 
-Clojure destructuring is broken up into two categories, sequential
-destructuring and associative destructuring. Sequential destructuring
-represents a sequential data structure as a Clojure vector within a let
-binding.
+Clojure destructuring is broken up into two categories, sequential destructuring
+and associative destructuring. Sequential destructuring represents a sequential
+data structure as a Clojure vector within a let binding.
 
-This type of destructuring can be used on any kind of data structure
-that can be traversed in linear time, including lists, vectors, and
-anything that can produce a sequence.
+This type of destructuring can be used on any kind of data structure that can be
+traversed in linear time, including lists, vectors, and anything that can
+produce a sequence.
 
 #+BEGIN_SRC clojure
     (def my-vector [1 2 3])
@@ -91,13 +85,13 @@ anything that can produce a sequence.
     ;= (java.lang.Character java.lang.Character java.lang.Character)
 #+END_SRC
 
-The key to sequential destructuring is that you bind the values
-one-by-one to the symbols in the vector. For instance the vector
-=[x y z]= will match each element one-by-one with the list ='(1 2 3)=.
+The key to sequential destructuring is that you bind the values one-by-one to
+the symbols in the vector. For instance the vector =[x y z]= will match each
+element one-by-one with the list ='(1 2 3)=.
 
-In some cases, the collection you are destructuring isn't the exact same
-size as the destructuring bindings. If the vector is too small, the
-extra symbols will be bound to nil.
+In some cases, the collection you are destructuring isn't the exact same size as
+the destructuring bindings. If the vector is too small, the extra symbols will
+be bound to nil.
 
 #+BEGIN_SRC clojure
     (def small-list '(1 2 3))
@@ -106,8 +100,8 @@ extra symbols will be bound to nil.
     ;= 1 2 3 nil nil nil nil
 #+END_SRC
 
-On the other hand, if the collection is too large, the extra values are
-simply ignored.
+On the other hand, if the collection is too large, the extra values are simply
+ignored.
 
 #+BEGIN_SRC clojure
     (def large-list '(1 2 3 4 5 6 7 8 9 10))
@@ -116,18 +110,18 @@ simply ignored.
     ;= 1 2 3
 #+END_SRC
 
-Destructuring gives you total control over the elements that you choose
-to bind (or not) and how you bind them.
+Destructuring gives you total control over the elements that you choose to bind
+(or not) and how you bind them.
 
-Many times, you don't need access to /every/ element in a collection,
-only certain ones.
+Many times, you don't need access to /every/ element in a collection, only certain
+ones.
 
 #+BEGIN_SRC clojure
     (def names ["Michael" "Amber" "Aaron" "Nick" "Earl" "Joe"])
 #+END_SRC
 
-Say you want to print the first element on one line and the remainder on
-another line.
+Say you want to print the first element on one line and the remainder on another
+line.
 
 #+BEGIN_SRC clojure
     (let [[item1 item2 item3 item4 item5 item6] names]
@@ -137,8 +131,8 @@ another line.
     ;= Amber Aaron Nick Earl Joe
 #+END_SRC
 
-This binding works but even using destructuring it's pretty clunky.
-Instead we can use =&= to combine the tail elements into a sequence.
+This binding works but even using destructuring it's pretty clunky. Instead we
+can use =&= to combine the tail elements into a sequence.
 
 #+BEGIN_SRC clojure
     (let [[item1 & remaining] names]
@@ -148,8 +142,8 @@ Instead we can use =&= to combine the tail elements into a sequence.
     ;= Amber Aaron Nick Earl Joe
 #+END_SRC
 
-You can ignore bindings that you don't intend on using by binding them
-to any symbol of your choosing.
+You can ignore bindings that you don't intend on using by binding them to any
+symbol of your choosing.
 
 #+BEGIN_SRC clojure
     (let [[item1 _ item3 _ item5 _] names]
@@ -167,8 +161,7 @@ You can use =:as all= to bind the entire vector to the symbol =all=.
     ;= The first name from [Michael Amber Aaron Nick Earl Joe] is Michael
 #+END_SRC
 
-Let's stop for a bit and look a little further into the types of =:as=
-and =&=.
+Let's stop for a bit and look a little further into the types of =:as= and =&=.
 
 #+BEGIN_SRC clojure
     (def numbers [1 2 3 4 5])
@@ -177,9 +170,9 @@ and =&=.
     ;= (2 3 4 5) [1 2 3 4 5]
 #+END_SRC
 
-Here =remaining= is bound to a sequence containing the remaining
-elements of the =numbers= vector while =all= has been bound to the
-original =vector=. What happens when we destructure a string instead?
+Here =remaining= is bound to a sequence containing the remaining elements of the
+=numbers= vector while =all= has been bound to the original =vector=. What happens
+when we destructure a string instead?
 
 #+BEGIN_SRC clojure
     (def word "Clojure")
@@ -188,9 +181,9 @@ original =vector=. What happens when we destructure a string instead?
     ;= \C (\l \o \j \u \r \e) "Clojure"
 #+END_SRC
 
-Here =all= is bound to the original structure (String, vector, list,
-whatever it may be) and =x= is bound to the character =\C=, and
-=remaining= is the remaining list of characters.
+Here =all= is bound to the original structure (String, vector, list, whatever it
+may be) and =x= is bound to the character =\C=, and =remaining= is the remaining list
+of characters.
 
 You can combine any or all of these techniques at the same time at your
 discretion.
@@ -206,9 +199,8 @@ discretion.
     ;= The fruits after them are (peach pear lemon)
 #+END_SRC
 
-Destructuring can also be nested to get access to arbitrary levels of
-sequential structure. Let's go back to our vector from the very
-beginning, =my-line=.
+Destructuring can also be nested to get access to arbitrary levels of sequential
+structure. Let's go back to our vector from the very beginning, =my-line=.
 
 #+BEGIN_SRC clojure
     (def my-line [[5 10] [10 20]])
@@ -222,8 +214,7 @@ This vector is comprised of nested vectors that we can access directly.
     ;= "Line from ( 5 , 10 ) to ( 10 , 20 )"
 #+END_SRC
 
-When you have nested vectors, you can use =:as= or =&= at any level as
-well.
+When you have nested vectors, you can use =:as= or =&= at any level as well.
 
 #+BEGIN_SRC clojure
     (let [[[a b :as group1] [c d :as group2]] my-line]
@@ -238,10 +229,10 @@ well.
   :CUSTOM_ID: _associative_destructuring
   :END:
 
-Associative destructuring is similar to sequential destructuring, but
-applied instead to associative (key-value) structures (including maps,
-records, vectors, etc). The associative bindings are concerned with
-concisely extracting values of the map by key.
+Associative destructuring is similar to sequential destructuring, but applied
+instead to associative (key-value) structures (including maps, records, vectors,
+etc). The associative bindings are concerned with concisely extracting values of
+the map by key.
 
 Let's first consider an example that extracts values from a map without
 destructuring:
@@ -258,12 +249,11 @@ destructuring:
     ;= Super Co. Philadelphia - The worldwide leader in plastic tableware.
 #+END_SRC
 
-Note that each line of the let binding is essentially the same - it
-extracts a value from the map by the name of the key, then binds it to a
-local with the same name.
+Note that each line of the let binding is essentially the same - it extracts a
+value from the map by the name of the key, then binds it to a local with the
+same name.
 
-Below is a first example of doing the same thing with associative
-destructuring:
+Below is a first example of doing the same thing with associative destructuring:
 
 #+BEGIN_SRC clojure
     (let [{name :name
@@ -273,15 +263,14 @@ destructuring:
     ;= Super Co. Philadelphia - The worldwide leader in plastic tableware.
 #+END_SRC
 
-The destructuring form is now a map rather than a vector, and instead of
-a symbol on the left side of the let, we have a map. The keys of the map
-are the symbols we want to bind in the let. The values of the
-destructuring map are the keys we will look up in the associative value.
-Here they are keywords (the most common case), but they could be any key
-value - numbers, strings, symbols, etc.
+The destructuring form is now a map rather than a vector, and instead of a
+symbol on the left side of the let, we have a map. The keys of the map are the
+symbols we want to bind in the let. The values of the destructuring map are the
+keys we will look up in the associative value. Here they are keywords (the most
+common case), but they could be any key value - numbers, strings, symbols, etc.
 
-Similar to sequential destructuring, if you try to bind a key that is
-not present in the map, the binding value will be nil.
+Similar to sequential destructuring, if you try to bind a key that is not
+present in the map, the binding value will be nil.
 
 #+BEGIN_SRC clojure
     (let [{category :category} client]
@@ -289,9 +278,8 @@ not present in the map, the binding value will be nil.
     ;= nil
 #+END_SRC
 
-Associative destructuring, however, also allows you to supply a default
-value if the key is not present in the associative value with the =:or=
-key.
+Associative destructuring, however, also allows you to supply a default value if
+the key is not present in the associative value with the =:or= key.
 
 #+BEGIN_SRC clojure
     (let [{category :category, :or {category "Category not found"}} client]
@@ -299,18 +287,16 @@ key.
     ;= Category not found
 #+END_SRC
 
-The value for =:or= is a map where the bound symbol (here =category=) is
-bound to the expression ="Category not found"=. When category is not
-found in =client=, it is instead found in the =:or= map and bound to
-that value instead.
+The value for =:or= is a map where the bound symbol (here =category=) is bound to
+the expression ="Category not found"=. When category is not found in =client=, it is
+instead found in the =:or= map and bound to that value instead.
 
-In sequential destructuring, you generally bind unneeded values with an
-=_=. Since associative destructuring doesn't require traversing the
-entire structure, you can simply omit any keys you don't plan on using
-from the destructuring form.
+In sequential destructuring, you generally bind unneeded values with an =_=. Since
+associative destructuring doesn't require traversing the entire structure, you
+can simply omit any keys you don't plan on using from the destructuring form.
 
-If you need access to the entire map, you can use the =:as= key to bind
-the entire incoming value, just as in sequential destructuring.
+If you need access to the entire map, you can use the =:as= key to bind the entire
+incoming value, just as in sequential destructuring.
 
 #+BEGIN_SRC clojure
     (let [{name :name :as all} client]
@@ -329,10 +315,9 @@ The =:as= and =:or= keywords can be combined in a single destructuring.
     ;= Where is x? Not found!
 #+END_SRC
 
-You might have noticed that our original example still contains
-redundant information (the local binding name and the key name) in the
-associative destructuring form. The =:keys= key can be used to further
-remove the duplication:
+You might have noticed that our original example still contains redundant
+information (the local binding name and the key name) in the associative
+destructuring form. The =:keys= key can be used to further remove the duplication:
 
 #+BEGIN_SRC clojure
     (let [{:keys [name location description]} client]
@@ -340,14 +325,13 @@ remove the duplication:
     ;= Super Co. Philadelphia - The worldwide leader in plastic tableware.
 #+END_SRC
 
-This example is exactly the same as the prior version - it binds =name=
-to =(:name client)=, =location= to =(:location client)=, and
-=description= to =(:description client)=.
+This example is exactly the same as the prior version - it binds =name= to =(:name
+client)=, =location= to =(:location client)=, and =description= to =(:description
+client)=.
 
-The =:keys= key is for associative values with keyword keys, but there
-are also =:strs= and =:syms= for string and symbol keys respectively. In
-all of these cases the vector contains symbols which are the local
-binding names.
+The =:keys= key is for associative values with keyword keys, but there are also
+=:strs= and =:syms= for string and symbol keys respectively. In all of these cases
+the vector contains symbols which are the local binding names.
 
 #+BEGIN_SRC clojure
     (def string-keys {"first-name" "Joe" "last-name" "Smith"})
@@ -388,9 +372,9 @@ destructuring as needed.
    :CUSTOM_ID: _keyword_arguments
    :END:
 
-One special case is using associative destructuring for keyword-arg
-parsing. Consider a function that takes options =:debug= and =:verbose=.
-These could be specified in an options map:
+One special case is using associative destructuring for keyword-arg parsing.
+Consider a function that takes options =:debug= and =:verbose=. These could be
+specified in an options map:
 
 #+BEGIN_SRC clojure
     (defn configure [val options]
@@ -401,19 +385,18 @@ These could be specified in an options map:
     ;;val = 12  debug = true  verbose = false
 #+END_SRC
 
-However, it would be nicer to type if we could pass those optional
-arguments as just additional "keyword" arguments like this:
+However, it would be nicer to type if we could pass those optional arguments as
+just additional "keyword" arguments like this:
 
 #+BEGIN_SRC clojure
     (configure 12 :debug true)
 #+END_SRC
 
-To support this style of invocation, associative destructuring also
-works with lists or sequences of key-value pairs for keyword argument
-parsing. The sequence comes from the rest arg of a variadic function but
-is destructured not with sequential destructuring, but with associative
-destructuring (so a sequence destructured as if it were the key-value
-pairs in a map):
+To support this style of invocation, associative destructuring also works with
+lists or sequences of key-value pairs for keyword argument parsing. The sequence
+comes from the rest arg of a variadic function but is destructured not with
+sequential destructuring, but with associative destructuring (so a sequence
+destructured as if it were the key-value pairs in a map):
 
 #+BEGIN_SRC clojure
     (defn configure [val & {:keys [debug verbose]
@@ -431,22 +414,21 @@ pairs in a map):
     ;;val = 12  debug = true  verbose = true
 #+END_SRC
 
-The use of keyword arguments has fallen in and out of fashion in the
-Clojure community over the years. They are now mostly used when
-presenting interfaces that people are expected to type at the REPL or
-the outermost layers of an API. In general, inner layers of the code
-find it easier to pass options as an explicit map.
+The use of keyword arguments has fallen in and out of fashion in the Clojure
+community over the years. They are now mostly used when presenting interfaces
+that people are expected to type at the REPL or the outermost layers of an API.
+In general, inner layers of the code find it easier to pass options as an
+explicit map.
 
 ** Namespaced keywords
    :PROPERTIES:
    :CUSTOM_ID: _namespaced_keywords
    :END:
 
-If the keys in your map are namespaced keywords, you can also use
-destructuring with it, even though local binding symbols are not allowed
-to have namespaces. Destructuring a namespaced key will bind a value to
-the local name part of the key and drop the namespace. (Thus you can use
-=:or= as with a non-namespaced key.)
+If the keys in your map are namespaced keywords, you can also use destructuring
+with it, even though local binding symbols are not allowed to have namespaces.
+Destructuring a namespaced key will bind a value to the local name part of the
+key and drop the namespace. (Thus you can use =:or= as with a non-namespaced key.)
 
 #+BEGIN_SRC clojure
     (def human {:person/name "Franklin"
@@ -459,9 +441,9 @@ the local name part of the key and drop the namespace. (Thus you can use
     ;= Franklin is 25 and likes running
 #+END_SRC
 
-Destructuring namespaced keywords using =:keys= alone can result in
-local bindings that clash. Because all map destructuring options can be
-combined, any local binding form can be defined individually.
+Destructuring namespaced keywords using =:keys= alone can result in local bindings
+that clash. Because all map destructuring options can be combined, any local
+binding form can be defined individually.
 
 #+BEGIN_SRC clojure
     (def human {:person/name "Franklin"
@@ -474,8 +456,8 @@ combined, any local binding form can be defined individually.
     ;= Franklin is 25 and likes running
 #+END_SRC
 
-You can even destructure using auto-resolved keywords, which will again
-be bound to only the name part of the key:
+You can even destructure using auto-resolved keywords, which will again be bound
+to only the name part of the key:
 
 #+BEGIN_SRC clojure
     ;; this assumes you have a person.clj namespace in your project
@@ -489,19 +471,19 @@ be bound to only the name part of the key:
     ;= Franklin is 25
 #+END_SRC
 
-Creating and destructuring maps with auto-resolved keywords allow us to
-write code using a namespace alias (here =p=) that is defined by a
-=require= in the current namespace, giving us a means of namespace
-indirection that can be changed at a single place in the code.
+Creating and destructuring maps with auto-resolved keywords allow us to write
+code using a namespace alias (here =p=) that is defined by a =require= in the
+current namespace, giving us a means of namespace indirection that can be
+changed at a single place in the code.
 
-All symbols bound in the context of destructuring can be further
-destructured - this allows destructuring to be used in a nested fashion
-for both sequential and associative destructuring. It is less obvious,
-but this also extends to the symbol defined after =&=.
+All symbols bound in the context of destructuring can be further destructured -
+this allows destructuring to be used in a nested fashion for both sequential and
+associative destructuring. It is less obvious, but this also extends to the
+symbol defined after =&=.
 
-This example destructures the =&= seq in place to decode the rest of the
-arguments as options (note that we are thus destructuring the two
-arguments sequentially and the rest associatively):
+This example destructures the =&= seq in place to decode the rest of the arguments
+as options (note that we are thus destructuring the two arguments sequentially
+and the rest associatively):
 
 #+BEGIN_SRC clojure
     (defn f-with-options
@@ -517,14 +499,14 @@ arguments sequentially and the rest associatively):
   :CUSTOM_ID: _where_to_destructure
   :END:
 
-You can utilize destructuring anywhere that there is an explicit or
-implicit let binding.
+You can utilize destructuring anywhere that there is an explicit or implicit let
+binding.
 
-One of the most common places to see destructuring is in pulling apart
-the arguments passed to a function.
+One of the most common places to see destructuring is in pulling apart the
+arguments passed to a function.
 
-Here we have the standard let x equal this, let y equal that, etc...​
-Again, this is perfectly valid code, it's just verbose.
+Here we have the standard let x equal this, let y equal that, etc...​ Again, this
+is perfectly valid code, it's just verbose.
 
 #+BEGIN_SRC clojure
     (defn print-coordinates-1 [point]
@@ -534,9 +516,9 @@ Again, this is perfectly valid code, it's just verbose.
         (println "x:" x ", y:" y ", z:" z)))
 #+END_SRC
 
-Any time we see code that is using =first=, =second=, =nth=, or =get= to
-pull apart a data structure, it's likely that destructuring can clean
-that up - we can start by rewriting the =let=:
+Any time we see code that is using =first=, =second=, =nth=, or =get= to pull apart a
+data structure, it's likely that destructuring can clean that up - we can start
+by rewriting the =let=:
 
 #+BEGIN_SRC clojure
     (defn print-coordinates-2 [point]
@@ -552,12 +534,12 @@ incoming parameters, just like in a let:
       (println "x:" x ", y:" y ", z:" z))
 #+END_SRC
 
-We have replaced several lines of code that pulled apart the incoming
-point data with a concise statement about the structure of that data
-that also binds the data to local values.
+We have replaced several lines of code that pulled apart the incoming point data
+with a concise statement about the structure of that data that also binds the
+data to local values.
 
-For a more realistic example, let's create a map containing some basic
-contact information for the infamous John Smith.
+For a more realistic example, let's create a map containing some basic contact
+information for the infamous John Smith.
 
 #+BEGIN_SRC clojure
     (def john-smith {:f-name "John"
@@ -567,8 +549,8 @@ contact information for the infamous John Smith.
                      :title "Sith Lord of Git"})
 #+END_SRC
 
-Now that we have John's personal information we need to access the
-values within this map.
+Now that we have John's personal information we need to access the values within
+this map.
 
 #+BEGIN_SRC clojure
     (defn print-contact-info [{:keys [f-name l-name phone company title]}]
@@ -580,8 +562,8 @@ values within this map.
     ;= You can reach him at 555-555-5555
 #+END_SRC
 
-This function will associatively destructure the input using the =:keys=
-shortcut and then print out the contact information that we provided.
+This function will associatively destructure the input using the =:keys= shortcut
+and then print out the contact information that we provided.
 
 But what about when we want to send John a nice letter?
 
@@ -598,8 +580,8 @@ But what about when we want to send John a nice letter?
                      :title "Sith Lord of Git"})
 #+END_SRC
 
-We have an address in there now, but we needed to nest a map into our
-original structure in order to accomplish this.
+We have an address in there now, but we needed to nest a map into our original
+structure in order to accomplish this.
 
 #+BEGIN_SRC clojure
     (defn print-contact-info
@@ -624,17 +606,15 @@ original structure in order to accomplish this.
   :END:
 
 Macro writers may find the need to write a macro that incorporates
-destructuring. The most common way to do so is to produce a call to
-something that already does destructuring (like =let=, =loop=, =fn=,
-etc). Some examples of this in =clojure.core= include =if-let=,
-=when-let=, =when-some=, etc.
+destructuring. The most common way to do so is to produce a call to something
+that already does destructuring (like =let=, =loop=, =fn=, etc). Some examples of this
+in =clojure.core= include =if-let=, =when-let=, =when-some=, etc.
 
-However, in rare cases you might want to instead resolve the
-destructuring yourself in a macro. In this case, use the (undocumented)
-=clojure.core/destructure= function, which implements the destructuring
-logic and is what =let= and =loop= actually invoke. The =destructure=
-function is designed to be invoked in a macro and expects to take a form
-and return a form:
+However, in rare cases you might want to instead resolve the destructuring
+yourself in a macro. In this case, use the (undocumented)
+=clojure.core/destructure= function, which implements the destructuring logic and
+is what =let= and =loop= actually invoke. The =destructure= function is designed to be
+invoked in a macro and expects to take a form and return a form:
 
 #+BEGIN_SRC clojure
     (destructure '[[x & remaining :as all] numbers])
@@ -644,6 +624,5 @@ and return a form:
     ;=  all vec__1]
 #+END_SRC
 
-The result was formatted here to give it a little more clarity. This
-example should also give you some insight into how destructuring works
-under the hood.
+The result was formatted here to give it a little more clarity. This example
+should also give you some insight into how destructuring works under the hood.

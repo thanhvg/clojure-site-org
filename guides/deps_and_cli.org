@@ -7,39 +7,35 @@ Clojure provides command line tools for:
 - Evaluating Clojure expressions
 
 In all the above scenarios you might want to use other Clojure and Java
-libraries (dependencies or 'deps'). These may be libraries you are
-writing locally, projects in git (e.g. on GitHub) or, commonly,
-libraries available in the Maven ecosystem and hosted by central
-repositories like Maven Central or Clojars.
+libraries (dependencies or 'deps'). These may be libraries you are writing
+locally, projects in git (e.g. on GitHub) or, commonly, libraries available in
+the Maven ecosystem and hosted by central repositories like Maven Central or
+Clojars.
 
 In all cases, using a library involves:
 
-1. specifying which library you want to use, providing its name and
-   other aspects like version
+1. specifying which library you want to use, providing its name and other
+   aspects like version
 
-2. getting it (once) from the git or maven repositories to your local
-   machine
+2. getting it (once) from the git or maven repositories to your local machine
 
-3. making it available on the JVM classpath so Clojure can find it while
-   your REPL or program is running
+3. making it available on the JVM classpath so Clojure can find it while your
+   REPL or program is running
 
-Clojure tools specify a syntax and file (deps.edn) for (a), given which
-they'll handle (b) and (c) automatically.
+Clojure tools specify a syntax and file (deps.edn) for (a), given which they'll
+handle (b) and (c) automatically.
 
-See [[file:getting_started.org][Getting Started]] for details on how to
-install the tools. Here we will demonstrate how to get started. See
-[[file:xref/../../reference/deps_and_cli.org][Deps and CLI]] for a
-complete reference. See the
-[[https://github.com/clojure/brew-install/blob/1.10.1/CHANGELOG.md][changelog]]
-for version information.
+See [[file:getting_started.org][Getting Started]] for details on how to install the tools. Here we will
+demonstrate how to get started. See [[file:xref/../../reference/deps_and_cli.org][Deps and CLI]] for a complete reference. See
+the [[https://github.com/clojure/brew-install/blob/1.10.1/CHANGELOG.md][changelog]] for version information.
 
 * Running a REPL and using libraries
   :PROPERTIES:
   :CUSTOM_ID: _running_a_repl_and_using_libraries
   :END:
 
-After you download and install the tools, you can start a REPL by
-running the =clj= tool:
+After you download and install the tools, you can start a REPL by running the
+=clj= tool:
 
 #+BEGIN_EXAMPLE
     $ clj
@@ -47,8 +43,8 @@ running the =clj= tool:
     user=>
 #+END_EXAMPLE
 
-Once in the REPL you can type Clojure expressions and press enter to
-evaluate them. Type Control-D to exit the REPL:
+Once in the REPL you can type Clojure expressions and press enter to evaluate
+them. Type Control-D to exit the REPL:
 
 #+BEGIN_EXAMPLE
     user=> (+ 2 3)   # press the `enter` key after typing the expression to evaluate it
@@ -57,16 +53,14 @@ evaluate them. Type Control-D to exit the REPL:
     $
 #+END_EXAMPLE
 
-There are many Clojure and Java libraries available that provide access
-to practically any functionality you might need. For example, consider
-the commonly used Clojure library
-[[https://github.com/dm3/clojure.java-time][clojure.java-time]] for
-working with dates and times.
+There are many Clojure and Java libraries available that provide access to
+practically any functionality you might need. For example, consider the commonly
+used Clojure library [[https://github.com/dm3/clojure.java-time][clojure.java-time]] for working with dates and times.
 
-To work with this library, you need to declare it as a dependency so the
-tool can ensure it has been downloaded and add it to the classpath. The
-readme in most projects shows the name and version to use. Create a
-=deps.edn= file to declare the dependency:
+To work with this library, you need to declare it as a dependency so the tool
+can ensure it has been downloaded and add it to the classpath. The readme in
+most projects shows the name and version to use. Create a =deps.edn= file to
+declare the dependency:
 
 #+BEGIN_SRC clojure
     {:deps
@@ -86,18 +80,18 @@ Restart the REPL with the =clj= tool:
     "2020-09-01T03:42:47.691119Z"
 #+END_SRC
 
-You will see messages about a library being downloaded the first time
-you use a dependency. Once the file is downloaded, it will be reused in
-the future. You can use the same process to add other libraries to your
-=deps.edn= file and explore Clojure or Java libraries.
+You will see messages about a library being downloaded the first time you use a
+dependency. Once the file is downloaded, it will be reused in the future. You
+can use the same process to add other libraries to your =deps.edn= file and
+explore Clojure or Java libraries.
 
 * Writing a program
   :PROPERTIES:
   :CUSTOM_ID: _writing_a_program
   :END:
 
-Soon you will want to build and save your own code that makes use of
-these libraries. Create a new directory and copy this deps.edn into it:
+Soon you will want to build and save your own code that makes use of these
+libraries. Create a new directory and copy this deps.edn into it:
 
 #+BEGIN_EXAMPLE
     $ mkdir hello-world
@@ -106,8 +100,8 @@ these libraries. Create a new directory and copy this deps.edn into it:
     $ mkdir src
 #+END_EXAMPLE
 
-By default, the =clj= tool will look for source files in the =src=
-directory. Create =src/hello.clj=:
+By default, the =clj= tool will look for source files in the =src= directory. Create
+=src/hello.clj=:
 
 #+BEGIN_SRC clojure
     (ns hello
@@ -129,8 +123,7 @@ directory. Create =src/hello.clj=:
   :CUSTOM_ID: _using_a_main
   :END:
 
-This program has an entry function =run= that can be executed by =clj=
-using =-X=:
+This program has an entry function =run= that can be executed by =clj= using =-X=:
 
 #+BEGIN_EXAMPLE
     $ clj -X hello/run
@@ -142,11 +135,10 @@ using =-X=:
   :CUSTOM_ID: _using_local_libraries
   :END:
 
-You might decide to move part of this application into a library. The
-=clj= tool uses local coordinates to support projects that exist only on
-your local disk. Let's extract the java-time parts of this application
-out into a library in a parallel directory time-lib. The final structure
-will look something like this:
+You might decide to move part of this application into a library. The =clj= tool
+uses local coordinates to support projects that exist only on your local disk.
+Let's extract the java-time parts of this application out into a library in a
+parallel directory time-lib. The final structure will look something like this:
 
 #+BEGIN_EXAMPLE
     ├── time-lib
@@ -159,8 +151,8 @@ will look something like this:
             └── hello.clj
 #+END_EXAMPLE
 
-Under time-lib, use a copy of the deps.edn file you already have, and
-create a file =src/hello_time.clj=:
+Under time-lib, use a copy of the deps.edn file you already have, and create a
+file =src/hello_time.clj=:
 
 #+BEGIN_SRC clojure
     (ns hello-time
@@ -179,8 +171,7 @@ create a file =src/hello_time.clj=:
         instant))
 #+END_SRC
 
-Update the application at =hello-world/src/hello.clj= to use your
-library instead:
+Update the application at =hello-world/src/hello.clj= to use your library instead:
 
 #+BEGIN_SRC clojure
     (ns hello
@@ -190,17 +181,17 @@ library instead:
       (println "Hello world, the time is" (ht/time-str (ht/now))))
 #+END_SRC
 
-Modify =hello-world/deps.edn= to use a local coordinate that refers to
-the root directory of the time-lib library (make sure to update the path
-for your machine):
+Modify =hello-world/deps.edn= to use a local coordinate that refers to the root
+directory of the time-lib library (make sure to update the path for your
+machine):
 
 #+BEGIN_SRC clojure
     {:deps
      {time-lib/time-lib {:local/root "../time-lib"}}}
 #+END_SRC
 
-You can then test everything from the hello-world directory by running
-the application:
+You can then test everything from the hello-world directory by running the
+application:
 
 #+BEGIN_EXAMPLE
     $ clj -X hello/run
@@ -212,9 +203,9 @@ the application:
   :CUSTOM_ID: _using_git_libraries
   :END:
 
-It would be great to share that library with others. You can accomplish
-this by pushing the project to a public or private git repository and
-letting others use it with a git dependency coordinate.
+It would be great to share that library with others. You can accomplish this by
+pushing the project to a public or private git repository and letting others use
+it with a git dependency coordinate.
 
 First, create a git library for the time-lib:
 
@@ -228,14 +219,14 @@ First, create a git library for the time-lib:
 Then go to a public git repository host (like GitHub) and follow the
 instructions for creating and publishing this git repository.
 
-Finally, modify your app to use the git dependency instead. You'll need
-to gather the following information:
+Finally, modify your app to use the git dependency instead. You'll need to
+gather the following information:
 
 - repository url - in GitHub, use the HTTPS url, like
   =https://github.com/yourname/time-lib.git=
 
-- sha - indicate which version of the git library you want to use. You
-  can run =git rev-parse HEAD= to get the sha of the current repo
+- sha - indicate which version of the git library you want to use. You can run
+  =git rev-parse HEAD= to get the sha of the current repo
 
 Update the =hello-world/deps.edn= to use a git coordinate instead:
 
@@ -245,17 +236,15 @@ Update the =hello-world/deps.edn= to use a git coordinate instead:
       {:git/url "https://github.com/yourname/time-lib" :sha "04d2744549214b5cba04002b6875bdf59f9d88b6"}}}
 #+END_SRC
 
-Note that we've altered the library name. When artifacts are deployed in
-a Maven repository, it's a best practice to use a groupId (the first
-part of the name) that is something you control (usually via DNS or
-trademark). In the case where you have neither, you can instead combine
-the name of a site that establishes identities (like GitHub) with your
-identity on that site, here =github-yourname=.
+Note that we've altered the library name. When artifacts are deployed in a Maven
+repository, it's a best practice to use a groupId (the first part of the name)
+that is something you control (usually via DNS or trademark). In the case where
+you have neither, you can instead combine the name of a site that establishes
+identities (like GitHub) with your identity on that site, here =github-yourname=.
 
 Now you can run the app again, making use of the (shared) git repository
-library. The first time you run it you'll see extra messages on the
-console when =clj= downloads and caches the repository and the commit
-working tree:
+library. The first time you run it you'll see extra messages on the console when
+=clj= downloads and caches the repository and the commit working tree:
 
 #+BEGIN_EXAMPLE
     $ clj -X hello/run
@@ -271,11 +260,10 @@ Now your friends can use =time-lib= too!
   :CUSTOM_ID: _other_examples
   :END:
 
-As your program gets more involved you might need to create variations
-on the standard classpath. The Clojure tools supports classpath
-modifications using aliases, which are parts of the deps file that are
-only used when the corresponding alias is supplied. Some of the things
-you can do are:
+As your program gets more involved you might need to create variations on the
+standard classpath. The Clojure tools supports classpath modifications using
+aliases, which are parts of the deps file that are only used when the
+corresponding alias is supplied. Some of the things you can do are:
 
 - [[#extra_paths][Include a test source directory]]
 
@@ -294,11 +282,10 @@ you can do are:
    :CUSTOM_ID: extra_paths
    :END:
 
-Typically, the project classpath includes only the project source, not
-its test source by default. You can add extra paths as modifications to
-the primary classpath in the make-classpath step of the classpath
-construction. To do so, add an alias =:test= that includes the extra
-relative source path ="test"=:
+Typically, the project classpath includes only the project source, not its test
+source by default. You can add extra paths as modifications to the primary
+classpath in the make-classpath step of the classpath construction. To do so,
+add an alias =:test= that includes the extra relative source path ="test"=:
 
 #+BEGIN_SRC clojure
     {:deps
@@ -308,8 +295,8 @@ relative source path ="test"=:
      {:test {:extra-paths ["test"]}}}
 #+END_SRC
 
-Apply that classpath modification and examine the modified classpath by
-invoking =clj -A:test -Spath=:
+Apply that classpath modification and examine the modified classpath by invoking
+=clj -A:test -Spath=:
 
 #+BEGIN_EXAMPLE
     $ clj -A:test -Spath
@@ -326,28 +313,28 @@ Note that the test dir is now included in the classpath.
    :CUSTOM_ID: extra_deps
    :END:
 
-Aliases in the =deps.edn= file can also be used to add optional
-dependencies that affect the classpath:
+Aliases in the =deps.edn= file can also be used to add optional dependencies that
+affect the classpath:
 
 #+BEGIN_SRC clojure
     {:aliases
      {:bench {:extra-deps {criterium/criterium {:mvn/version "0.4.4"}}}}}
 #+END_SRC
 
-Here the =:bench= alias is used to add an extra dependency, namely the
-criterium benchmarking library.
+Here the =:bench= alias is used to add an extra dependency, namely the criterium
+benchmarking library.
 
-You can add this dependency to your classpath by adding the =:bench=
-alias to modify the dependency resolution: =clj -A:bench=.
+You can add this dependency to your classpath by adding the =:bench= alias to
+modify the dependency resolution: =clj -A:bench=.
 
 ** Override a dependency
    :PROPERTIES:
    :CUSTOM_ID: override_deps
    :END:
 
-You can use multiple aliases in combination. For example this =deps.edn=
-file defines two aliases - =:old-async= to force the use of an older
-core.async version and =:bench= to add an extra dependency:
+You can use multiple aliases in combination. For example this =deps.edn= file
+defines two aliases - =:old-async= to force the use of an older core.async version
+and =:bench= to add an extra dependency:
 
 #+BEGIN_SRC clojure
     {:deps
@@ -365,11 +352,11 @@ Activate both aliases as follows: =clj -A:bench:old-async=.
    :CUSTOM_ID: local_jar
    :END:
 
-Occasionally you may need to refer directly to a jar on disk that is not
-present in a Maven repository, such as a database driver jar.
+Occasionally you may need to refer directly to a jar on disk that is not present
+in a Maven repository, such as a database driver jar.
 
-Specify local jar dependencies with a local coordinate that points
-directly to a jar file instead of a directory:
+Specify local jar dependencies with a local coordinate that points directly to a
+jar file instead of a directory:
 
 #+BEGIN_SRC clojure
     {:deps
@@ -381,16 +368,11 @@ directly to a jar file instead of a directory:
    :CUSTOM_ID: aot_compilation
    :END:
 
-When using
-[[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/gen-class][gen-class]]
-or
-[[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/gen-interface][gen-interface]],
-the Clojure source must be ahead-of-time compiled to generate the java
-class(es).
+When using [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/gen-class][gen-class]] or [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/gen-interface][gen-interface]], the Clojure source must be ahead-of-time
+compiled to generate the java class(es).
 
-This can be done by calling =compile=. The default destination for
-compiled class files is =classes/=, which needs to be created and added
-to the classpath:
+This can be done by calling =compile=. The default destination for compiled class
+files is =classes/=, which needs to be created and added to the classpath:
 
 #+BEGIN_EXAMPLE
     $ mkdir classes
@@ -416,9 +398,8 @@ Declare a class with gen-class in =src/my_class.clj=:
 #+END_SRC
 
 Then you can reference the class with =:import= in another source file
-=src/hello.clj=. Notice that the namespace is also added in =:require=
-so compilation can automatically find all dependent namespaces and
-compile them.
+=src/hello.clj=. Notice that the namespace is also added in =:require= so
+compilation can automatically find all dependent namespaces and compile them.
 
 #+BEGIN_SRC clojure
     (ns hello
@@ -443,20 +424,18 @@ And then run the hello namespace:
     Hello, World!
 #+END_EXAMPLE
 
-See [[file:xref/../../reference/compilation.org][Compilation and Class
-Generation]] for a complete reference.
+See [[file:xref/../../reference/compilation.org][Compilation and Class Generation]] for a complete reference.
 
 ** Run a socket server remote repl
    :PROPERTIES:
    :CUSTOM_ID: socket_repl
    :END:
 
-Clojure provides built-in support for running
-[[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core.server/start-server][socket
-servers]], and in particular using them to host remote REPLs.
+Clojure provides built-in support for running [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core.server/start-server][socket servers]], and in particular
+using them to host remote REPLs.
 
-To configure a socket server repl, add the following base configuration
-to your =deps.edn=:
+To configure a socket server repl, add the following base configuration to your
+=deps.edn=:
 
 #+BEGIN_SRC clojure
     {:aliases
@@ -474,8 +453,8 @@ And then start the server by invoking with the alias:
     clojure -X:repl-server
 #+END_EXAMPLE
 
-If you like, you can also override the default parameters (or add
-additional options) on the command line:
+If you like, you can also override the default parameters (or add additional
+options) on the command line:
 
 #+BEGIN_EXAMPLE
     clojure -X:repl-server :port 51234

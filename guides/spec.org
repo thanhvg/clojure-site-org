@@ -3,10 +3,8 @@
   :CUSTOM_ID: _getting_started
   :END:
 
-The [[file:xref/../../../about/spec.org][spec]] library
-([[https://clojure.github.io/spec.alpha][API docs]]) specifies the
-structure of data, validates or conforms it, and can generate data based
-on the spec.
+The [[file:xref/../../../about/spec.org][spec]] library ([[https://clojure.github.io/spec.alpha][API docs]]) specifies the structure of data, validates or
+conforms it, and can generate data based on the spec.
 
 To use spec, declare a dependency on Clojure 1.9.0 or higher:
 
@@ -14,8 +12,8 @@ To use spec, declare a dependency on Clojure 1.9.0 or higher:
     [org.clojure/clojure "1.10.0"]
 #+END_SRC
 
-To start working with spec, require the =clojure.spec.alpha= namespace
-at the REPL:
+To start working with spec, require the =clojure.spec.alpha= namespace at the
+REPL:
 
 #+BEGIN_SRC clojure
     (require '[clojure.spec.alpha :as s])
@@ -33,41 +31,36 @@ Or include spec in your namespace:
   :CUSTOM_ID: _predicates
   :END:
 
-Each spec describes a set of allowed values. There are several ways to
-build specs and all of them can be composed to build more sophisticated
-specs.
+Each spec describes a set of allowed values. There are several ways to build
+specs and all of them can be composed to build more sophisticated specs.
 
-Any existing Clojure function that takes a single argument and returns a
-truthy value is a valid predicate spec. We can check whether a
-particular data value conforms to a spec using
-[[https://clojure.github.io/spec.alpha/clojure.spec.alpha-api.html#clojure.spec.alpha/conform][=conform=]]:
+Any existing Clojure function that takes a single argument and returns a truthy
+value is a valid predicate spec. We can check whether a particular data value
+conforms to a spec using [[https://clojure.github.io/spec.alpha/clojure.spec.alpha-api.html#clojure.spec.alpha/conform][=conform=]]:
 
 #+BEGIN_SRC clojure
     (s/conform even? 1000)
     ;;=> 1000
 #+END_SRC
 
-The =conform= function takes something that can be a spec and a data
-value. Here we are passing a predicate which is implicitly converted
-into a spec. The return value is "conformed". Here, the conformed value
-is the same as the original value - we'll see later where that starts to
-deviate. If the value does not conform to the spec, the special value
-=:clojure.spec.alpha/invalid= is returned.
+The =conform= function takes something that can be a spec and a data value. Here
+we are passing a predicate which is implicitly converted into a spec. The return
+value is "conformed". Here, the conformed value is the same as the original
+value - we'll see later where that starts to deviate. If the value does not
+conform to the spec, the special value =:clojure.spec.alpha/invalid= is returned.
 
 If you don't want to use the conformed value or check for
-=:clojure.spec.alpha/invalid=, the helper
-[[https://clojure.github.io/spec.alpha/clojure.spec.alpha-api.html#clojure.spec.alpha/valid?][=valid?=]]
-can be used instead to return a boolean.
+=:clojure.spec.alpha/invalid=, the helper [[https://clojure.github.io/spec.alpha/clojure.spec.alpha-api.html#clojure.spec.alpha/valid?][=valid?=]] can be used instead to return a
+boolean.
 
 #+BEGIN_SRC clojure
     (s/valid? even? 10)
     ;;=> true
 #+END_SRC
 
-Note that again =valid?= implicitly converts the predicate function into
-a spec. The spec library allows you to leverage all of the functions you
-already have - there is no special dictionary of predicates. Some more
-examples:
+Note that again =valid?= implicitly converts the predicate function into a spec.
+The spec library allows you to leverage all of the functions you already have -
+there is no special dictionary of predicates. Some more examples:
 
 #+BEGIN_SRC clojure
     (s/valid? nil? nil)  ;; true
@@ -80,8 +73,7 @@ examples:
     (s/valid? inst? (Date.))  ;; true
 #+END_SRC
 
-Sets can also be used as predicates that match one or more literal
-values:
+Sets can also be used as predicates that match one or more literal values:
 
 #+BEGIN_SRC clojure
     (s/valid? #{:club :diamond :heart :spade} :club) ;; true
@@ -95,24 +87,21 @@ values:
   :CUSTOM_ID: _registry
   :END:
 
-Until now, we've been using specs directly. However, spec provides a
-central registry for globally declaring reusable specs. The registry
-associates a namespaced keyword with a specification. The use of
-namespaces ensures that we can define reusable non-conflicting specs
-across libraries or applications.
+Until now, we've been using specs directly. However, spec provides a central
+registry for globally declaring reusable specs. The registry associates a
+namespaced keyword with a specification. The use of namespaces ensures that we
+can define reusable non-conflicting specs across libraries or applications.
 
-Specs are registered using
-[[https://clojure.github.io/spec.alpha/clojure.spec.alpha-api.html#clojure.spec.alpha/def][=def=]].
-It's up to you to register the specification in a namespace that makes
-sense (typically a namespace you control).
+Specs are registered using [[https://clojure.github.io/spec.alpha/clojure.spec.alpha-api.html#clojure.spec.alpha/def][=def=]]. It's up to you to register the specification
+in a namespace that makes sense (typically a namespace you control).
 
 #+BEGIN_SRC clojure
     (s/def ::date inst?)
     (s/def ::suit #{:club :diamond :heart :spade})
 #+END_SRC
 
-A registered spec identifier can be used in place of a spec definition
-in the operations we've seen so far - =conform= and =valid?=.
+A registered spec identifier can be used in place of a spec definition in the
+operations we've seen so far - =conform= and =valid?=.
 
 #+BEGIN_SRC clojure
     (s/valid? ::date (java.util.Date.))
@@ -121,28 +110,27 @@ in the operations we've seen so far - =conform= and =valid?=.
     ;;=> :club
 #+END_SRC
 
-You will see later that registered specs can (and should) be used
-anywhere we compose specs.
+You will see later that registered specs can (and should) be used anywhere we
+compose specs.
 
 #+BEGIN_QUOTE
   *Important*
 
-  In this guide we will often use auto-resolved keywords like =::date=.
-  The Clojure reader resolves these to a fully-qualified keyword using
-  the current namespace (=*ns*=). You may also see some cases where a
-  fully-qualified keyword like =:animal/dog= is used to name a spec.
+  In this guide we will often use auto-resolved keywords like =::date=. The
+  Clojure reader resolves these to a fully-qualified keyword using the current
+  namespace (=*ns*=). You may also see some cases where a fully-qualified keyword
+  like =:animal/dog= is used to name a spec.
 
-  Generally, Clojure code should use keyword namespaces that are
-  sufficiently unique such that they will not conflict with other spec
-  users. If you are writing a library for public use, spec namespaces
-  should include the project name, url, or organization such that you
-  will not conflict. Within a private organization, you may be able to
-  use shorter names - the important thing is that they are sufficiently
-  unique to avoid conflicts.
+  Generally, Clojure code should use keyword namespaces that are sufficiently
+  unique such that they will not conflict with other spec users. If you are
+  writing a library for public use, spec namespaces should include the project
+  name, url, or organization such that you will not conflict. Within a private
+  organization, you may be able to use shorter names - the important thing is
+  that they are sufficiently unique to avoid conflicts.
 #+END_QUOTE
 
-Once a spec has been added to the registry, =doc= knows how to find it
-and print it as well:
+Once a spec has been added to the registry, =doc= knows how to find it and print
+it as well:
 
 #+BEGIN_SRC clojure
     (doc ::date)
@@ -163,12 +151,8 @@ and print it as well:
   :CUSTOM_ID: _composing_predicates
   :END:
 
-The simplest way to compose specs is with
-[[https://clojure.github.io/spec.alpha/clojure.spec.alpha-api.html#clojure.spec.alpha/and][=and=]]
-and
-[[https://clojure.github.io/spec.alpha/clojure.spec.alpha-api.html#clojure.spec.alpha/or][=or=]].
-Let's create a spec that combines several predicates into a composite
-spec with =s/and=:
+The simplest way to compose specs is with [[https://clojure.github.io/spec.alpha/clojure.spec.alpha-api.html#clojure.spec.alpha/and][=and=]] and [[https://clojure.github.io/spec.alpha/clojure.spec.alpha-api.html#clojure.spec.alpha/or][=or=]]. Let's create a spec
+that combines several predicates into a composite spec with =s/and=:
 
 #+BEGIN_SRC clojure
     (s/def ::big-even (s/and int? even? #(> % 1000)))
@@ -187,14 +171,13 @@ We can also use =s/or= to specify two alternatives:
     (s/valid? ::name-or-id :foo) ;; false
 #+END_SRC
 
-This =or= spec is the first case we've seen that involves a choice
-during validity checking. Each choice is annotated with a tag (here,
-between =:name= and =:id=) and those tags give the branches names that
-can be used to understand or enrich the data returned from =conform= and
-other spec functions.
+This =or= spec is the first case we've seen that involves a choice during validity
+checking. Each choice is annotated with a tag (here, between =:name= and =:id=) and
+those tags give the branches names that can be used to understand or enrich the
+data returned from =conform= and other spec functions.
 
-When an =or= is conformed, it returns a vector with the tag name and
-conformed value:
+When an =or= is conformed, it returns a vector with the tag name and conformed
+value:
 
 #+BEGIN_SRC clojure
     (s/conform ::name-or-id "abc")
@@ -203,11 +186,9 @@ conformed value:
     ;;=> [:id 100]
 #+END_SRC
 
-Many predicates that check an instance's type do not allow =nil= as a
-valid value (=string?=, =number?=, =keyword?=, etc). To include =nil= as
-a valid value, use the provided function
-[[https://clojure.github.io/spec.alpha/clojure.spec.alpha-api.html#clojure.spec.alpha/nilable][=nilable=]]
-to make a spec:
+Many predicates that check an instance's type do not allow =nil= as a valid value
+(=string?=, =number?=, =keyword?=, etc). To include =nil= as a valid value, use the
+provided function [[https://clojure.github.io/spec.alpha/clojure.spec.alpha-api.html#clojure.spec.alpha/nilable][=nilable=]] to make a spec:
 
 #+BEGIN_SRC clojure
     (s/valid? string? nil)
@@ -221,10 +202,9 @@ to make a spec:
   :CUSTOM_ID: _explain
   :END:
 
-[[https://clojure.github.io/spec.alpha/clojure.spec.alpha-api.html#clojure.spec.alpha/explain][=explain=]]
-is another high-level operation in spec that can be used to report (to
-=*out*=) why a value does not conform to a spec. Let's see what explain
-says about some non-conforming examples we've seen so far.
+[[https://clojure.github.io/spec.alpha/clojure.spec.alpha-api.html#clojure.spec.alpha/explain][=explain=]] is another high-level operation in spec that can be used to report (to
+=*out*=) why a value does not conform to a spec. Let's see what explain says about
+some non-conforming examples we've seen so far.
 
 #+BEGIN_SRC clojure
     (s/explain ::suit 42)
@@ -236,36 +216,32 @@ says about some non-conforming examples we've seen so far.
     ;; :foo - failed: int? at: [:id] spec: :user/name-or-id
 #+END_SRC
 
-Let's examine the output of the final example more closely. First note
-that there are two errors being reported - spec will evaluate all
-possible alternatives and report errors on every path. The parts of each
-error are:
+Let's examine the output of the final example more closely. First note that
+there are two errors being reported - spec will evaluate all possible
+alternatives and report errors on every path. The parts of each error are:
 
 - val - the value in the user's input that does not match
 
 - spec - the spec that was being evaluated
 
-- at - a path (a vector of keywords) indicating the location within the
-  spec where the error occurred - the tags in the path correspond to any
-  tagged part in a spec (the alternatives in an =or= or =alt=, the parts
-  of a =cat=, the keys in a map, etc)
+- at - a path (a vector of keywords) indicating the location within the spec
+  where the error occurred - the tags in the path correspond to any tagged part
+  in a spec (the alternatives in an =or= or =alt=, the parts of a =cat=, the keys in a
+  map, etc)
 
 - predicate - the actual predicate that was not satisfied by val
 
-- in - the key path through a nested data val to the failing value. In
-  this example, the top-level value is the one that is failing so this
-  is essentially an empty path and is omitted.
+- in - the key path through a nested data val to the failing value. In this
+  example, the top-level value is the one that is failing so this is essentially
+  an empty path and is omitted.
 
-For the first reported error we can see that the value =:foo= did not
-satisfy the predicate =string?= at the path =:name= in the spec
-=::name-or-id=. The second reported error is similar but fails on the
-=:id= path instead. The actual value is a keyword so neither is a match.
+For the first reported error we can see that the value =:foo= did not satisfy the
+predicate =string?= at the path =:name= in the spec =::name-or-id=. The second
+reported error is similar but fails on the =:id= path instead. The actual value is
+a keyword so neither is a match.
 
-In addition to =explain=, you can use
-[[https://clojure.github.io/spec.alpha/clojure.spec.alpha-api.html#clojure.spec.alpha/explain-str][=explain-str=]]
-to receive the error messages as a string or
-[[https://clojure.github.io/spec.alpha/clojure.spec.alpha-api.html#clojure.spec.alpha/explain-data][=explain-data=]]
-to receive the errors as data.
+In addition to =explain=, you can use [[https://clojure.github.io/spec.alpha/clojure.spec.alpha-api.html#clojure.spec.alpha/explain-str][=explain-str=]] to receive the error messages
+as a string or [[https://clojure.github.io/spec.alpha/clojure.spec.alpha-api.html#clojure.spec.alpha/explain-data][=explain-data=]] to receive the errors as data.
 
 #+BEGIN_SRC clojure
     (s/explain-data ::name-or-id :foo)
@@ -285,11 +261,10 @@ to receive the errors as data.
 #+BEGIN_QUOTE
   *Note*
 
-  This result also demonstrates the namespace map literal syntax added
-  in Clojure 1.9. Maps may be prefixed with =#:= or =#::= (for
-  autoresolve) to specify a default namespace for all keys in the map.
-  In this example, this is equivalent to
-  ={:clojure.spec.alpha/problems …​}=
+  This result also demonstrates the namespace map literal syntax added in
+  Clojure 1.9. Maps may be prefixed with =#:= or =#::= (for autoresolve) to specify
+  a default namespace for all keys in the map. In this example, this is
+  equivalent to ={:clojure.spec.alpha/problems …​}=
 #+END_QUOTE
 
 * Entity Maps
@@ -297,23 +272,21 @@ to receive the errors as data.
   :CUSTOM_ID: _entity_maps
   :END:
 
-Clojure programs rely heavily on passing around maps of data. A common
-approach in other libraries is to describe each entity type, combining
-both the keys it contains and the structure of their values. Rather than
-define attribute (key+value) specifications in the scope of the entity
-(the map), specs assign meaning to individual attributes, then collect
-them into maps using set semantics (on the keys). This approach allows
-us to start assigning (and sharing) semantics at the attribute level
-across our libraries and applications.
+Clojure programs rely heavily on passing around maps of data. A common approach
+in other libraries is to describe each entity type, combining both the keys it
+contains and the structure of their values. Rather than define attribute
+(key+value) specifications in the scope of the entity (the map), specs assign
+meaning to individual attributes, then collect them into maps using set
+semantics (on the keys). This approach allows us to start assigning (and
+sharing) semantics at the attribute level across our libraries and applications.
 
-For example, most Ring middleware functions modify the request or
-response map with unqualified keys. However, each middleware could
-instead use namespaced keys with registered semantics for those keys.
-The keys could then be checked for conformance, creating a system with
-greater opportunities for collaboration and consistency.
+For example, most Ring middleware functions modify the request or response map
+with unqualified keys. However, each middleware could instead use namespaced
+keys with registered semantics for those keys. The keys could then be checked
+for conformance, creating a system with greater opportunities for collaboration
+and consistency.
 
-Entity maps in spec are defined with
-[[https://clojure.github.io/spec.alpha/clojure.spec.alpha-api.html#clojure.spec.alpha/keys][=keys=]]:
+Entity maps in spec are defined with [[https://clojure.github.io/spec.alpha/clojure.spec.alpha-api.html#clojure.spec.alpha/keys][=keys=]]:
 
 #+BEGIN_SRC clojure
     (ns my.domain (:require [clojure.spec.alpha :as s]))
@@ -329,18 +302,16 @@ Entity maps in spec are defined with
                             :opt [::phone]))
 #+END_SRC
 
-This registers a =::person= spec with the required keys =::first-name=,
-=::last-name=, and =::email=, with optional key =::phone=. The map spec
-never specifies the value spec for the attributes, only what attributes
-are required or optional.
+This registers a =::person= spec with the required keys =::first-name=, =::last-name=,
+and =::email=, with optional key =::phone=. The map spec never specifies the value
+spec for the attributes, only what attributes are required or optional.
 
-When conformance is checked on a map, it does two things - checking that
-the required attributes are included, and checking that every registered
-key has a conforming value. We'll see later where optional attributes
-can be useful. Also note that ALL attributes are checked via =keys=, not
-just those listed in the =:req= and =:opt= keys. Thus a bare =(s/keys)=
-is valid and will check all attributes of a map without checking which
-keys are required or optional.
+When conformance is checked on a map, it does two things - checking that the
+required attributes are included, and checking that every registered key has a
+conforming value. We'll see later where optional attributes can be useful. Also
+note that ALL attributes are checked via =keys=, not just those listed in the =:req=
+and =:opt= keys. Thus a bare =(s/keys)= is valid and will check all attributes of a
+map without checking which keys are required or optional.
 
 #+BEGIN_SRC clojure
     (s/valid? ::person
@@ -366,11 +337,10 @@ keys are required or optional.
     ;;   at: [:my.domain/email] spec: :my.domain/email-type
 #+END_SRC
 
-Let's take a moment to examine the explain error output on that final
-example:
+Let's take a moment to examine the explain error output on that final example:
 
-- in - the path within the data to the failing value (here, a key in the
-  person instance)
+- in - the path within the data to the failing value (here, a key in the person
+  instance)
 
 - val - the failing value, here ="n/a"=
 
@@ -378,17 +348,15 @@ example:
 
 - at - the path in the spec where the failing value is located
 
-- predicate - the predicate that failed, here
-  =(re-matches email-regex %)=
+- predicate - the predicate that failed, here =(re-matches email-regex %)=
 
-Much existing Clojure code does not use maps with namespaced keys and so
-=keys= can also specify =:req-un= and =:opt-un= for required and
-optional unqualified keys. These variants specify namespaced keys used
-to find their specification, but the map only checks for the unqualified
-version of the keys.
+Much existing Clojure code does not use maps with namespaced keys and so =keys=
+can also specify =:req-un= and =:opt-un= for required and optional unqualified keys.
+These variants specify namespaced keys used to find their specification, but the
+map only checks for the unqualified version of the keys.
 
-Let's consider a person map that uses unqualified keys but checks
-conformance against the namespaced specs we registered earlier:
+Let's consider a person map that uses unqualified keys but checks conformance
+against the namespaced specs we registered earlier:
 
 #+BEGIN_SRC clojure
     (s/def :unq/person
@@ -430,13 +398,11 @@ Unqualified keys can also be used to validate record attributes:
     ;;=>                   :email "bugs@example.com", :phone nil}
 #+END_SRC
 
-One common occurrence in Clojure is the use of "keyword args" where
-keyword keys and values are passed in a sequential data structure as
-options. Spec provides special support for this pattern with the regex
-op
-[[https://clojure.github.io/spec.alpha/clojure.spec.alpha-api.html#clojure.spec.alpha/keys*][=keys*=]].
-=keys*= has the same syntax and semantics as =keys= but can be embedded
-inside a sequential regex structure.
+One common occurrence in Clojure is the use of "keyword args" where keyword keys
+and values are passed in a sequential data structure as options. Spec provides
+special support for this pattern with the regex op [[https://clojure.github.io/spec.alpha/clojure.spec.alpha-api.html#clojure.spec.alpha/keys*][=keys*=]]. =keys*= has the same
+syntax and semantics as =keys= but can be embedded inside a sequential regex
+structure.
 
 #+BEGIN_SRC clojure
     (s/def ::port number?)
@@ -447,14 +413,13 @@ inside a sequential regex structure.
     ;;=> {:my.domain/id :s1, :my.domain/host "example.com", :my.domain/port 5555}
 #+END_SRC
 
-Sometimes it will be convenient to declare entity maps in parts, either
-because there are different sources for requirements on an entity map or
-because there is a common set of keys and variant-specific parts. The
-=s/merge= spec can be used to combine multiple =s/keys= specs into a
-single spec that combines their requirements. For example consider two
-=keys= specs that define common animal attributes and some dog-specific
-ones. The dog entity itself can be described as a =merge= of those two
-attribute sets:
+Sometimes it will be convenient to declare entity maps in parts, either because
+there are different sources for requirements on an entity map or because there
+is a common set of keys and variant-specific parts. The =s/merge= spec can be used
+to combine multiple =s/keys= specs into a single spec that combines their
+requirements. For example consider two =keys= specs that define common animal
+attributes and some dog-specific ones. The dog entity itself can be described as
+a =merge= of those two attribute sets:
 
 #+BEGIN_SRC clojure
     (s/def :animal/kind string?)
@@ -477,23 +442,20 @@ attribute sets:
   :CUSTOM_ID: _multi_spec
   :END:
 
-One common occurrence in Clojure is to use maps as tagged entities and a
-special field that indicates the "type" of the map where type indicates
-a potentially open set of types, often with shared attributes across the
-types.
+One common occurrence in Clojure is to use maps as tagged entities and a special
+field that indicates the "type" of the map where type indicates a potentially
+open set of types, often with shared attributes across the types.
 
-As previously discussed, the attributes for all types are well-specified
-using attributes stored in the registry by namespaced keyword.
-Attributes shared across entity types automatically gain shared
-semantics. However, we also want to be able to specify the required keys
-per entity type and for that spec provides
-[[https://clojure.github.io/spec.alpha/clojure.spec.alpha-api.html#clojure.spec.alpha/multi-spec][=multi-spec=]]
-which leverages a multimethod to provide for the specification of an
-open set of entity types based on a type tag.
+As previously discussed, the attributes for all types are well-specified using
+attributes stored in the registry by namespaced keyword. Attributes shared
+across entity types automatically gain shared semantics. However, we also want
+to be able to specify the required keys per entity type and for that spec
+provides [[https://clojure.github.io/spec.alpha/clojure.spec.alpha-api.html#clojure.spec.alpha/multi-spec][=multi-spec=]] which leverages a multimethod to provide for the
+specification of an open set of entity types based on a type tag.
 
-For example, imagine an API that received event objects which shared
-some common fields but also had type-specific shapes. First we would
-register the event attributes:
+For example, imagine an API that received event objects which shared some common
+fields but also had type-specific shapes. First we would register the event
+attributes:
 
 #+BEGIN_SRC clojure
     (s/def :event/type keyword?)
@@ -503,9 +465,9 @@ register the event attributes:
     (s/def :error/code int?)
 #+END_SRC
 
-We then need a multimethod that defines a dispatch function for choosing
-the selector (here our =:event/type= field) and returns the appropriate
-spec based on the value:
+We then need a multimethod that defines a dispatch function for choosing the
+selector (here our =:event/type= field) and returns the appropriate spec based on
+the value:
 
 #+BEGIN_SRC clojure
     (defmulti event-type :event/type)
@@ -515,12 +477,11 @@ spec based on the value:
       (s/keys :req [:event/type :event/timestamp :error/message :error/code]))
 #+END_SRC
 
-The methods should ignore their argument and return the spec for the
-specified type. Here we've fully spec'ed two possible events - a
-"search" event and an "error" event.
+The methods should ignore their argument and return the spec for the specified
+type. Here we've fully spec'ed two possible events - a "search" event and an
+"error" event.
 
-And then finally we are ready to declare our =multi-spec= and try it
-out.
+And then finally we are ready to declare our =multi-spec= and try it out.
 
 #+BEGIN_SRC clojure
     (s/def :event/event (s/multi-spec event-type :event/type))
@@ -549,18 +510,17 @@ out.
     ;;   at: [:event/search] spec: :event/event
 #+END_SRC
 
-Let's take a moment to examine the explain error output on that final
-example. There were two different kinds of failures detected. The first
-failure is due to the missing required =:event/timestamp= key in the
-event. The second is from the invalid =:search/url= value (a number
-instead of a string). We see the same parts as prior explain errors:
+Let's take a moment to examine the explain error output on that final example.
+There were two different kinds of failures detected. The first failure is due to
+the missing required =:event/timestamp= key in the event. The second is from the
+invalid =:search/url= value (a number instead of a string). We see the same parts
+as prior explain errors:
 
-- in - the path within the data to the failing value. This is omitted on
-  the first error as it's at the root value but is the key in the map on
-  the second error.
+- in - the path within the data to the failing value. This is omitted on the
+  first error as it's at the root value but is the key in the map on the second
+  error.
 
-- val - the failing value, either the full map or the individual key in
-  the map
+- val - the failing value, either the full map or the individual key in the map
 
 - spec - the actual spec that failed
 
@@ -568,24 +528,20 @@ instead of a string). We see the same parts as prior explain errors:
 
 - predicate - the actual predicate that failed
 
-The =multi-spec= approach allows us to create an *open* system for spec
-validation, just like multimethods and protocols. New event types can be
-added later by just extending the =event-type= multimethod.
+The =multi-spec= approach allows us to create an *open* system for spec validation,
+just like multimethods and protocols. New event types can be added later by just
+extending the =event-type= multimethod.
 
 * Collections
   :PROPERTIES:
   :CUSTOM_ID: _collections
   :END:
 
-A few helpers are provided for other special collection cases -
-[[https://clojure.github.io/spec.alpha/clojure.spec.alpha-api.html#clojure.spec.alpha/coll-of][=coll-of=]],
-[[https://clojure.github.io/spec.alpha/clojure.spec.alpha-api.html#clojure.spec.alpha/tuple][=tuple=]],
-and
-[[https://clojure.github.io/spec.alpha/clojure.spec.alpha-api.html#clojure.spec.alpha/map-of][=map-of=]].
+A few helpers are provided for other special collection cases - [[https://clojure.github.io/spec.alpha/clojure.spec.alpha-api.html#clojure.spec.alpha/coll-of][=coll-of=]],
+[[https://clojure.github.io/spec.alpha/clojure.spec.alpha-api.html#clojure.spec.alpha/tuple][=tuple=]], and [[https://clojure.github.io/spec.alpha/clojure.spec.alpha-api.html#clojure.spec.alpha/map-of][=map-of=]].
 
-For the special case of a homogenous collection of arbitrary size, you
-can use =coll-of= to specify a collection of elements satisfying a
-predicate.
+For the special case of a homogenous collection of arbitrary size, you can use
+=coll-of= to specify a collection of elements satisfying a predicate.
 
 #+BEGIN_SRC clojure
     (s/conform (s/coll-of keyword?) [:a :b :c])
@@ -596,22 +552,21 @@ predicate.
 
 Additionally, =coll-of= can be passed a number of keyword arg options:
 
-- =:kind= - a predicate that the incoming collection must satisfy, such
-  as =vector?=
+- =:kind= - a predicate that the incoming collection must satisfy, such as =vector?=
 
 - =:count= - specifies exact expected count
 
-- =:min-count=, =:max-count= - checks that collection has
-  =(<= min-count count max-count)=
+- =:min-count=, =:max-count= - checks that collection has =(<= min-count count
+  max-count)=
 
 - =:distinct= - checks that all elements are distinct
 
-- =:into= - one of [], (), {}, or #{} for output conformed value. If
-  =:into= is not specified, the input collection type will be used.
+- =:into= - one of [], (), {}, or #{} for output conformed value. If =:into= is not
+  specified, the input collection type will be used.
 
 Following is an example utilizing some of these options to spec a vector
-containing three distinct numbers conformed as a set and some of the
-errors for different kinds of invalid values:
+containing three distinct numbers conformed as a set and some of the errors for
+different kinds of invalid values:
 
 #+BEGIN_SRC clojure
     (s/def ::vnum3 (s/coll-of number? :kind vector? :count 3 :distinct true :into #{}))
@@ -628,16 +583,14 @@ errors for different kinds of invalid values:
 #+BEGIN_QUOTE
   *Note*
 
-  Both =coll-of= and =map-of= will conform all of their elements, which
-  may make them unsuitable for large collections. In that case, consider
-  [[https://clojure.github.io/spec.alpha/clojure.spec.alpha-api.html#clojure.spec.alpha/every][=every=]]
-  or for maps
-  [[https://clojure.github.io/spec.alpha/clojure.spec.alpha-api.html#clojure.spec.alpha/every-kv][=every-kv=]].
+  Both =coll-of= and =map-of= will conform all of their elements, which may make
+  them unsuitable for large collections. In that case, consider [[https://clojure.github.io/spec.alpha/clojure.spec.alpha-api.html#clojure.spec.alpha/every][=every=]] or for
+  maps [[https://clojure.github.io/spec.alpha/clojure.spec.alpha-api.html#clojure.spec.alpha/every-kv][=every-kv=]].
 #+END_QUOTE
 
-While =coll-of= is good for homogenous collections of any size, another
-case is a fixed-size positional collection with fields of known type at
-different positions. For that we have =tuple=.
+While =coll-of= is good for homogenous collections of any size, another case is a
+fixed-size positional collection with fields of known type at different
+positions. For that we have =tuple=.
 
 #+BEGIN_SRC clojure
     (s/def ::point (s/tuple double? double? double?))
@@ -645,8 +598,8 @@ different positions. For that we have =tuple=.
     => [1.5 2.5 -0.5]
 #+END_SRC
 
-Note that in this case of a "point" structure with x/y/z values we
-actually had a choice of three possible specs:
+Note that in this case of a "point" structure with x/y/z values we actually had
+a choice of three possible specs:
 
 - Regular expression - =(s/cat :x double? :y double? :z double?)=
 
@@ -666,15 +619,14 @@ actually had a choice of three possible specs:
 
   - Conforms to a vector of the values
 
-In this example, =coll-of= will match other (invalid) values as well
-(like =[1.0]= or =[1.0 2.0 3.0 4.0])=, so it is not a suitable choice -
-we want fixed fields. The choice between a regular expression and tuple
-here is to some degree a matter of taste, possibly informed by whether
-you expect either the tagged return values or error output to be better
-with one or the other.
+In this example, =coll-of= will match other (invalid) values as well (like =[1.0]=
+or =[1.0 2.0 3.0 4.0])=, so it is not a suitable choice - we want fixed fields.
+The choice between a regular expression and tuple here is to some degree a
+matter of taste, possibly informed by whether you expect either the tagged
+return values or error output to be better with one or the other.
 
-In addition to the support for information maps via =keys=, spec also
-provides =map-of= for maps with homogenous key and value predicates.
+In addition to the support for information maps via =keys=, spec also provides
+=map-of= for maps with homogenous key and value predicates.
 
 #+BEGIN_SRC clojure
     (s/def ::scores (s/map-of string? int?))
@@ -682,48 +634,39 @@ provides =map-of= for maps with homogenous key and value predicates.
     ;=> {"Sally" 1000, "Joe" 500}
 #+END_SRC
 
-By default =map-of= will validate but not conform keys because conformed
-keys might create key duplicates that would cause entries in the map to
-be overridden. If conformed keys are desired, pass the option
-=:conform-keys true=.
+By default =map-of= will validate but not conform keys because conformed keys
+might create key duplicates that would cause entries in the map to be
+overridden. If conformed keys are desired, pass the option =:conform-keys true=.
 
-You can also use the various count-related options on =map-of= that you
-have with =coll-of=.
+You can also use the various count-related options on =map-of= that you have with
+=coll-of=.
 
 * Sequences
   :PROPERTIES:
   :CUSTOM_ID: _sequences
   :END:
 
-Sometimes sequential data is used to encode additional structure
-(typically new syntax, often used in macros). spec provides the standard
-[[https://en.wikipedia.org/wiki/Regular_expression][regular expression]]
+Sometimes sequential data is used to encode additional structure (typically new
+syntax, often used in macros). spec provides the standard [[https://en.wikipedia.org/wiki/Regular_expression][regular expression]]
 operators to describe the structure of a sequential data value:
 
-- [[https://clojure.github.io/spec.alpha/clojure.spec.alpha-api.html#clojure.spec.alpha/cat][=cat=]] -
-  concatenation of predicates/patterns
+- [[https://clojure.github.io/spec.alpha/clojure.spec.alpha-api.html#clojure.spec.alpha/cat][=cat=]] - concatenation of predicates/patterns
 
-- [[https://clojure.github.io/spec.alpha/clojure.spec.alpha-api.html#clojure.spec.alpha/alt][=alt=]] -
-  choice among alternative predicates/patterns
+- [[https://clojure.github.io/spec.alpha/clojure.spec.alpha-api.html#clojure.spec.alpha/alt][=alt=]] - choice among alternative predicates/patterns
 
-- [[https://clojure.github.io/spec.alpha/clojure.spec.alpha-api.html#clojure.spec.alpha/*][=*=]] -
-  0 or more of a predicate/pattern
+- [[https://clojure.github.io/spec.alpha/clojure.spec.alpha-api.html#clojure.spec.alpha/*][=*=]] - 0 or more of a predicate/pattern
 
-- [[https://clojure.github.io/spec.alpha/clojure.spec.alpha-api.html#clojure.spec.alpha/%2B][=+=]] -
-  1 or more of a predicate/pattern
+- [[https://clojure.github.io/spec.alpha/clojure.spec.alpha-api.html#clojure.spec.alpha/%2B][=+=]] - 1 or more of a predicate/pattern
 
-- [[https://clojure.github.io/spec.alpha/clojure.spec.alpha-api.html#clojure.spec.alpha/%3F][=?=]] -
-  0 or 1 of a predicate/pattern
+- [[https://clojure.github.io/spec.alpha/clojure.spec.alpha-api.html#clojure.spec.alpha/%3F][=?=]] - 0 or 1 of a predicate/pattern
 
-Like =or=, both =cat= and =alt= tag their "parts" - these tags are then
-used in the conformed value to identify what was matched, to report
-errors, and more.
+Like =or=, both =cat= and =alt= tag their "parts" - these tags are then used in the
+conformed value to identify what was matched, to report errors, and more.
 
-Consider an ingredient represented by a vector containing a quantity
-(number) and a unit (keyword). The spec for this data uses =cat= to
-specify the right components in the right order. Like predicates, regex
-operators are implicitly converted to specs when passed to functions
-like =conform=, =valid?=, etc.
+Consider an ingredient represented by a vector containing a quantity (number)
+and a unit (keyword). The spec for this data uses =cat= to specify the right
+components in the right order. Like predicates, regex operators are implicitly
+converted to specs when passed to functions like =conform=, =valid?=, etc.
 
 #+BEGIN_SRC clojure
     (s/def ::ingredient (s/cat :quantity number? :unit keyword?))
@@ -731,8 +674,8 @@ like =conform=, =valid?=, etc.
     ;;=> {:quantity 2, :unit :teaspoon}
 #+END_SRC
 
-The data is conformed as a map with the tags as keys. We can use
-=explain= to examine non-conforming data.
+The data is conformed as a map with the tags as keys. We can use =explain= to
+examine non-conforming data.
 
 #+BEGIN_SRC clojure
     ;; pass string for unit instead of keyword
@@ -768,9 +711,9 @@ Let's now see the various occurrence operators =*=, =+=, and =?=:
     ;;=> [{:opt :silent?, :val false} {:opt :verbose, :val true}]
 #+END_SRC
 
-Finally, we can use =alt= to specify alternatives within the sequential
-data. Like =cat=, =alt= requires you to tag each alternative but the
-conformed data is a vector of tag and value.
+Finally, we can use =alt= to specify alternatives within the sequential data. Like
+=cat=, =alt= requires you to tag each alternative but the conformed data is a vector
+of tag and value.
 
 #+BEGIN_SRC clojure
     (s/def ::config (s/*
@@ -782,8 +725,8 @@ conformed data is a vector of tag and value.
     ;;    {:prop "-user", :val [:s "joe"]}]
 #+END_SRC
 
-If you need a description of a specification, use =describe= to retrieve
-one. Let's try it on some of the specifications we've already defined:
+If you need a description of a specification, use =describe= to retrieve one.
+Let's try it on some of the specifications we've already defined:
 
 #+BEGIN_SRC clojure
     (s/describe ::seq-of-keywords)
@@ -794,13 +737,11 @@ one. Let's try it on some of the specifications we've already defined:
     ;;=> (* (cat :opt keyword? :val boolean?))
 #+END_SRC
 
-Spec also defines one additional regex operator,
-[[https://clojure.github.io/spec.alpha/clojure.spec.alpha-api.html#clojure.spec.alpha/&][=&=]],
-which takes a regex operator and constrains it with one or more
-additional predicates. This can be used to create regular expressions
-with additional constraints that would otherwise require custom
-predicates. For example, consider wanting to match only sequences with
-an even number of strings:
+Spec also defines one additional regex operator, [[https://clojure.github.io/spec.alpha/clojure.spec.alpha-api.html#clojure.spec.alpha/&][=&=]], which takes a regex
+operator and constrains it with one or more additional predicates. This can be
+used to create regular expressions with additional constraints that would
+otherwise require custom predicates. For example, consider wanting to match only
+sequences with an even number of strings:
 
 #+BEGIN_SRC clojure
     (s/def ::even-strings (s/& (s/* string?) #(even? (count %))))
@@ -810,13 +751,11 @@ an even number of strings:
     (s/valid? ::even-strings ["a" "b" "c" "d"])  ;; true
 #+END_SRC
 
-When regex ops are combined, they describe a single sequence. If you
-need to spec a nested sequential collection, you must use an explicit
-call to
-[[https://clojure.github.io/spec.alpha/clojure.spec.alpha-api.html#clojure.spec.alpha/spec][=spec=]]
-to start a new nested regex context. For example to describe a sequence
-like =[:names ["a" "b"] :nums [1 2 3]]=, you need nested regular
-expressions to describe the inner sequential data:
+When regex ops are combined, they describe a single sequence. If you need to
+spec a nested sequential collection, you must use an explicit call to [[https://clojure.github.io/spec.alpha/clojure.spec.alpha-api.html#clojure.spec.alpha/spec][=spec=]] to
+start a new nested regex context. For example to describe a sequence like
+=[:names ["a" "b"] :nums [1 2 3]]=, you need nested regular expressions to
+describe the inner sequential data:
 
 #+BEGIN_SRC clojure
     (s/def ::nested
@@ -828,8 +767,8 @@ expressions to describe the inner sequential data:
     ;;=> {:names-kw :names, :names ["a" "b"], :nums-kw :nums, :nums [1 2 3]}
 #+END_SRC
 
-If the specs were removed this spec would instead match a sequence like
-=[:names "a" "b" :nums 1 2 3]=.
+If the specs were removed this spec would instead match a sequence like =[:names
+"a" "b" :nums 1 2 3]=.
 
 #+BEGIN_SRC clojure
     (s/def ::unnested
@@ -846,12 +785,12 @@ If the specs were removed this spec would instead match a sequence like
   :CUSTOM_ID: _using_spec_for_validation
   :END:
 
-Now is a good time to step back and think about how spec can be used for
-runtime data validation.
+Now is a good time to step back and think about how spec can be used for runtime
+data validation.
 
-One way to use spec is to explicitly call =valid?= to verify input data
-passed to a function. You can, for example, use the existing pre- and
-post-condition support built into =defn=:
+One way to use spec is to explicitly call =valid?= to verify input data passed to
+a function. You can, for example, use the existing pre- and post-condition
+support built into =defn=:
 
 #+BEGIN_SRC clojure
     (defn person-name
@@ -867,15 +806,15 @@ post-condition support built into =defn=:
     ;; Bugs Bunny
 #+END_SRC
 
-When the function is invoked with something that isn't valid =::person=
-data, the pre-condition fails. Similarly, if there was a bug in our code
-and the output was not a string, the post-condition would fail.
+When the function is invoked with something that isn't valid =::person= data, the
+pre-condition fails. Similarly, if there was a bug in our code and the output
+was not a string, the post-condition would fail.
 
-Another option is to use =s/assert= within your code to assert that a
-value satisfies a spec. On success the value is returned and on failure
-an assertion error is thrown. By default assertion checking is off -
-this can be changed at the REPL with =s/check-asserts= or on startup by
-setting the system property =clojure.spec.check-asserts=true=.
+Another option is to use =s/assert= within your code to assert that a value
+satisfies a spec. On success the value is returned and on failure an assertion
+error is thrown. By default assertion checking is off - this can be changed at
+the REPL with =s/check-asserts= or on startup by setting the system property
+=clojure.spec.check-asserts=true=.
 
 #+BEGIN_SRC clojure
     (defn person-name
@@ -889,9 +828,9 @@ setting the system property =clojure.spec.check-asserts=true=.
     ;; 100 - failed: map?
 #+END_SRC
 
-A deeper level of integration is to call conform and use the return
-value with destructuring to pull apart the input. This will be
-particularly useful for complex inputs with alternate options.
+A deeper level of integration is to call conform and use the return value with
+destructuring to pull apart the input. This will be particularly useful for
+complex inputs with alternate options.
 
 Here we conform using the config specification defined above:
 
@@ -910,9 +849,9 @@ Here we conform using the config specification defined above:
     (configure ["-server" "foo" "-verbose" true "-user" "joe"])
 #+END_SRC
 
-Here configure calls =conform= to produce data good for destructuring
-the config input. The result is either the special =::s/invalid= value
-or an annotated form of the result:
+Here configure calls =conform= to produce data good for destructuring the config
+input. The result is either the special =::s/invalid= value or an annotated form
+of the result:
 
 #+BEGIN_SRC clojure
     [{:prop "-server", :val [:s "foo"]}
@@ -920,11 +859,11 @@ or an annotated form of the result:
      {:prop "-user", :val [:s "joe"]}]
 #+END_SRC
 
-In the success case, the parsed input is transformed into the desired
-shape for further processing. In the error case, we call =explain-data=
-to generate error message data. The explain data contains information
-about what expression failed to conform, the path to that expression in
-the specification, and the predicate it was attempting to match.
+In the success case, the parsed input is transformed into the desired shape for
+further processing. In the error case, we call =explain-data= to generate error
+message data. The explain data contains information about what expression failed
+to conform, the path to that expression in the specification, and the predicate
+it was attempting to match.
 
 * Spec'ing functions
   :PROPERTIES:
@@ -932,17 +871,14 @@ the specification, and the predicate it was attempting to match.
   :END:
 
 The pre- and post-condition example in the previous section hinted at an
-interesting question - how do we define the input and output
-specifications for a function or macro?
+interesting question - how do we define the input and output specifications for
+a function or macro?
 
-Spec has explicit support for this using
-[[https://clojure.github.io/spec.alpha/clojure.spec.alpha-api.html#clojure.spec.alpha/fdef][=fdef=]],
-which defines specifications for a function - the arguments and/or the
-return value spec, and optionally a function that can specify a
-relationship between args and return.
+Spec has explicit support for this using [[https://clojure.github.io/spec.alpha/clojure.spec.alpha-api.html#clojure.spec.alpha/fdef][=fdef=]], which defines specifications
+for a function - the arguments and/or the return value spec, and optionally a
+function that can specify a relationship between args and return.
 
-Let's consider a =ranged-rand= function that produces a random number in
-a range:
+Let's consider a =ranged-rand= function that produces a random number in a range:
 
 #+BEGIN_SRC clojure
     (defn ranged-rand
@@ -962,20 +898,19 @@ We can then provide a specification for that function:
                  #(< (:ret %) (-> % :args :end))))
 #+END_SRC
 
-This function spec demonstrates a number of features. First the =:args=
-is a compound spec that describes the function arguments. This spec is
-invoked with the args in a list, as if they were passed to
-=(apply fn (arg-list))=. Because the args are sequential and the args
-are positional fields, they are almost always described using a regex
-op, like =cat=, =alt=, or =*=.
+This function spec demonstrates a number of features. First the =:args= is a
+compound spec that describes the function arguments. This spec is invoked with
+the args in a list, as if they were passed to =(apply fn (arg-list))=. Because the
+args are sequential and the args are positional fields, they are almost always
+described using a regex op, like =cat=, =alt=, or =*=.
 
-The second =:args= predicate takes as input the conformed result of the
-first predicate and verifies that start < end. The =:ret= spec indicates
-the return is also an integer. Finally, the =:fn= spec checks that the
-return value is >= start and < end.
+The second =:args= predicate takes as input the conformed result of the first
+predicate and verifies that start < end. The =:ret= spec indicates the return is
+also an integer. Finally, the =:fn= spec checks that the return value is >= start
+and < end.
 
-Once a spec has been created for a function, the =doc= for the function
-will also include it:
+Once a spec has been created for a function, the =doc= for the function will also
+include it:
 
 #+BEGIN_SRC clojure
     (doc ranged-rand)
@@ -989,17 +924,15 @@ will also include it:
       fn: (and (>= (:ret %) (-> % :args :start)) (< (:ret %) (-> % :args :end)))
 #+END_SRC
 
-We'll see later how we can use a function spec for development and
-testing.
+We'll see later how we can use a function spec for development and testing.
 
 * Higher order functions
   :PROPERTIES:
   :CUSTOM_ID: _higher_order_functions
   :END:
 
-Higher order functions are common in Clojure and spec provides
-[[https://clojure.github.io/spec.alpha/clojure.spec.alpha-api.html#clojure.spec.alpha/fspec][=fspec=]]
-to support spec'ing them.
+Higher order functions are common in Clojure and spec provides [[https://clojure.github.io/spec.alpha/clojure.spec.alpha-api.html#clojure.spec.alpha/fspec][=fspec=]] to
+support spec'ing them.
 
 For example, consider the =adder= function:
 
@@ -1007,8 +940,8 @@ For example, consider the =adder= function:
     (defn adder [x] #(+ x %))
 #+END_SRC
 
-=adder= returns a function that adds x. We can declare a function spec
-for =adder= using =fspec= for the return value:
+=adder= returns a function that adds x. We can declare a function spec for =adder=
+using =fspec= for the return value:
 
 #+BEGIN_SRC clojure
     (s/fdef adder
@@ -1018,23 +951,22 @@ for =adder= using =fspec= for the return value:
       :fn #(= (-> % :args :x) ((:ret %) 0)))
 #+END_SRC
 
-The =:ret= spec uses =fspec= to declare that the returning function
-takes and returns a number. Even more interesting, the =:fn= spec can
-state a general property that relates the =:args= (where we know x) and
-the result we get from invoking the function returned from =adder=,
-namely that adding 0 to it should return x.
+The =:ret= spec uses =fspec= to declare that the returning function takes and
+returns a number. Even more interesting, the =:fn= spec can state a general
+property that relates the =:args= (where we know x) and the result we get from
+invoking the function returned from =adder=, namely that adding 0 to it should
+return x.
 
 * Macros
   :PROPERTIES:
   :CUSTOM_ID: _macros
   :END:
 
-As macros are functions that take code and produce code, they can also
-be spec'ed like functions. One special consideration however is that you
-must keep in mind that you are receiving code as data, not evaluated
-arguments, and that you are most commonly producing new code as data, so
-often it's not helpful to spec the :ret value of a macro (as it's just
-code).
+As macros are functions that take code and produce code, they can also be
+spec'ed like functions. One special consideration however is that you must keep
+in mind that you are receiving code as data, not evaluated arguments, and that
+you are most commonly producing new code as data, so often it's not helpful to
+spec the :ret value of a macro (as it's just code).
 
 For example, we could spec the =clojure.core/declare= macro like this:
 
@@ -1044,9 +976,9 @@ For example, we could spec the =clojure.core/declare= macro like this:
         :ret any?)
 #+END_SRC
 
-The Clojure macroexpander will look for and conform :args specs
-registered for macros at macro expansion time (not runtime!). If an
-error is detected, =explain= will be invoked to explain the error:
+The Clojure macroexpander will look for and conform :args specs registered for
+macros at macro expansion time (not runtime!). If an error is detected, =explain=
+will be invoked to explain the error:
 
 #+BEGIN_SRC clojure
     (declare 100)
@@ -1054,8 +986,8 @@ error is detected, =explain= will be invoked to explain the error:
     ;; 100 - failed: simple-symbol? at: [:names]
 #+END_SRC
 
-Because macros are always checked during macro expansion, you do not
-need to call instrument for macro specs.
+Because macros are always checked during macro expansion, you do not need to
+call instrument for macro specs.
 
 * A game of cards
   :PROPERTIES:
@@ -1104,15 +1036,14 @@ Or look at the errors we'll get from some bad data:
     ;;   at: [:user/players :user/hand 1] spec: :user/card
 #+END_SRC
 
-The error indicates the key path in the data structure down to the
-invalid value, the non-matching value, the spec part it's trying to
-match, the path in that spec, and the predicate that failed.
+The error indicates the key path in the data structure down to the invalid
+value, the non-matching value, the spec part it's trying to match, the path in
+that spec, and the predicate that failed.
 
-If we have a function =deal= that doles out some cards to the players we
-can spec that function to verify the arg and return value are both
-suitable data values. We can also specify a =:fn= spec to verify that
-the count of cards in the game before the deal equals the count of cards
-after the deal.
+If we have a function =deal= that doles out some cards to the players we can spec
+that function to verify the arg and return value are both suitable data values.
+We can also specify a =:fn= spec to verify that the count of cards in the game
+before the deal equals the count of cards after the deal.
 
 #+BEGIN_SRC clojure
     (defn total-cards [{:keys [::deck ::players] :as game}]
@@ -1133,22 +1064,20 @@ after the deal.
   :CUSTOM_ID: _generators
   :END:
 
-A key design constraint of spec is that all specs are also designed to
-act as generators of sample data that conforms to the spec (a critical
-requirement for property-based testing).
+A key design constraint of spec is that all specs are also designed to act as
+generators of sample data that conforms to the spec (a critical requirement for
+property-based testing).
 
 ** Project Setup
    :PROPERTIES:
    :CUSTOM_ID: _project_setup
    :END:
 
-spec generators rely on the Clojure property testing library
-[[https://github.com/clojure/test.check][test.check]]. However, this
-dependency is dynamically loaded and you can use the parts of spec other
-than =gen=, =exercise=, and testing without declaring test.check as a
-runtime dependency. When you wish to use these parts of spec (typically
-during testing), you will need to declare a dev dependency on
-test.check.
+spec generators rely on the Clojure property testing library [[https://github.com/clojure/test.check][test.check]].
+However, this dependency is dynamically loaded and you can use the parts of spec
+other than =gen=, =exercise=, and testing without declaring test.check as a runtime
+dependency. When you wish to use these parts of spec (typically during testing),
+you will need to declare a dev dependency on test.check.
 
 In Leiningen add this to project.clj:
 
@@ -1156,12 +1085,11 @@ In Leiningen add this to project.clj:
     :profiles {:dev {:dependencies [[org.clojure/test.check "0.9.0"]]}}
 #+END_SRC
 
-In Leiningen the dev profile dependencies are included during testing
-but not published as a dependency or included in uber jars.
+In Leiningen the dev profile dependencies are included during testing but not
+published as a dependency or included in uber jars.
 
-In Boot, add your dependency with test scope in your build.boot file
-(this is also possible in Leiningen but the approach above is
-preferred):
+In Boot, add your dependency with test scope in your build.boot file (this is
+also possible in Leiningen but the approach above is preferred):
 
 #+BEGIN_SRC clojure
     (set-env!
@@ -1184,8 +1112,7 @@ In Maven, declare your dependency as a test scope dependency:
     </project>
 #+END_EXAMPLE
 
-In your code you also need to include the =clojure.spec.gen.alpha=
-namespace:
+In your code you also need to include the =clojure.spec.gen.alpha= namespace:
 
 #+BEGIN_SRC clojure
     (require '[clojure.spec.gen.alpha :as gen])
@@ -1196,16 +1123,11 @@ namespace:
    :CUSTOM_ID: _sampling_generators
    :END:
 
-The
-[[https://clojure.github.io/spec.alpha/clojure.spec.alpha-api.html#clojure.spec.alpha/gen][=gen=]]
-function can be used to obtain the generator for any spec.
+The [[https://clojure.github.io/spec.alpha/clojure.spec.alpha-api.html#clojure.spec.alpha/gen][=gen=]] function can be used to obtain the generator for any spec.
 
-Once you have obtained a generator with =gen=, there are several ways to
-use it. You can generate a single sample value with
-[[https://clojure.github.io/spec.alpha/clojure.spec.gen.alpha-api.html#clojure.spec.gen.alpha/generate][=generate=]]
-or a series of samples with
-[[https://clojure.github.io/spec.alpha/clojure.spec.gen.alpha-api.html#clojure.spec.gen.alpha/sample][=sample=]].
-Let's see some basic examples:
+Once you have obtained a generator with =gen=, there are several ways to use it.
+You can generate a single sample value with [[https://clojure.github.io/spec.alpha/clojure.spec.gen.alpha-api.html#clojure.spec.gen.alpha/generate][=generate=]] or a series of samples
+with [[https://clojure.github.io/spec.alpha/clojure.spec.gen.alpha-api.html#clojure.spec.gen.alpha/sample][=sample=]]. Let's see some basic examples:
 
 #+BEGIN_SRC clojure
     (gen/generate (s/gen int?))
@@ -1246,24 +1168,20 @@ What about generating a whole game?
     ;; it works! but the output is really long, so not including it here
 #+END_SRC
 
-So we can now start with a spec, extract a generator, and generate some
-data. All generated data will conform to the spec we used as a
-generator. For specs that have a conformed value different than the
-original value (anything using s/or, s/cat, s/alt, etc) it can be useful
-to see a set of generated samples plus the result of conforming that
-sample data.
+So we can now start with a spec, extract a generator, and generate some data.
+All generated data will conform to the spec we used as a generator. For specs
+that have a conformed value different than the original value (anything using
+s/or, s/cat, s/alt, etc) it can be useful to see a set of generated samples plus
+the result of conforming that sample data.
 
 ** Exercise
    :PROPERTIES:
    :CUSTOM_ID: _exercise
    :END:
 
-For this we have
-[[https://clojure.github.io/spec.alpha/clojure.spec.alpha-api.html#clojure.spec.alpha/exercise][=exercise=]],
-which returns pairs of generated and conformed values for a spec.
-=exercise= by default produces 10 samples (like =sample=) but you can
-pass both functions a number indicating the number of samples to
-produce.
+For this we have [[https://clojure.github.io/spec.alpha/clojure.spec.alpha-api.html#clojure.spec.alpha/exercise][=exercise=]], which returns pairs of generated and conformed
+values for a spec. =exercise= by default produces 10 samples (like =sample=) but you
+can pass both functions a number indicating the number of samples to produce.
 
 #+BEGIN_SRC clojure
     (s/exercise (s/cat :k keyword? :ns (s/+ number?)) 5)
@@ -1282,10 +1200,8 @@ produce.
     ;;    [-3.0 [:n -3.0]])
 #+END_SRC
 
-For spec'ed functions we also have
-[[https://clojure.github.io/spec.alpha/clojure.spec.alpha-api.html#clojure.spec.alpha/exercise-fn][=exercise-fn=]],
-which generates sample args, invokes the spec'ed function and returns
-the args and the return value.
+For spec'ed functions we also have [[https://clojure.github.io/spec.alpha/clojure.spec.alpha-api.html#clojure.spec.alpha/exercise-fn][=exercise-fn=]], which generates sample args,
+invokes the spec'ed function and returns the args and the return value.
 
 #+BEGIN_SRC clojure
     (s/exercise-fn `ranged-rand)
@@ -1307,10 +1223,10 @@ the args and the return value.
    :CUSTOM_ID: _using_sand_generators
    :END:
 
-All of the generators we've seen worked fine but there are a number of
-cases where they will need some additional help. One common case is when
-the predicate implicitly presumes values of a particular type but the
-spec does not specify them:
+All of the generators we've seen worked fine but there are a number of cases
+where they will need some additional help. One common case is when the predicate
+implicitly presumes values of a particular type but the spec does not specify
+them:
 
 #+BEGIN_SRC clojure
     (gen/generate (s/gen even?))
@@ -1318,27 +1234,24 @@ spec does not specify them:
     ;; Unable to construct gen at: [] for: clojure.core$even_QMARK_@73ab3aac
 #+END_SRC
 
-In this case spec was not able to find a generator for the =even?=
-predicate. Most of the primitive generators in spec are mapped to the
-common type predicates (strings, numbers, keywords, etc).
+In this case spec was not able to find a generator for the =even?= predicate. Most
+of the primitive generators in spec are mapped to the common type predicates
+(strings, numbers, keywords, etc).
 
-However, spec is designed to support this case via =and= - the first
-predicate will determine the generator and subsequent branches will act
-as filters by applying the predicate to the produced values (using
-test.check's =such-that=).
+However, spec is designed to support this case via =and= - the first predicate
+will determine the generator and subsequent branches will act as filters by
+applying the predicate to the produced values (using test.check's =such-that=).
 
 If we modify our predicate to use an =and= and a predicate with a mapped
-generator, the =even?= can be used as a filter for generated values
-instead:
+generator, the =even?= can be used as a filter for generated values instead:
 
 #+BEGIN_SRC clojure
     (gen/generate (s/gen (s/and int? even?)))
     ;;=> -15161796
 #+END_SRC
 
-We can use many predicates to further refine the generated values. For
-example, say we only wanted to generate numbers that were positive
-multiples of 3:
+We can use many predicates to further refine the generated values. For example,
+say we only wanted to generate numbers that were positive multiples of 3:
 
 #+BEGIN_SRC clojure
     (defn divisible-by [n] #(zero? (mod % n)))
@@ -1349,13 +1262,11 @@ multiples of 3:
     ;;=> (3 9 1524 3 1836 6 3 3 927 15027)
 #+END_SRC
 
-However, it is possible to go too far with refinement and make something
-that fails to produce any values. The test.check
-[[https://clojure.github.io/test.check/clojure.test.check.generators.html#var-such-that][=such-that=]]
-that implements the refinement will throw an error if the refinement
-predicate cannot be resolved within a relatively small number of
-attempts. For example, consider trying to generate strings that happen
-to contain the word "hello":
+However, it is possible to go too far with refinement and make something that
+fails to produce any values. The test.check [[https://clojure.github.io/test.check/clojure.test.check.generators.html#var-such-that][=such-that=]] that implements the
+refinement will throw an error if the refinement predicate cannot be resolved
+within a relatively small number of attempts. For example, consider trying to
+generate strings that happen to contain the word "hello":
 
 #+BEGIN_SRC clojure
     ;; hello, are you the one I'm looking for?
@@ -1364,44 +1275,41 @@ to contain the word "hello":
     ;; Couldn't satisfy such-that predicate after 100 tries.
 #+END_SRC
 
-Given enough time (maybe a lot of time), the generator probably would
-come up with a string like this, but the underlying =such-that= will
-make only 100 attempts to generate a value that passes the filter. This
-is a case where you will need to step in and provide a custom generator.
+Given enough time (maybe a lot of time), the generator probably would come up
+with a string like this, but the underlying =such-that= will make only 100
+attempts to generate a value that passes the filter. This is a case where you
+will need to step in and provide a custom generator.
 
 ** Custom Generators
    :PROPERTIES:
    :CUSTOM_ID: _custom_generators
    :END:
 
-Building your own generator gives you the freedom to be either narrower
-and/or be more explicit about what values you want to generate.
-Alternately, custom generators can be used in cases where conformant
-values can be generated more efficiently than using a base predicate
-plus filtering. Spec does not trust custom generators and any values
-they produce will also be checked by their associated spec to guarantee
-they pass conformance.
+Building your own generator gives you the freedom to be either narrower and/or
+be more explicit about what values you want to generate. Alternately, custom
+generators can be used in cases where conformant values can be generated more
+efficiently than using a base predicate plus filtering. Spec does not trust
+custom generators and any values they produce will also be checked by their
+associated spec to guarantee they pass conformance.
 
-There are three ways to build up custom generators - in decreasing order
-of preference:
+There are three ways to build up custom generators - in decreasing order of
+preference:
 
 1. Let spec create a generator based on a predicate/spec
 
 2. Create your own generator from the tools in clojure.spec.gen.alpha
 
-3. Use test.check or other test.check compatible libraries (like
-   [[https://github.com/gfredericks/test.chuck][test.chuck]])
+3. Use test.check or other test.check compatible libraries (like [[https://github.com/gfredericks/test.chuck][test.chuck]])
 
 #+BEGIN_QUOTE
   *Warning*
 
-  The last option requires a runtime dependency on test.check so the
-  first two options are strongly preferred over using test.check
-  directly.
+  The last option requires a runtime dependency on test.check so the first two
+  options are strongly preferred over using test.check directly.
 #+END_QUOTE
 
-First consider a spec with a predicate to specify keywords from a
-particular namespace:
+First consider a spec with a predicate to specify keywords from a particular
+namespace:
 
 #+BEGIN_SRC clojure
     (s/def ::kws (s/and keyword? #(= (namespace %) "my.domain")))
@@ -1409,9 +1317,9 @@ particular namespace:
     (gen/sample (s/gen ::kws)) ;; unlikely we'll generate useful keywords this way
 #+END_SRC
 
-The simplest way to start generating values for this spec is to have
-spec create a generator from a fixed set of options. A set is a valid
-predicate spec so we can create one and ask for it's generator:
+The simplest way to start generating values for this spec is to have spec create
+a generator from a fixed set of options. A set is a valid predicate spec so we
+can create one and ask for it's generator:
 
 #+BEGIN_SRC clojure
     (def kw-gen (s/gen #{:my.domain/name :my.domain/occupation :my.domain/id}))
@@ -1419,9 +1327,8 @@ predicate spec so we can create one and ask for it's generator:
     ;;=> (:my.domain/occupation :my.domain/occupation :my.domain/name :my.domain/id :my.domain/name)
 #+END_SRC
 
-To redefine our spec using this custom generator, use
-[[https://clojure.github.io/spec.alpha/clojure.spec.alpha-api.html#clojure.spec.alpha/with-gen][=with-gen=]]
-which takes a spec and a replacement generator:
+To redefine our spec using this custom generator, use [[https://clojure.github.io/spec.alpha/clojure.spec.alpha-api.html#clojure.spec.alpha/with-gen][=with-gen=]] which takes a
+spec and a replacement generator:
 
 #+BEGIN_SRC clojure
     (s/def ::kws (s/with-gen (s/and keyword? #(= (namespace %) "my.domain"))
@@ -1431,33 +1338,29 @@ which takes a spec and a replacement generator:
     ;;=> (:my.domain/occupation :my.domain/occupation :my.domain/name  ...)
 #+END_SRC
 
-Note that =with-gen= (and other places that take a custom generator)
-take a no-arg function that returns the generator, allowing it to be
-lazily realized.
+Note that =with-gen= (and other places that take a custom generator) take a no-arg
+function that returns the generator, allowing it to be lazily realized.
 
-One downside to this approach is we are missing what property testing is
-really good at: automatically generating data across a wide search space
-to find unexpected problems.
+One downside to this approach is we are missing what property testing is really
+good at: automatically generating data across a wide search space to find
+unexpected problems.
 
-The clojure.spec.gen.alpha namespace has a number of functions for
-generator "primitives" as well as "combinators" for combining them into
-more complicated generators.
+The clojure.spec.gen.alpha namespace has a number of functions for generator
+"primitives" as well as "combinators" for combining them into more complicated
+generators.
 
 #+BEGIN_QUOTE
   *Note*
 
-  Nearly all of the functions in the clojure.spec.gen.alpha namespace
-  are merely wrappers that dynamically load functions of the same name
-  in test.check. You should refer to the documentation for
-  [[https://clojure.github.io/test.check/][test.check]] for more details
-  on how all of the clojure.spec.gen.alpha generator functions work.
+  Nearly all of the functions in the clojure.spec.gen.alpha namespace are merely
+  wrappers that dynamically load functions of the same name in test.check. You
+  should refer to the documentation for [[https://clojure.github.io/test.check/][test.check]] for more details on how all
+  of the clojure.spec.gen.alpha generator functions work.
 #+END_QUOTE
 
-In this case we want our keyword to have open names but fixed
-namespaces. There are many ways to accomplish this but one of the
-simplest is to use
-[[https://clojure.github.io/spec.alpha/clojure.spec.gen.alpha-api.html#clojure.spec.gen.alpha/fmap][=fmap=]]
-to build up a keyword based on generated strings:
+In this case we want our keyword to have open names but fixed namespaces. There
+are many ways to accomplish this but one of the simplest is to use [[https://clojure.github.io/spec.alpha/clojure.spec.gen.alpha-api.html#clojure.spec.gen.alpha/fmap][=fmap=]] to
+build up a keyword based on generated strings:
 
 #+BEGIN_SRC clojure
     (def kw-gen-2 (gen/fmap #(keyword "my.domain" %) (gen/string-alphanumeric)))
@@ -1465,17 +1368,15 @@ to build up a keyword based on generated strings:
     ;;=> (:my.domain/ :my.domain/ :my.domain/1 :my.domain/1O :my.domain/l9p2)
 #+END_SRC
 
-=gen/fmap= takes a function to apply and a generator. The function will
-be applied to each sample produced by the generator allowing us to build
-one generator on another.
+=gen/fmap= takes a function to apply and a generator. The function will be applied
+to each sample produced by the generator allowing us to build one generator on
+another.
 
-However, we can spot a problem in the example above - generators are
-often designed to return "simpler" values first and any string-oriented
-generator will often return an empty string which is not a valid
-keyword. We can make a slight adjustment to omit that particular value
-using
-[[https://clojure.github.io/spec.alpha/clojure.spec.gen.alpha-api.html#clojure.spec.gen.alpha/such-that][=such-that=]]
-which lets us specify a filtering condition:
+However, we can spot a problem in the example above - generators are often
+designed to return "simpler" values first and any string-oriented generator will
+often return an empty string which is not a valid keyword. We can make a slight
+adjustment to omit that particular value using [[https://clojure.github.io/spec.alpha/clojure.spec.gen.alpha-api.html#clojure.spec.gen.alpha/such-that][=such-that=]] which lets us specify
+a filtering condition:
 
 #+BEGIN_SRC clojure
     (def kw-gen-3 (gen/fmap #(keyword "my.domain" %)
@@ -1485,8 +1386,7 @@ which lets us specify a filtering condition:
     ;;=> (:my.domain/O :my.domain/b :my.domain/ZH :my.domain/31 :my.domain/U)
 #+END_SRC
 
-Returning to our "hello" example, we now have the tools to make that
-generator:
+Returning to our "hello" example, we now have the tools to make that generator:
 
 #+BEGIN_SRC clojure
     (s/def ::hello
@@ -1497,21 +1397,19 @@ generator:
     ;;=> ("hello" "ehello3" "eShelloO1" "vhello31p" "hello" "1Xhellow" "S5bhello" "aRejhellorAJ7Yj" "3hellowPMDOgv7" "UhelloIx9E")
 #+END_SRC
 
-Here we generate a tuple of a random prefix and random suffix strings,
-then insert "hello" between them.
+Here we generate a tuple of a random prefix and random suffix strings, then
+insert "hello" between them.
 
 ** Range Specs and Generators
    :PROPERTIES:
    :CUSTOM_ID: _range_specs_and_generators
    :END:
 
-There are several cases where it's useful to spec (and generate) values
-in a range and spec provides helpers for these cases.
+There are several cases where it's useful to spec (and generate) values in a
+range and spec provides helpers for these cases.
 
-For example, in the case of a range of integer values (for example, a
-bowling roll), use
-[[https://clojure.github.io/spec.alpha/clojure.spec.alpha-api.html#clojure.spec.alpha/int-in][=int-in=]]
-to spec a range (end is exclusive):
+For example, in the case of a range of integer values (for example, a bowling
+roll), use [[https://clojure.github.io/spec.alpha/clojure.spec.alpha-api.html#clojure.spec.alpha/int-in][=int-in=]] to spec a range (end is exclusive):
 
 #+BEGIN_SRC clojure
     (s/def ::roll (s/int-in 0 11))
@@ -1519,9 +1417,7 @@ to spec a range (end is exclusive):
     ;;=> (1 0 0 3 1 7 10 1 5 0)
 #+END_SRC
 
-spec also includes
-[[https://clojure.github.io/spec.alpha/clojure.spec.alpha-api.html#clojure.spec.alpha/inst-in][=inst-in=]]
-for a range of instants:
+spec also includes [[https://clojure.github.io/spec.alpha/clojure.spec.alpha-api.html#clojure.spec.alpha/inst-in][=inst-in=]] for a range of instants:
 
 #+BEGIN_SRC clojure
     (s/def ::the-aughts (s/inst-in #inst "2000" #inst "2010"))
@@ -1533,13 +1429,11 @@ for a range of instants:
     ;;    #inst"2000-01-02T10:18:42.219-00:00")
 #+END_SRC
 
-Due to the generator implementation, it takes a few samples to get
-"interesting" so I skipped ahead a bit.
+Due to the generator implementation, it takes a few samples to get "interesting"
+so I skipped ahead a bit.
 
-Finally,
-[[https://clojure.github.io/spec.alpha/clojure.spec.alpha-api.html#clojure.spec.alpha/double-in][=double-in=]]
-has support for double ranges and special options for checking special
-double values like =NaN= (not a number), =Infinity=, and =-Infinity=.
+Finally, [[https://clojure.github.io/spec.alpha/clojure.spec.alpha-api.html#clojure.spec.alpha/double-in][=double-in=]] has support for double ranges and special options for
+checking special double values like =NaN= (not a number), =Infinity=, and =-Infinity=.
 
 #+BEGIN_SRC clojure
     (s/def ::dubs (s/double-in :min -100.0 :max 100.0 :NaN? false :infinite? false))
@@ -1551,10 +1445,8 @@ double values like =NaN= (not a number), =Infinity=, and =-Infinity=.
     ;;=> (-1.0 -1.0 -1.5 1.25 -0.5 -1.0 -3.125 -1.5625 1.25 -0.390625)
 #+END_SRC
 
-To learn more about generators, read the test.check
-[[https://clojure.github.io/test.check/intro.html][tutorial]] or
-[[https://clojure.github.io/test.check/generator-examples.html][examples]].
-Do keep in mind that while clojure.spec.gen.alpha is a large subset of
+To learn more about generators, read the test.check [[https://clojure.github.io/test.check/intro.html][tutorial]] or [[https://clojure.github.io/test.check/generator-examples.html][examples]]. Do
+keep in mind that while clojure.spec.gen.alpha is a large subset of
 clojure.test.check.generators, not everything is included.
 
 * Instrumentation and Testing
@@ -1574,19 +1466,17 @@ spec provides a set of development and testing functionality in the
    :CUSTOM_ID: _instrumentation
    :END:
 
-Instrumentation validates that the =:args= spec is being invoked on
-instrumented functions and thus provides validation for external uses of
-a function. Let's turn on instrumentation for our previously spec'ed
-=ranged-rand= function:
+Instrumentation validates that the =:args= spec is being invoked on instrumented
+functions and thus provides validation for external uses of a function. Let's
+turn on instrumentation for our previously spec'ed =ranged-rand= function:
 
 #+BEGIN_SRC clojure
     (stest/instrument `ranged-rand)
 #+END_SRC
 
-Instrument takes a fully-qualified symbol so we use =`= here to resolve
-it in the context of the current namespace. If the function is invoked
-with args that do not conform with the =:args= spec you will see an
-error like this:
+Instrument takes a fully-qualified symbol so we use =`= here to resolve it in the
+context of the current namespace. If the function is invoked with args that do
+not conform with the =:args= spec you will see an error like this:
 
 #+BEGIN_SRC clojure
     (ranged-rand 8 5)
@@ -1594,16 +1484,15 @@ error like this:
     {:start 8, :end 5} - failed: (< (:start %) (:end %))
 #+END_SRC
 
-The error fails in the second args predicate that checks
-=(< start end)=. Note that the =:ret= and =:fn= specs are not checked
-with instrumentation as validating the implementation should occur at
-testing time.
+The error fails in the second args predicate that checks =(< start end)=. Note
+that the =:ret= and =:fn= specs are not checked with instrumentation as validating
+the implementation should occur at testing time.
 
-Instrumentation can be turned off using the complementary function
-=unstrument=. Instrumentation is likely to be useful at both development
-time and during testing to discover errors in calling code. It is not
-recommended to use instrumentation in production due to the overhead
-involved with checking args specs.
+Instrumentation can be turned off using the complementary function =unstrument=.
+Instrumentation is likely to be useful at both development time and during
+testing to discover errors in calling code. It is not recommended to use
+instrumentation in production due to the overhead involved with checking args
+specs.
 
 ** Testing
    :PROPERTIES:
@@ -1611,13 +1500,11 @@ involved with checking args specs.
    :END:
 
 We mentioned earlier that =clojure.spec.test.alpha= provides tools for
-automatically testing functions. When functions have specs, we can use
-[[https://clojure.github.io/spec.alpha/clojure.spec.test.alpha-api.html#clojure.spec.test.alpha/check][=check=]],
+automatically testing functions. When functions have specs, we can use [[https://clojure.github.io/spec.alpha/clojure.spec.test.alpha-api.html#clojure.spec.test.alpha/check][=check=]],
 to automatically generate tests that check the function using the specs.
 
-=check= will generate arguments based on the =:args= spec for a
-function, invoke the function, and check that the =:ret= and =:fn= specs
-were satisfied.
+=check= will generate arguments based on the =:args= spec for a function, invoke the
+function, and check that the =:ret= and =:fn= specs were satisfied.
 
 #+BEGIN_SRC clojure
     (require '[clojure.spec.test.alpha :as stest])
@@ -1632,19 +1519,18 @@ were satisfied.
 #+BEGIN_QUOTE
   *Note*
 
-  A keen observer will notice that =ranged-rand= contains a subtle bug.
-  If the difference between start and end is very large (larger than is
-  representable by =Long/MAX_VALUE=), then =ranged-rand= will produce an
-  IntegerOverflowException. If you run =check= several times you will
-  eventually cause this case to occur.
+  A keen observer will notice that =ranged-rand= contains a subtle bug. If the
+  difference between start and end is very large (larger than is representable
+  by =Long/MAX_VALUE=), then =ranged-rand= will produce an IntegerOverflowException.
+  If you run =check= several times you will eventually cause this case to occur.
 #+END_QUOTE
 
-=check= also takes a number of options that can be passed to test.check
-to influence the test run, as well as the option to override generators
-for parts of the spec, by either name or path.
+=check= also takes a number of options that can be passed to test.check to
+influence the test run, as well as the option to override generators for parts
+of the spec, by either name or path.
 
-Imagine instead that we made an error in the ranged-rand code and
-swapped start and end:
+Imagine instead that we made an error in the ranged-rand code and swapped start
+and end:
 
 #+BEGIN_SRC clojure
     (defn ranged-rand  ;; BROKEN!
@@ -1653,9 +1539,8 @@ swapped start and end:
       (+ start (long (rand (- start end)))))
 #+END_SRC
 
-This broken function will still create random integers, just not in the
-expected range. Our =:fn= spec will detect the problem when checking the
-var:
+This broken function will still create random integers, just not in the expected
+range. Our =:fn= spec will detect the problem when checking the var:
 
 #+BEGIN_SRC clojure
     (stest/abbrev-result (first (stest/check `ranged-rand)))
@@ -1676,39 +1561,36 @@ var:
     ;;              :clojure.spec.alpha/failure :test-failed}}
 #+END_SRC
 
-=check= has reported an error in the =:fn= spec. We can see the
-arguments passed were -3 and 0 and the return value was -5, which is out
-of the expected range.
+=check= has reported an error in the =:fn= spec. We can see the arguments passed
+were -3 and 0 and the return value was -5, which is out of the expected range.
 
-To test all of the spec'ed functions in a namespace (or multiple
-namespaces), use
-[[https://clojure.github.io/spec.alpha/clojure.spec.test.alpha-api.html#clojure.spec.test.alpha/enumerate-namespace][=enumerate-namespace=]]
-to generate the set of symbols naming vars in the namespace:
+To test all of the spec'ed functions in a namespace (or multiple namespaces),
+use [[https://clojure.github.io/spec.alpha/clojure.spec.test.alpha-api.html#clojure.spec.test.alpha/enumerate-namespace][=enumerate-namespace=]] to generate the set of symbols naming vars in the
+namespace:
 
 #+BEGIN_SRC clojure
     (-> (stest/enumerate-namespace 'user) stest/check)
 #+END_SRC
 
-And you can check all of the spec'ed functions by calling =stest/check=
-without any arguments.
+And you can check all of the spec'ed functions by calling =stest/check= without
+any arguments.
 
 ** Combining =check= and =instrument=
    :PROPERTIES:
    :CUSTOM_ID: _combining_check_and_instrument
    :END:
 
-While both =instrument= (for enabling =:args= checking) and =check= (for
-generating tests of a function) are useful tools, they can be combined
-to provide even deeper levels of test coverage.
+While both =instrument= (for enabling =:args= checking) and =check= (for generating
+tests of a function) are useful tools, they can be combined to provide even
+deeper levels of test coverage.
 
-=instrument= takes a number of options for changing the behavior of
-instrumented functions, including support for swapping in alternate
-(narrower) specs, stubbing functions (by using the =:ret= spec to
-generate results), or replacing functions with an alternate
-implementation.
+=instrument= takes a number of options for changing the behavior of instrumented
+functions, including support for swapping in alternate (narrower) specs,
+stubbing functions (by using the =:ret= spec to generate results), or replacing
+functions with an alternate implementation.
 
-Consider the case where we have a low-level function that invokes a
-remote service and a higher-level function that calls it.
+Consider the case where we have a low-level function that invokes a remote
+service and a higher-level function that calls it.
 
 #+BEGIN_SRC clojure
     ;; code under test
@@ -1742,8 +1624,7 @@ We can spec these functions using the following specs:
 #+END_SRC
 
 And then we want to test the behavior of =run-query= while stubbing out
-=invoke-service= with =instrument= so that the remote service is not
-invoked:
+=invoke-service= with =instrument= so that the remote service is not invoked:
 
 #+BEGIN_SRC clojure
     (stest/instrument `invoke-service {:stub #{`invoke-service}})
@@ -1756,20 +1637,20 @@ invoked:
     ;;=> {:total 1, :check-passed 1}
 #+END_SRC
 
-The first call here instruments and stubs =invoke-service=. The second
-and third calls demonstrate that calls to =invoke-service= now return
-generated results (rather than hitting a service). Finally, we can use
-=check= on the higher level function to test that it behaves properly
-based on the generated stub results returned from =invoke-service=.
+The first call here instruments and stubs =invoke-service=. The second and third
+calls demonstrate that calls to =invoke-service= now return generated results
+(rather than hitting a service). Finally, we can use =check= on the higher level
+function to test that it behaves properly based on the generated stub results
+returned from =invoke-service=.
 
 * Wrapping Up
   :PROPERTIES:
   :CUSTOM_ID: _wrapping_up
   :END:
 
-In this guide we have covered most of the features for designing and
-using specs and generators. We expect to add some more advanced
-generator techniques and help on testing in a future update.
+In this guide we have covered most of the features for designing and using specs
+and generators. We expect to add some more advanced generator techniques and
+help on testing in a future update.
 
 * More information
   :PROPERTIES:

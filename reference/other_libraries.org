@@ -8,51 +8,44 @@
   :CUSTOM_ID: _java_utilities_clojure_java
   :END:
 
-*[[https://clojure.github.io/clojure/clojure.java.io-api.html][clojure.java.io]]*
-Contains polymorphic I/O utility functions for Clojure backed by Java
-classes.
+*[[https://clojure.github.io/clojure/clojure.java.io-api.html][clojure.java.io]]* Contains polymorphic I/O utility functions for Clojure backed by
+Java classes.
 
 *[[https://clojure.github.io/clojure/clojure.java.javadoc-api.html][clojure.java.javadocs]]*
 
-Provides the function
-[[https://clojure.github.io/clojure/clojure.java.javadoc-api.html#clojure.java.javadoc/javadoc][javadoc]]
-that attempts to display the appropriate Javadocs for a class or
-instance class.
+Provides the function [[https://clojure.github.io/clojure/clojure.java.javadoc-api.html#clojure.java.javadoc/javadoc][javadoc]] that attempts to display the appropriate Javadocs
+for a class or instance class.
 
 *[[https://clojure.github.io/clojure/clojure.java.shell-api.html][clojure.java.shell]]*
 
-Provides a
-[[https://clojure.github.io/clojure/clojure.java.shell-api.html#clojure.java.shell/sh][sh]]
-function that facilitates launching and managing subprocesses. See the
-function documentation for details on its expected arguments.
+Provides a [[https://clojure.github.io/clojure/clojure.java.shell-api.html#clojure.java.shell/sh][sh]] function that facilitates launching and managing subprocesses. See
+the function documentation for details on its expected arguments.
 
 * Parallel Processing (DEPRECATED)
   :PROPERTIES:
   :CUSTOM_ID: _parallel_processing_deprecated
   :END:
 
-The parallel library (namespace /*parallel*/, in parallel.clj) wraps the
-[[http://gee.cs.oswego.edu/dl/concurrency-interest/index.html][ForkJoin
+The parallel library (namespace /*parallel*/, in parallel.clj) wraps the [[http://gee.cs.oswego.edu/dl/concurrency-interest/index.html][ForkJoin
 library]]. This lib is now deprecated.
 
-You'll need =jsr166y.jar= in your classpath in order to use this
-library. The basic idea is that Clojure collections, and most
-efficiently vectors, can be turned into parallel arrays for use by this
-library with the function par, although most of the functions take
-collections and will call /*par*/ if needed, so normally you will only
-need to call par explicitly in order to attach bound/filter/map ops.
+You'll need =jsr166y.jar= in your classpath in order to use this library. The
+basic idea is that Clojure collections, and most efficiently vectors, can be
+turned into parallel arrays for use by this library with the function par,
+although most of the functions take collections and will call /*par*/ if needed,
+so normally you will only need to call par explicitly in order to attach
+bound/filter/map ops.
 
-Parallel arrays support the attachment of bounds, filters and mapping
-functions prior to realization/calculation, which happens as the result
-of any of several operations on the array
-(pvec/psort/pfilter-nils/pfilter-dupes). Rather than perform composite
-operations in steps, as would normally be done with sequences, maps and
-filters are instead attached and thus composed by providing ops to
-/*par*/. Note that there is an order sensitivity to the attachments -
-bounds precede filters precede mappings. All operations then happen in
-parallel, using multiple threads and a sophisticated work-stealing
-system supported by fork-join, either when the array is realized, or to
-perform aggregate operations like preduce/pmin/pmax etc.
+Parallel arrays support the attachment of bounds, filters and mapping functions
+prior to realization/calculation, which happens as the result of any of several
+operations on the array (pvec/psort/pfilter-nils/pfilter-dupes). Rather than
+perform composite operations in steps, as would normally be done with sequences,
+maps and filters are instead attached and thus composed by providing ops to
+/*par*/. Note that there is an order sensitivity to the attachments - bounds
+precede filters precede mappings. All operations then happen in parallel, using
+multiple threads and a sophisticated work-stealing system supported by
+fork-join, either when the array is realized, or to perform aggregate operations
+like preduce/pmin/pmax etc.
 
 A parallel array can be realized into a Clojure vector using pvec
 
@@ -77,8 +70,8 @@ A parallel array can be realized into a Clojure vector using pvec
   :CUSTOM_ID: _reflection_utilities_clojure_reflect
   :END:
 
-Provides functions and protocols useful for gathering and building host
-type reflection information as Clojure data.
+Provides functions and protocols useful for gathering and building host type
+reflection information as Clojure data.
 
 * REPL Utilities
 ([[https://clojure.github.io/clojure/clojure.repl-api.html][clojure.repl]])
@@ -94,8 +87,8 @@ Utilities meant to be used interactively at the REPL.
   :CUSTOM_ID: _sets_and_relational_algebra_clojure_set
   :END:
 
-Functions useful for manipulating, building, and querying mathematical
-sets using relational algebra.
+Functions useful for manipulating, building, and querying mathematical sets
+using relational algebra.
 
 * String Handling
 ([[https://clojure.github.io/clojure/clojure.string-api.html][clojure.string]])
@@ -135,21 +128,16 @@ Utilities for reading and writing XML data.
   :CUSTOM_ID: _zippers_functional_tree_editing_clojure_zip
   :END:
 
-Clojure includes purely functional, generic tree walking and editing,
-using a technique called a zipper (in namespace /*zip*/) . For
-background, see the
-[[https://www.google.com/search?q=huet%20functional%20zipper][paper by
-Huet]]. A zipper is a data structure representing a location in a
-hierarchical data structure, and the path it took to get there. It
-provides down/up/left/right navigation, and localized functional
-'editing', insertion and removal of nodes. With zippers you can write
-code that looks like an imperative, destructive walk through a tree,
-call
-[[https://clojure.github.io/clojure/clojure.zip-api.html#clojure.zip/root][root]]
-when you are done and get a new tree reflecting all the changes, when in
-fact nothing at all is mutated - it's all thread safe and shareable. The
-[[https://clojure.github.io/clojure/clojure.zip-api.html#clojure.zip/next][next]]
-function does a depth-first walk, making for easy to understand loops:
+Clojure includes purely functional, generic tree walking and editing, using a
+technique called a zipper (in namespace /*zip*/) . For background, see the [[https://www.google.com/search?q=huet%20functional%20zipper][paper
+by Huet]]. A zipper is a data structure representing a location in a hierarchical
+data structure, and the path it took to get there. It provides
+down/up/left/right navigation, and localized functional 'editing', insertion and
+removal of nodes. With zippers you can write code that looks like an imperative,
+destructive walk through a tree, call [[https://clojure.github.io/clojure/clojure.zip-api.html#clojure.zip/root][root]] when you are done and get a new tree
+reflecting all the changes, when in fact nothing at all is mutated - it's all
+thread safe and shareable. The [[https://clojure.github.io/clojure/clojure.zip-api.html#clojure.zip/next][next]] function does a depth-first walk, making for
+easy to understand loops:
 
 #+BEGIN_SRC clojure
     (def data '[[a * b] + [c * d]])
@@ -195,6 +183,6 @@ function does a depth-first walk, making for easy to understand loops:
     -> [[a * b] + [c * d]]
 #+END_SRC
 
-Zipper constructors are provided for nested seqs, nested vectors, and
-the xml elements generated by /*xml/parse*/. All it takes is a 4-5 line
-function to support other data structures.
+Zipper constructors are provided for nested seqs, nested vectors, and the xml
+elements generated by /*xml/parse*/. All it takes is a 4-5 line function to
+support other data structures.

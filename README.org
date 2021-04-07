@@ -1,8 +1,9 @@
-Convert adoc and html files from https://github.com/clojure/clojure-site/tree/master/content to org files
+Convert adoc and html files from
+https://github.com/clojure/clojure-site/tree/master/content to org files
 
-Required =pandoc= and =asciidoctor= 
+Required =pandoc= and =asciidoctor=
 
-First clone https://github.com/clojure/clojure-site 
+First clone https://github.com/clojure/clojure-site
 
 
 Then clone this project, then =cd= into it and run

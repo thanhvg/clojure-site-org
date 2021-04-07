@@ -1,11 +1,10 @@
-First and foremost, Clojure is dynamic. That means that a Clojure
-program is not just something you compile and run, but something with
-which you can interact. Clojure is not a language abstraction, but an
-environment, where almost all of the language constructs are reified,
-and thus can be examined and changed. This leads to a substantially
-different experience from running a program, examining its results (or
-failures) and trying again. In particular, you can grow your program,
-with data loaded, adding features, fixing bugs, testing, in an unbroken
+First and foremost, Clojure is dynamic. That means that a Clojure program is not
+just something you compile and run, but something with which you can interact.
+Clojure is not a language abstraction, but an environment, where almost all of
+the language constructs are reified, and thus can be examined and changed. This
+leads to a substantially different experience from running a program, examining
+its results (or failures) and trying again. In particular, you can grow your
+program, with data loaded, adding features, fixing bugs, testing, in an unbroken
 stream.
 
 * The REPL
@@ -13,12 +12,11 @@ stream.
   :CUSTOM_ID: _the_repl
   :END:
 
-While Clojure can be embedded in a Java application, or used as a
-scripting language, the primary programming interface is the
-Read-Eval-Print-Loop (REPL). This is a simple console interface that
-allows you to enter and execute commands, and examine their results. You
-can start the Clojure REPL like this, and then follow along trying the
-samples in this feature tour:
+While Clojure can be embedded in a Java application, or used as a scripting
+language, the primary programming interface is the Read-Eval-Print-Loop (REPL).
+This is a simple console interface that allows you to enter and execute
+commands, and examine their results. You can start the Clojure REPL like this,
+and then follow along trying the samples in this feature tour:
 
 #+BEGIN_SRC clojure
     java -cp clojure.jar clojure.main
@@ -46,8 +44,8 @@ Most Clojure commands take the form (command arguments*). Try it:
   :CUSTOM_ID: _basics
   :END:
 
-Clojure has arbitrary precision integers, strings, ratios, doubles,
-characters, symbols, keywords.
+Clojure has arbitrary precision integers, strings, ratios, doubles, characters,
+symbols, keywords.
 
 #+BEGIN_SRC clojure
     (* 12345678 12345678)
@@ -72,7 +70,7 @@ characters, symbols, keywords.
   :CUSTOM_ID: _dynamic_compilation
   :END:
 
-Clojure is a compiled language, so one might wonder when you have to run
-the compiler. You don't. Anything you enter into the REPL or load using
-load-file is automatically compiled to JVM bytecode on the fly.
-Compiling ahead-of-time is also possible, but not required.
+Clojure is a compiled language, so one might wonder when you have to run the
+compiler. You don't. Anything you enter into the REPL or load using load-file is
+automatically compiled to JVM bytecode on the fly. Compiling ahead-of-time is
+also possible, but not required.

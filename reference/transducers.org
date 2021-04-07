@@ -1,34 +1,30 @@
-Transducers are composable algorithmic transformations. They are
-independent from the context of their input and output sources and
-specify only the essence of the transformation in terms of an individual
-element. Because transducers are decoupled from input or output sources,
-they can be used in many different processes - collections, streams,
-channels, observables, etc. Transducers compose directly, without
-awareness of input or creation of intermediate aggregates.
+Transducers are composable algorithmic transformations. They are independent
+from the context of their input and output sources and specify only the essence
+of the transformation in terms of an individual element. Because transducers are
+decoupled from input or output sources, they can be used in many different
+processes - collections, streams, channels, observables, etc. Transducers
+compose directly, without awareness of input or creation of intermediate
+aggregates.
 
-Also see the introductory
-[[https://blog.cognitect.com/blog/2014/8/6/transducers-are-coming][blog
-post]], this [[https://www.youtube.com/watch?v=6mTbuzafcII][video]], and
-this section of the FAQ
-[[https://clojure.org/guides/faq#transducers_vs_seqs][about good use
-cases for transducers]].
+Also see the introductory [[https://blog.cognitect.com/blog/2014/8/6/transducers-are-coming][blog post]], this [[https://www.youtube.com/watch?v=6mTbuzafcII][video]], and this section of the FAQ
+[[https://clojure.org/guides/faq#transducers_vs_seqs][about good use cases for transducers]].
 
 * Terminology
   :PROPERTIES:
   :CUSTOM_ID: _terminology
   :END:
 
-A /reducing function/ is the kind of function you'd pass to *reduce* -
-it is a function that takes an accumulated result and a new input and
-returns a new accumulated result:
+A /reducing function/ is the kind of function you'd pass to *reduce* - it is a
+function that takes an accumulated result and a new input and returns a new
+accumulated result:
 
 #+BEGIN_SRC clojure
     ;; reducing function signature
     whatever, input -> whatever
 #+END_SRC
 
-A /transducer/ (sometimes referred to as xform or xf) is a
-transformation from one reducing function to another:
+A /transducer/ (sometimes referred to as xform or xf) is a transformation from one
+reducing function to another:
 
 #+BEGIN_SRC clojure
     ;; transducer signature
@@ -40,10 +36,10 @@ transformation from one reducing function to another:
   :CUSTOM_ID: _defining_transformations_with_transducers
   :END:
 
-Most sequence functions included in Clojure have an arity that produces
-a transducer. This arity omits the input collection; the inputs will be
-supplied by the process applying the transducer. /Note: this reduced
-arity is not currying or partial application./
+Most sequence functions included in Clojure have an arity that produces a
+transducer. This arity omits the input collection; the inputs will be supplied
+by the process applying the transducer. /Note: this reduced arity is not currying
+or partial application./
 
 For example:
 
@@ -53,10 +49,10 @@ For example:
     (take 5)      ;; returns a transducer that will take the first 5 values
 #+END_SRC
 
-Transducers compose with ordinary function composition. A transducer
-performs its operation before deciding whether and how many times to
-call the transducer it wraps. The recommended way to compose transducers
-is with the existing *comp* function:
+Transducers compose with ordinary function composition. A transducer performs
+its operation before deciding whether and how many times to call the transducer
+it wraps. The recommended way to compose transducers is with the existing *comp*
+function:
 
 #+BEGIN_SRC clojure
     (def xf
@@ -66,15 +62,15 @@ is with the existing *comp* function:
         (take 5)))
 #+END_SRC
 
-The transducer xf is a transformation stack that will be applied by a
-process to a series of input elements. Each function in the stack is
-performed /before/ the operation it wraps. Composition of the
-transformer runs right-to-left but builds a transformation stack that
-runs left-to-right (filtering happens before mapping in this example).
+The transducer xf is a transformation stack that will be applied by a process to
+a series of input elements. Each function in the stack is performed /before/ the
+operation it wraps. Composition of the transformer runs right-to-left but builds
+a transformation stack that runs left-to-right (filtering happens before mapping
+in this example).
 
-As a mnemonic, remember that the ordering of transducer functions in
-*comp* is the same order as sequence transformations in *->>*. The
-transformation above is equivalent to the sequence transformation:
+As a mnemonic, remember that the ordering of transducer functions in *comp* is the
+same order as sequence transformations in *->>*. The transformation above is
+equivalent to the sequence transformation:
 
 #+BEGIN_SRC clojure
     (->> coll
@@ -83,56 +79,35 @@ transformation above is equivalent to the sequence transformation:
          (take 5))
 #+END_SRC
 
-The following functions produce a transducer when the input collection
-is omitted:
-[[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/map][map]]
-[[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/cat][cat]]
-[[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/mapcat][mapcat]]
-[[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/filter][filter]]
-[[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/remove][remove]]
-[[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/take][take]]
-[[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/take-while][take-while]]
-[[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/take-nth][take-nth]]
-[[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/drop][drop]]
-[[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/drop-while][drop-while]]
-[[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/replace][replace]]
-[[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/partition-by][partition-by]]
-[[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/partition-all][partition-all]]
-[[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/keep][keep]]
-[[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/keep-indexed][keep-indexed]]
-[[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/map-indexed][map-indexed]]
-[[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/distinct][distinct]]
-[[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/interpose][interpose]]
-[[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/dedupe][dedupe]]
-[[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/random-sample][random-sample]]
+The following functions produce a transducer when the input collection is
+omitted: [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/map][map]] [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/cat][cat]] [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/mapcat][mapcat]] [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/filter][filter]] [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/remove][remove]] [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/take][take]] [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/take-while][take-while]] [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/take-nth][take-nth]] [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/drop][drop]] [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/drop-while][drop-while]]
+[[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/replace][replace]] [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/partition-by][partition-by]] [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/partition-all][partition-all]] [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/keep][keep]] [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/keep-indexed][keep-indexed]] [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/map-indexed][map-indexed]] [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/distinct][distinct]]
+[[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/interpose][interpose]] [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/dedupe][dedupe]] [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/random-sample][random-sample]]
 
 ** Using Transducers
    :PROPERTIES:
    :CUSTOM_ID: _using_transducers
    :END:
 
-Transducers can be used in many contexts (see below for how to create
-new ones).
+Transducers can be used in many contexts (see below for how to create new ones).
 
 ** transduce
    :PROPERTIES:
    :CUSTOM_ID: _transduce
    :END:
 
-One of the most common ways to apply transducers is with the
-[[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/transduce][transduce]]
-function, which is analogous to the standard reduce function:
+One of the most common ways to apply transducers is with the [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/transduce][transduce]] function,
+which is analogous to the standard reduce function:
 
 #+BEGIN_SRC clojure
     (transduce xform f coll)
     (transduce xform f init coll)
 #+END_SRC
 
-*transduce* will immediately (not lazily) reduce over *coll* with the
-transducer *xform* applied to the reducing function *f*, using init as
-the initial value if supplied or (f) otherwise. f supplies the knowledge
-of how to accumulate the result, which occurs in the (potentially
-stateful) context of the reduce.
+*transduce* will immediately (not lazily) reduce over *coll* with the transducer
+*xform* applied to the reducing function *f*, using init as the initial value if
+supplied or (f) otherwise. f supplies the knowledge of how to accumulate the
+result, which occurs in the (potentially stateful) context of the reduce.
 
 #+BEGIN_SRC clojure
     (def xf (comp (filter odd?) (map inc)))
@@ -142,9 +117,9 @@ stateful) context of the reduce.
     ;; => 106
 #+END_SRC
 
-The composed xf transducer will be invoked left-to-right with a final
-call to the reducing function f. In the last example, input values will
-be filtered, then incremented, and finally summed.
+The composed xf transducer will be invoked left-to-right with a final call to
+the reducing function f. In the last example, input values will be filtered,
+then incremented, and finally summed.
 
 [[/images/content/reference/transducers/xf.png]]
 
@@ -153,12 +128,10 @@ be filtered, then incremented, and finally summed.
    :CUSTOM_ID: _eduction
    :END:
 
-To capture the process of applying a transducer to a coll, use the
-[[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/eduction][eduction]]
+To capture the process of applying a transducer to a coll, use the [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/eduction][eduction]]
 function. It takes any number of xforms and a final coll and returns a
-reducible/iterable application of the transducer to the items in coll.
-These applications will be performed each time reduce/iterator is
-called.
+reducible/iterable application of the transducer to the items in coll. These
+applications will be performed each time reduce/iterator is called.
 
 #+BEGIN_SRC clojure
     (def iter (eduction xf (range 5)))
@@ -172,9 +145,7 @@ called.
    :END:
 
 To apply a transducer to an input collection and construct a new output
-collection, use
-[[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/into][into]]
-(which efficiently uses reduce and transients if possible):
+collection, use [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/into][into]] (which efficiently uses reduce and transients if possible):
 
 #+BEGIN_SRC clojure
     (into [] xf (range 1000))
@@ -186,17 +157,15 @@ collection, use
    :END:
 
 To create a sequence from the application of a transducer to an input
-collection, use
-[[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/sequence][sequence]]:
+collection, use [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/sequence][sequence]]:
 
 #+BEGIN_SRC clojure
     (sequence xf (range 1000))
 #+END_SRC
 
-The resulting sequence elements are incrementally computed. These
-sequences will consume input incrementally as needed and fully realize
-intermediate operations. This behavior differs from the equivalent
-operations on lazy sequences.
+The resulting sequence elements are incrementally computed. These sequences will
+consume input incrementally as needed and fully realize intermediate operations.
+This behavior differs from the equivalent operations on lazy sequences.
 
 * Creating Transducers
   :PROPERTIES:
@@ -213,33 +182,29 @@ Transducers have the following shape (custom code in "...​"):
 #+END_SRC
 
 Many of the core sequence functions (like map, filter, etc) take
-operation-specific arguments (a predicate, function, count, etc) and
-return a transducer of this shape closing over those arguments. In some
-cases, like *cat*, the core function /is/ a transducer function and does
-not take an *rf*.
+operation-specific arguments (a predicate, function, count, etc) and return a
+transducer of this shape closing over those arguments. In some cases, like *cat*,
+the core function /is/ a transducer function and does not take an *rf*.
 
-The inner function is defined with 3 arities used for different
-purposes:
+The inner function is defined with 3 arities used for different purposes:
 
-- *Init* (arity 0) - should call the init arity on the nested transform
-  *rf*, which will eventually call out to the transducing process.
+- *Init* (arity 0) - should call the init arity on the nested transform *rf*, which
+  will eventually call out to the transducing process.
 
-- *Step* (arity 2) - this is a standard reduction function but it is
-  expected to call the *rf* step arity 0 or more times as appropriate in
-  the transducer. For example, filter will choose (based on the
-  predicate) whether to call *rf* or not. map will always call it
-  exactly once. cat may call it many times depending on the inputs.
+- *Step* (arity 2) - this is a standard reduction function but it is expected to
+  call the *rf* step arity 0 or more times as appropriate in the transducer. For
+  example, filter will choose (based on the predicate) whether to call *rf* or
+  not. map will always call it exactly once. cat may call it many times
+  depending on the inputs.
 
-- *Completion* (arity 1) - some processes will not end, but for those
-  that do (like *transduce*), the completion arity is used to produce a
-  final value and/or flush state. This arity must call the *rf*
-  completion arity exactly once.
+- *Completion* (arity 1) - some processes will not end, but for those that do
+  (like *transduce*), the completion arity is used to produce a final value and/or
+  flush state. This arity must call the *rf* completion arity exactly once.
 
-An example use of *completion* is *partition-all*, which must flush any
-remaining elements at the end of the input. The
-[[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/completing][completing]]
-function can be used to convert a reducing function to a transducing
-function by adding a default completion arity.
+An example use of *completion* is *partition-all*, which must flush any remaining
+elements at the end of the input. The [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/completing][completing]] function can be used to convert
+a reducing function to a transducing function by adding a default completion
+arity.
 
 ** Early termination
    :PROPERTIES:
@@ -248,33 +213,30 @@ function by adding a default completion arity.
 
 Clojure has a mechanism for specifying early termination of a reduce:
 
-- [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/reduced][reduced]] -
-  takes a value and returns a /reduced/ value indicating reduction
+- [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/reduced][reduced]] - takes a value and returns a /reduced/ value indicating reduction
   should stop
 
-- [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/reduced?][reduced?]] -
-  returns true if the value was created with /reduced/
+- [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/reduced?][reduced?]] - returns true if the value was created with /reduced/
 
-- [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/deref][deref]]
-  or @ can be used to retrieve the value inside a /reduced/
+- [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/deref][deref]] or @ can be used to retrieve the value inside a /reduced/
 
-A process that uses transducers must check for and stop when the step
-function returns a reduced value (more on that in Creating Transducible
-Processes). Additionally, a transducer step function that uses a nested
-reduce must check for and convey reduced values when they are
-encountered. (See the implementation of cat for an example.)
+A process that uses transducers must check for and stop when the step function
+returns a reduced value (more on that in Creating Transducible Processes).
+Additionally, a transducer step function that uses a nested reduce must check
+for and convey reduced values when they are encountered. (See the implementation
+of cat for an example.)
 
 ** Transducers with reduction state
    :PROPERTIES:
    :CUSTOM_ID: _transducers_with_reduction_state
    :END:
 
-Some transducers (such as *take*, *partition*, etc) require state during
-the reduction process. This state is created each time the transducible
-process applies the transducer. For example, consider the dedupe
-transducer that collapses a series of duplicate values into a single
-value. This transducer must remember the previous value to determine
-whether the current value should be passed on:
+Some transducers (such as *take*, *partition*, etc) require state during the
+reduction process. This state is created each time the transducible process
+applies the transducer. For example, consider the dedupe transducer that
+collapses a series of duplicate values into a single value. This transducer must
+remember the previous value to determine whether the current value should be
+passed on:
 
 #+BEGIN_SRC clojure
     (defn dedupe []
@@ -291,41 +253,40 @@ whether the current value should be passed on:
                     (xf result input))))))))
 #+END_SRC
 
-In dedupe, *prev* is a stateful container that stores the previous value
-during the reduction. The prev value is a volatile for performance, but
-it could also be an atom. The prev value will not be initialized until
-the transducing process starts (in a call to *transduce* for example).
-The stateful interactions are therefore contained within the context of
-the transducible process.
+In dedupe, *prev* is a stateful container that stores the previous value during
+the reduction. The prev value is a volatile for performance, but it could also
+be an atom. The prev value will not be initialized until the transducing process
+starts (in a call to *transduce* for example). The stateful interactions are
+therefore contained within the context of the transducible process.
 
-In the completion step, a transducer with reduction state should flush
-state prior to calling the nested transformer's completion function,
-unless it has previously seen a reduced value from the nested step in
-which case pending state should be discarded.
+In the completion step, a transducer with reduction state should flush state
+prior to calling the nested transformer's completion function, unless it has
+previously seen a reduced value from the nested step in which case pending state
+should be discarded.
 
 * Creating Transducible Processes
   :PROPERTIES:
   :CUSTOM_ID: _creating_transducible_processes
   :END:
 
-Transducers are designed to be used in many kinds of processes. A
-transducible process is defined as a succession of steps where each step
-ingests an input. The source of the inputs is specific to each process
-(from a collection, an iterator, a stream, etc). Similarly, the process
-must choose what to do with the outputs produced by each step.
+Transducers are designed to be used in many kinds of processes. A transducible
+process is defined as a succession of steps where each step ingests an input.
+The source of the inputs is specific to each process (from a collection, an
+iterator, a stream, etc). Similarly, the process must choose what to do with the
+outputs produced by each step.
 
-If you have a new context for applying transducers, there are a few
-general rules to be aware of:
+If you have a new context for applying transducers, there are a few general
+rules to be aware of:
 
-- If a step function returns a /reduced/ value, the transducible process
-  must not supply any more inputs to the step function. The reduced
-  value must be unwrapped with deref before completion.
+- If a step function returns a /reduced/ value, the transducible process must not
+  supply any more inputs to the step function. The reduced value must be
+  unwrapped with deref before completion.
 
 - A completing process must call the completion operation on the final
   accumulated value exactly once.
 
-- A transducing process must encapsulate references to the function
-  returned by invoking a transducer - these may be stateful and unsafe
-  for use across threads.
+- A transducing process must encapsulate references to the function returned by
+  invoking a transducer - these may be stateful and unsafe for use across
+  threads.
 
 

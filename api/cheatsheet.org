@@ -3,10 +3,8 @@ title=Cheatsheet date=2019-06-20 type=page status=published ~~~~~~
    :PROPERTIES:
    :CUSTOM_ID: clojure-1.10-cheat-sheet-v49
    :END:
-[[https://github.com/jafingerhut/clojure-cheatsheets/blob/master/pdf/cheatsheet-usletter-color.pdf?raw=true][Download
-PDF version]] / [[https://jafingerhut.github.io/][Source repo]]
-/Many thanks to Steve Tayon for creating it and Andy Fingerhut for
-ongoing maintenance./
+[[https://github.com/jafingerhut/clojure-cheatsheets/blob/master/pdf/cheatsheet-usletter-color.pdf?raw=true][Download PDF version]] / [[https://jafingerhut.github.io/][Source repo]] /Many thanks to Steve Tayon for creating it
+and Andy Fingerhut for ongoing maintenance./
 ** Documentation
    :PROPERTIES:
    :CUSTOM_ID: documentation
@@ -211,8 +209,7 @@ ongoing maintenance./
 | Call     | =apply -> ->> trampoline as-> cond-> cond->> some-> some->>=                                                       |
 | Test     | =fn? ifn?=                                                                                                         |
 ** Abstractions
-([[https://github.com/cemerick/clojure-type-selection-flowchart][Clojure
-type selection flowchart]])
+([[https://github.com/cemerick/clojure-type-selection-flowchart][Clojure type selection flowchart]])
    :PROPERTIES:
    :CUSTOM_ID: abstractions-clojure-type-selection-flowchart
    :END:
@@ -274,8 +271,7 @@ type selection flowchart]])
 | Lazy      | =lazy-cat lazy-seq delay=                                                                                             |
 | Doc.      | =assert comment doc=                                                                                                  |
 ** Special Characters
-([[https://clojure.org/reference/reader#macrochars][clojure.org/reference/reader]],
-[[https://clojure.org/guides/weird_characters][guide]])
+([[https://clojure.org/reference/reader#macrochars][clojure.org/reference/reader]], [[https://clojure.org/guides/weird_characters][guide]])
    :PROPERTIES:
    :CUSTOM_ID: special-characters-clojure.orgreferencereader-guide
    :END:
@@ -314,8 +310,7 @@ type selection flowchart]])
 | =_=               | =conventional name for an unused value (unenforced)=                                                                                             |
 | =#_=              | Ignore next form                                                                                                                                 |
 ** Metadata
-([[https://clojure.org/reference/reader#_metadata][clojure.org/reference/reader]],
-[[https://clojure.org/reference/special_forms][special_forms]])
+([[https://clojure.org/reference/reader#_metadata][clojure.org/reference/reader]], [[https://clojure.org/reference/special_forms][special_forms]])
    :PROPERTIES:
    :CUSTOM_ID: metadata-clojure.orgreferencereader-special_forms
    :END:
@@ -331,7 +326,8 @@ type selection flowchart]])
    :PROPERTIES:
    :CUSTOM_ID: special-forms-clojure.orgreferencespecial_forms
    :END:
-=def if do let letfn quote var fn loop recur set! throw try monitor-enter monitor-exit=
+=def if do let letfn quote var fn loop recur set! throw try monitor-enter
+monitor-exit=
 | Binding Forms / Destructuring   | =(examples) let fn defn defmacro loop for doseq if-let when-let if-some when-some=   |
 ** Vars and global environment
 ([[https://clojure.org/reference/vars][clojure.org/reference/vars]])
@@ -410,8 +406,7 @@ type selection flowchart]])
 | Use      | =aget aset aset-boolean aset-byte aset-short aset-char aset-int aset-long aset-float aset-double alength amap areduce=                                           |
 | Cast     | =booleans bytes shorts chars ints longs floats doubles=                                                                                                          |
 *** Proxy
-([[https://github.com/cemerick/clojure-type-selection-flowchart][Clojure
-type selection flowchart]])
+([[https://github.com/cemerick/clojure-type-selection-flowchart][Clojure type selection flowchart]])
     :PROPERTIES:
     :CUSTOM_ID: proxy-clojure-type-selection-flowchart
     :END:

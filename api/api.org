@@ -5,8 +5,7 @@
 
 - [[https://clojure.github.io/clojure/][Clojure API]]
 
-- [[https://clojure.github.io/clojure/javadoc/][Clojure Java API]] - for
-  calling from Java into Clojure
+- [[https://clojure.github.io/clojure/javadoc/][Clojure Java API]] - for calling from Java into Clojure
 
 - [[file:cheatsheet.org][Clojure Cheatsheet]]
 
@@ -22,8 +21,7 @@
   :CUSTOM_ID: _clojure_contrib_libraries
   :END:
 
-Documentation for Clojure
-[[file:xref/../../dev/contrib_libs.org][contrib libraries]]:
+Documentation for Clojure [[file:xref/../../dev/contrib_libs.org][contrib libraries]]:
 
 - [[https://clojure.github.io/][Contrib APIs]]
 
@@ -32,8 +30,7 @@ Documentation for Clojure
   :CUSTOM_ID: _other_resources
   :END:
 
-- [[https://clojuredocs.org][ClojureDocs]] - community provided example
-  repository
+- [[https://clojuredocs.org][ClojureDocs]] - community provided example repository
 
 - [[https://cljdoc.org/][cljdoc]] - library documentation
 

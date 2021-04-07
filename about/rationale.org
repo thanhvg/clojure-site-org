@@ -1,32 +1,29 @@
-Customers and stakeholders have substantial investments in, and are
-comfortable with the performance, security and stability of,
-industry-standard platforms like the JVM. While Java developers may envy
-the succinctness, flexibility and productivity of dynamic languages,
-they have concerns about running on customer-approved infrastructure,
-access to their existing code base and libraries, and performance. In
-addition, they face ongoing problems dealing with concurrency using
-native threads and locking. Clojure is an effort in pragmatic dynamic
-language design in this context. It endeavors to be a general-purpose
-language suitable in those areas where Java is suitable. It reflects the
-reality that, for the concurrent programming future, pervasive,
-unmoderated mutation simply has to go.
+Customers and stakeholders have substantial investments in, and are comfortable
+with the performance, security and stability of, industry-standard platforms
+like the JVM. While Java developers may envy the succinctness, flexibility and
+productivity of dynamic languages, they have concerns about running on
+customer-approved infrastructure, access to their existing code base and
+libraries, and performance. In addition, they face ongoing problems dealing with
+concurrency using native threads and locking. Clojure is an effort in pragmatic
+dynamic language design in this context. It endeavors to be a general-purpose
+language suitable in those areas where Java is suitable. It reflects the reality
+that, for the concurrent programming future, pervasive, unmoderated mutation
+simply has to go.
 
-Clojure meets its goals by: embracing an industry-standard, open
-platform - the JVM; modernizing a venerable language - Lisp; fostering
-functional programming with immutable persistent data structures; and
-providing built-in concurrency support via software transactional memory
-and asynchronous agents. The result is robust, practical, and fast.
+Clojure meets its goals by: embracing an industry-standard, open platform - the
+JVM; modernizing a venerable language - Lisp; fostering functional programming
+with immutable persistent data structures; and providing built-in concurrency
+support via software transactional memory and asynchronous agents. The result is
+robust, practical, and fast.
 
-Clojure has a distinctive approach to [[file:state.org][state and
-identity]].
+Clojure has a distinctive approach to [[file:state.org][state and identity]].
 
 * Why Clojure?
   :PROPERTIES:
   :CUSTOM_ID: _why_clojure
   :END:
 
-Why did I write yet another programming language? Basically because I
-wanted:
+Why did I write yet another programming language? Basically because I wanted:
 
 - A Lisp
 
@@ -36,8 +33,8 @@ wanted:
 
 - designed for Concurrency
 
-and couldn't find one. Here's an outline of some of the motivating ideas
-behind Clojure.
+and couldn't find one. Here's an outline of some of the motivating ideas behind
+Clojure.
 
 * Lisp is a good thing
   :PROPERTIES:
@@ -83,11 +80,9 @@ behind Clojure.
 
 - Could always be done in Lisp, by discipline/convention
 
-  - But if a data structure /can/ be mutated, dangerous to presume it
-    won't be
+  - But if a data structure /can/ be mutated, dangerous to presume it won't be
 
-  - In traditional Lisp, only the list data structure is structurally
-    recursive
+  - In traditional Lisp, only the list data structure is structurally recursive
 
 - Pure functional languages tend to strongly static types
 
@@ -148,8 +143,8 @@ behind Clojure.
 
     - Library duplication
 
-    - If original language based on C, some extension libraries written
-      in C don't come over
+    - If original language based on C, some extension libraries written in C
+      don't come over
 
 - Platforms are dictated by clients
 
@@ -165,8 +160,8 @@ behind Clojure.
 
 - Java/JVM /is/ language + platform
 
-  - Not the original story, but other languages for JVM always existed,
-    now embraced by Sun
+  - Not the original story, but other languages for JVM always existed, now
+    embraced by Sun
 
   - Java can be tedious, insufficiently expressive
 
@@ -183,8 +178,8 @@ behind Clojure.
 
 - Born of simulation, now used for everything, even when inappropriate
 
-  - Encouraged by Java/C# in all situations, due to their lack of
-    (idiomatic) support for anything else
+  - Encouraged by Java/C# in all situations, due to their lack of (idiomatic)
+    support for anything else
 
 - Mutable stateful objects are the new spaghetti code
 
@@ -194,14 +189,13 @@ behind Clojure.
 
 - Inheritance is /not/ the only way to do polymorphism
 
-- "It is better to have 100 functions operate on one data structure than
-  to have 10 functions operate on 10 data structures." - Alan J. Perlis
+- "It is better to have 100 functions operate on one data structure than to have
+  10 functions operate on 10 data structures." - Alan J. Perlis
 
 - Clojure models its data structures as immutable objects represented by
   interfaces, and otherwise does not offer its own class system.
 
-- Many functions defined on few primary data structures (seq, map,
-  vector, set).
+- Many functions defined on few primary data structures (seq, map, vector, set).
 
 - Write Java in Java, consume and extend Java from Clojure.
 
@@ -229,16 +223,13 @@ behind Clojure.
 
   - Share freely between threads
 
-- But changing state a reality for simulations and for in-program
-  proxies to the outside world
+- But changing state a reality for simulations and for in-program proxies to the
+  outside world
 
 - Locking is too hard to get right over and over again
 
-- Clojure's software transactional memory and agent systems do the hard
-  part
+- Clojure's software transactional memory and agent systems do the hard part
 
-In short, I think Clojure occupies a unique niche as a functional Lisp
-for the JVM with strong concurrency support. Check out some of the
-[[file:features.org][features]] or
-[[file:xref/../../guides/getting_started.org][get started with
-Clojure]].
+In short, I think Clojure occupies a unique niche as a functional Lisp for the
+JVM with strong concurrency support. Check out some of the [[file:features.org][features]] or [[file:xref/../../guides/getting_started.org][get
+started with Clojure]].

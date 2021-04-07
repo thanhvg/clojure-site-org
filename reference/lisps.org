@@ -1,5 +1,5 @@
-This information is provided for programmers familiar with Common Lisp
-or Scheme.
+This information is provided for programmers familiar with Common Lisp or
+Scheme.
 
 - Clojure is case sensitive
 
@@ -33,8 +33,8 @@ or Scheme.
 
 - There is reader syntax for maps, vectors, and sets
 
-- /*cons*/, /*first*/ and /*rest*/ manipulate sequence abstractions, not
-  concrete cons cells
+- /*cons*/, /*first*/ and /*rest*/ manipulate sequence abstractions, not concrete cons
+  cells
 
 - Most data structures are immutable
 
@@ -43,53 +43,47 @@ or Scheme.
 - /*=*/ is the equality predicate
 
 - Global Vars can be dynamically rebound (if declared dynamic) without
-  interfering with lexical local bindings. No special declarations are
-  necessary to distinguish between dynamic and lexical bindings. Since
-  Clojure is a Lisp-1, (global) functions can be dynamically rebound (if
-  they are marked as dynamic).
+  interfering with lexical local bindings. No special declarations are necessary
+  to distinguish between dynamic and lexical bindings. Since Clojure is a
+  Lisp-1, (global) functions can be dynamically rebound (if they are marked as
+  dynamic).
 
-- No letrec, labels or flet - use (fn name [args]...​) for
-  self-reference,
-  [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/letfn][letfn]]
+- No letrec, labels or flet - use (fn name [args]...​) for self-reference, [[https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/letfn][letfn]]
   for mutual reference.
 
-- In Clojure /*nil*/ means 'nothing'. It signifies the absence of a
-  value, of any type, and is not specific to lists or sequences.
+- In Clojure /*nil*/ means 'nothing'. It signifies the absence of a value, of any
+  type, and is not specific to lists or sequences.
 
-- Empty collections are distinct from /*nil*/. Clojure does not equate
-  /*nil*/ and '().
+- Empty collections are distinct from /*nil*/. Clojure does not equate /*nil*/ and
+  '().
 
-- /*false*/ means one of the two possible boolean values, the other
-  being /*true*/
+- /*false*/ means one of the two possible boolean values, the other being /*true*/
 
-- There is more to collections than lists. You can have instances of
-  empty collections, some of which have literal support ([], {}, and
-  ()). Thus there can be no sentinel empty collection value.
+- There is more to collections than lists. You can have instances of empty
+  collections, some of which have literal support ([], {}, and ()). Thus there
+  can be no sentinel empty collection value.
 
 - Coming from Scheme, /*nil*/ may map most closely to your notion of #f.
 
 - A big difference in Clojure, is sequences. Sequences are not specific
-  collections, esp. they are not necessarily concrete lists. When you
-  ask an empty collection for a sequence of its elements (by calling
-  *seq*) it returns /*nil*/, saying "I can't produce one". When you ask
-  a sequence on its last element for the /*rest*/ it returns /*another
-  logical sequence.*/ You can only tell if that sequence is empty by
-  calling *seq* on it in turn. This enables sequences and the sequence
-  protocol to be /lazy/.
+  collections, esp. they are not necessarily concrete lists. When you ask an
+  empty collection for a sequence of its elements (by calling *seq*) it returns
+  /*nil*/, saying "I can't produce one". When you ask a sequence on its last
+  element for the /*rest*/ it returns /*another logical sequence.*/ You can only
+  tell if that sequence is empty by calling *seq* on it in turn. This enables
+  sequences and the sequence protocol to be /lazy/.
 
-- Some of the sequence functions correspond to functions from Scheme and
-  CL that there manipulated only pairs/conses ('lists') and returned
-  sentinel values ('() and nil) that represented 'empty' lists. The
-  Clojure return values differ in not returning specific empty
-  collections, but rather another logical sequence. Some of the sequence
-  functions have no counterpart in Scheme/CL, and map to Haskell/ML-like
-  functions. Some of those functions return infinite or calculated
-  sequences, where the analogy to concrete data-structures like
+- Some of the sequence functions correspond to functions from Scheme and CL that
+  there manipulated only pairs/conses ('lists') and returned sentinel values
+  ('() and nil) that represented 'empty' lists. The Clojure return values differ
+  in not returning specific empty collections, but rather another logical
+  sequence. Some of the sequence functions have no counterpart in Scheme/CL, and
+  map to Haskell/ML-like functions. Some of those functions return infinite or
+  calculated sequences, where the analogy to concrete data-structures like
   Scheme/CL lists is tenuous at best.
 
-- It helps to distinguish collections/data-structures and
-  seqs/iteration. In both CL and Scheme they are conflated, in Clojure
-  they are separate.
+- It helps to distinguish collections/data-structures and seqs/iteration. In
+  both CL and Scheme they are conflated, in Clojure they are separate.
 
 |                                                                     | Clojure                                                            | Common Lisp                       | Scheme       | Java                                                             |    |
 |---------------------------------------------------------------------+--------------------------------------------------------------------+-----------------------------------+--------------+------------------------------------------------------------------+----|

@@ -1,14 +1,14 @@
-Clojure collections "collect" values into compound values. There are
-four key Clojure collection types: vectors, lists, sets, and maps. Of
-those four collection types, vectors and lists are ordered.
+Clojure collections "collect" values into compound values. There are four key
+Clojure collection types: vectors, lists, sets, and maps. Of those four
+collection types, vectors and lists are ordered.
 
 * Vectors
   :PROPERTIES:
   :CUSTOM_ID: _vectors
   :END:
 
-Vectors are an indexed, sequential data structure. Vectors are
-represented with =[ ]= like this:
+Vectors are an indexed, sequential data structure. Vectors are represented with
+=[ ]= like this:
 
 #+BEGIN_SRC clojure
     [1 2 3]
@@ -19,9 +19,9 @@ represented with =[ ]= like this:
    :CUSTOM_ID: _indexed_access
    :END:
 
-"Indexed" means that elements of a vector can be retrieved by index. In
-Clojure (as in Java), indexes start at 0, not 1. Use the =get= function
-to retrieve an element at an index:
+"Indexed" means that elements of a vector can be retrieved by index. In Clojure
+(as in Java), indexes start at 0, not 1. Use the =get= function to retrieve an
+element at an index:
 
 #+BEGIN_EXAMPLE
     user=> (get ["abc" false 99] 0)
@@ -54,8 +54,8 @@ All Clojure collections can be counted:
    :CUSTOM_ID: _constructing
    :END:
 
-In addition to the literal =[ ]= syntax, Clojure vectors can be created
-with the =vector= function:
+In addition to the literal =[ ]= syntax, Clojure vectors can be created with the
+=vector= function:
 
 #+BEGIN_EXAMPLE
     user=> (vector 1 2 3)
@@ -67,8 +67,8 @@ with the =vector= function:
    :CUSTOM_ID: _adding_elements
    :END:
 
-Elements are added to a vector with =conj= (short for conjoin). Elements
-are always added to a vector at the end:
+Elements are added to a vector with =conj= (short for conjoin). Elements are
+always added to a vector at the end:
 
 #+BEGIN_EXAMPLE
     user=> (conj [1 2 3] 4 5 6)
@@ -80,9 +80,8 @@ are always added to a vector at the end:
    :CUSTOM_ID: _immutability
    :END:
 
-Clojure collections share important properties of simple values like
-strings and numbers, such as immutability and equality comparison by
-value.
+Clojure collections share important properties of simple values like strings and
+numbers, such as immutability and equality comparison by value.
 
 For example, lets create a vector and modify it with =conj=.
 
@@ -93,33 +92,33 @@ For example, lets create a vector and modify it with =conj=.
     [1 2 3 4 5 6]
 #+END_EXAMPLE
 
-Here =conj= returned a new vector but if we examine the original vector,
-we see it's unchanged:
+Here =conj= returned a new vector but if we examine the original vector, we see
+it's unchanged:
 
 #+BEGIN_EXAMPLE
     user=> v
     [1 2 3]
 #+END_EXAMPLE
 
-Any function that "changes" a collection returns a new instance. Your
-program will need to remember or pass along the changed instance to take
-advantage of it.
+Any function that "changes" a collection returns a new instance. Your program
+will need to remember or pass along the changed instance to take advantage of
+it.
 
 * Lists
   :PROPERTIES:
   :CUSTOM_ID: _lists
   :END:
 
-Lists are sequential linked lists that add new elements at the head of
-the list, instead of at the tail like vectors.
+Lists are sequential linked lists that add new elements at the head of the list,
+instead of at the tail like vectors.
 
 ** Constructing
    :PROPERTIES:
    :CUSTOM_ID: _constructing_2
    :END:
 
-Because lists are evaluated by invoking the first element as a function,
-we must quote a list to prevent evaluation:
+Because lists are evaluated by invoking the first element as a function, we must
+quote a list to prevent evaluation:
 
 #+BEGIN_SRC clojure
     (def cards '(10 :ace :jack 9))
@@ -139,10 +138,9 @@ Lists are not indexed so they must be walked using =first= and =rest=.
    :CUSTOM_ID: _adding_elements_2
    :END:
 
-=conj= can be used to add elements to a list just as with vectors.
-However, =conj= always adds elements where it can be done in constant
-time for the data structure. In the case of lists, elements are added at
-the front:
+=conj= can be used to add elements to a list just as with vectors. However, =conj=
+always adds elements where it can be done in constant time for the data
+structure. In the case of lists, elements are added at the front:
 
 #+BEGIN_EXAMPLE
     user=> (conj cards :queen)
